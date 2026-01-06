@@ -1,6 +1,5 @@
 ci:
     autofix_commit_msg: 'CHORE: Auto fixes from pre-commit hooks'
-    autoupdate_branch: 'chore/pre-commit-autoupdate'
     autoupdate_commit_msg: 'CHORE: Pre-commit automatic update'
     autoupdate_schedule: weekly
 
@@ -51,7 +50,7 @@ repos:
     - id: check-pre-commit-ci-config
 
 - repo: https://github.com/ansys/pre-commit-hooks
-  rev: v0.4.4
+  rev: v0.5.2
   hooks:
     - id: add-license-headers
       files: '(src|tests|installer)/.*\.(py)'
