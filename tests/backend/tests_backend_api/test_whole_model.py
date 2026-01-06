@@ -29,7 +29,7 @@ including mesh operations, design setups, ports, and circuit creation functional
 
 import pytest
 from pathlib import Path
-from tests.backend.conftest import DEFAULT_CONFIG
+from ansys.aedt.core.generic.general_methods import is_linux
 
 json_files_path = Path(__file__).parents[1] / "json_files"
 vol_limit = 1e-5
@@ -37,7 +37,7 @@ vol_limit = 1e-5
 pytestmark = [pytest.mark.backend_API]
 
 
-@pytest.mark.skipif(DEFAULT_CONFIG["non_graphical"], reason="Not running in non-graphical mode.")
+@pytest.mark.skipif(is_linux, reason="Crashing on Linux")
 class TestBackendAPI:
 
     def test_01_create_model(self, aedt_common_fixture_class):
@@ -79,9 +79,21 @@ class TestBackendAPI:
         # Verify solution type is AC Magnetic
         assert solution_type == "AC Magnetic", f"Solution type is {solution_type}, expected 'AC Magnetic'"
 
-    def test_05_post_processing(self, aedt_common_fixture_class):
+    def test_04_post_processing(self, aedt_common_fixture_class):
         aedt_common_fixture_class.connect_design("Maxwell3D")
         aedtapp = aedt_common_fixture_class.aedtapp
         assert aedtapp.post.field_plot_names == ['B', 'Core_Loss', 'J', 'Ohmic_Loss']
         assert aedtapp.post.plots[0].plot_name == 'PyETK Leakage_Inductance'
         assert aedtapp.post.plots[0].expressions == ['L(Layer_1,Layer_1)*(1-sqr(CplCoef(Layer_1,Layer_1)))']
+
+    def test_05_circut(self, aedt_common_fixture_class):
+        aedt_common_fixture_class.connect_design("Maxwell3D")
+        aedtapp = aedt_common_fixture_class.aedtapp
+
+        if "circuit" in aedtapp.design_list[0].lower():
+            circuit_design_name = aedtapp.design_list[0]
+        else:
+            circuit_design_name = aedtapp.design_list[1]
+
+        cir = aedtapp.desktop_class[[aedtapp.project_name, circuit_design_name]]
+        assert len(cir.modeler.schematic.components) == 4
