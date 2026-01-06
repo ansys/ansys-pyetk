@@ -1,7 +1,7 @@
 Electronic Transformer toolKit (PyETK)
 =============================================
 
-|pyansys| |PythonVersion| |GH-CI| |MIT| |coverage| |ruff|
+|pyansys| |PythonVersion| |GH-CI| |Apache| |coverage| |ruff|
 
 .. |pyansys| image:: https://img.shields.io/badge/Py-Ansys-ffc107.svg?logo=data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAABDklEQVQ4jWNgoDfg5mD8vE7q/3bpVyskbW0sMRUwofHD7Dh5OBkZGBgW7/3W2tZpa2tLQEOyOzeEsfumlK2tbVpaGj4N6jIs1lpsDAwMJ278sveMY2BgCA0NFRISwqkhyQ1q/Nyd3zg4OBgYGNjZ2ePi4rB5loGBhZnhxTLJ/9ulv26Q4uVk1NXV/f///////69du4Zdg78lx//t0v+3S88rFISInD59GqIH2esIJ8G9O2/XVwhjzpw5EAam1xkkBJn/bJX+v1365hxxuCAfH9+3b9/+////48cPuNehNsS7cDEzMTAwMMzb+Q2u4dOnT2vWrMHu9ZtzxP9vl/69RVpCkBlZ3N7enoDXBwEAAA+YYitOilMVAAAAAElFTkSuQmCC
    :target: https://docs.pyansys.com/
@@ -13,8 +13,8 @@ Electronic Transformer toolKit (PyETK)
 .. |GH-CI| image:: https://github.com/ansys/ansys-pyetk/actions/workflows/ci_cd.yml/badge.svg
    :target: https://github.com/ansys/ansys-pyetk/actions/workflows/ci_cd.yml
 
-.. |MIT| image:: https://img.shields.io/badge/License-MIT-yellow.svg
-   :target: https://opensource.org/licenses/MIT
+.. |Apache| image:: https://img.shields.io/badge/License-Apache%202.0-blue.svg
+   :target: https://opensource.org/licenses/Apache-2.0
 
 .. |coverage| image:: https://codecov.io/gh/ansys/ansys-pyetk/branch/main/graph/badge.svg
    :target: https://codecov.io/gh/ansys/ansys-pyetk
@@ -92,7 +92,7 @@ site. Information on how to report vulenrabilities is also found.
 
 License
 ~~~~~~~
-This toolkit is licensed under the MIT license.
+This toolkit is licensed under the Apache-2.0 license.
 
 This module makes no commercial claim over Ansys whatsoever.
 The use of the interactive control of this toolkit requires a legally licensed

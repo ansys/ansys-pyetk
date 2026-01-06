@@ -7,7 +7,6 @@ ci:
 exclude: |
     (?x)(
         src/ansys/aedt/toolkits/electronic_transformer/ui/windows/.* |
-        tests/.* |
         README.rst
     )
 
@@ -39,7 +38,7 @@ repos:
   hooks:
     - id: check-github-workflows
 
-- repo: https://github.com/asottile/blacken-docs
+- repo: https://github.com/adamchainz/blacken-docs
   rev: 1.19.1
   hooks:
     - id: blacken-docs
@@ -57,5 +56,6 @@ repos:
     - id: add-license-headers
       files: '(src|tests|installer)/.*\.(py)'
       args:
-      - --custom_template=mit_license.jinja2
+      - --custom_license=Apache-2.0
+      - --custom_template=apache_2.0_license.jinja2
       - --start_year=2023

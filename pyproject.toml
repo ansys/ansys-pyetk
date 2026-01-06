@@ -9,7 +9,8 @@ dynamic = ["version"]
 description = "Advanced PyAEDT tool to set up electronic transformers in Ansys Electronic Desktop (AEDT)."
 readme = "README.rst"
 requires-python = ">=3.10"
-license = {file = "LICENSE"}
+license = "Apache-2.0"
+license-files = ["LICENSE"]
 authors = [
     {name = "ANSYS, Inc.", email = "pyansys.core@ansys.com"},
 ]
