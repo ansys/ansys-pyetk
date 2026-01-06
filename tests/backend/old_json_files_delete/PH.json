@@ -1,0 +1,82 @@
+{
+  "core_dimensions": {
+    "segmentation_angle": 10,
+    "supplier": "Ferroxcube",
+    "core_type": "PH",
+    "core_model": "PH26/9.2",
+    "dimensions": {
+    "D_1": "25.5",
+    "D_2": "21.2",
+    "D_3": "11.5",
+    "D_4": "9.2",
+    "D_5": "5.9",
+    "D_6": "5.4",
+    "D_7": "3.8",
+    "D_8": "18.0"
+    },
+    "airgap": {
+      "define_airgap": false
+    }
+  },
+  "winding_definition": {
+    "material_name": "Copper",
+    "draw_skin_layers": true,
+    "layer_type": "Wound",
+    "number_of_layers": "2",
+    "layer_spacing": "0.0",
+    "bobbin_board_thickness": "0.1",
+    "top_margin": "0.0",
+    "side_margin": "0.0",
+    "conductor_type": "Rectangular",
+    "include_bobbin": false,
+    "layers_definition": {
+      "layer_1": {
+        "conductor_width": 1.0,
+        "conductor_height": 1.0,
+        "insulation_thickness": 0.050000000000000003,
+        "turns_number": 8
+      },
+      "layer_2": {
+        "conductor_width": 1.0,
+        "conductor_height": 1.0,
+        "insulation_thickness": 0.050000000000000003,
+        "turns_number": 8
+      }
+    }
+  },
+  "setup_definition": {
+    "core_material": "4F1",
+    "adaptive_frequency": "100000.0",
+    "percentage_error": "1.0",
+    "number_passes": 5,
+    "transformer_sides": 2,
+    "side_loads": [
+      9.9999999999999995e-07,
+      9.9999999999999995e-07
+    ],
+    "excitation_strategy": "Voltage",
+    "voltage": "1.0",
+    "offset": "50.0",
+    "full_model": false,
+    "project_path": "C:/Users/detwyman/OneDrive - ANSYS, Inc/Documents/Ansoft/",
+    "frequency_sweep_definition": {
+      "frequency_sweep": false
+    },
+    "layer_side_definition": {
+      "1": [
+        "1"
+      ],
+      "2": [
+        "2"
+      ]
+    },
+    "connections_definition": {
+      "1": {
+        "1": "Layer"
+      },
+      "2": {
+        "2": "Layer"
+      }
+    }
+  }
+}

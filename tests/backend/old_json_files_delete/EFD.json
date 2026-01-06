@@ -1,0 +1,131 @@
+{
+  "core_dimensions": {
+    "segmentation_angle": 10,
+    "supplier": "Phillips",
+    "core_type": "EFD",
+    "core_model": "EFD30",
+    "dimensions": {
+    "D_1": "30.0",
+    "D_2": "22.4",
+    "D_3": "14.6",
+    "D_4": "15.0",
+    "D_5": "12.3",
+    "D_6": "9.1",
+    "D_7": "4.9",
+    "D_8": "-0.75"
+    },
+    "airgap": {
+      "define_airgap": false
+    }
+  },
+  "winding_definition": {
+    "material_name": "Copper",
+    "draw_skin_layers": false,
+    "layer_type": "Wound",
+    "number_of_layers": "6",
+    "layer_spacing": "0.1",
+    "bobbin_board_thickness": "0.1",
+    "top_margin": "0.0",
+    "side_margin": "0.0",
+    "conductor_type": "Rectangular",
+    "include_bobbin": true,
+    "layers_definition": {
+      "layer_1": {
+        "conductor_width": 0.20000000000000001,
+        "conductor_height": 2.2,
+        "insulation_thickness": 0.050000000000000003,
+        "turns_number": 10
+      },
+      "layer_2": {
+        "conductor_width": 0.20000000000000001,
+        "conductor_height": 2.2,
+        "insulation_thickness": 0.050000000000000003,
+        "turns_number": 10
+      },
+      "layer_3": {
+        "conductor_width": 0.20000000000000001,
+        "conductor_height": 2.2,
+        "insulation_thickness": 0.050000000000000003,
+        "turns_number": 10
+      },
+      "layer_4": {
+        "conductor_width": 0.20000000000000001,
+        "conductor_height": 2.2,
+        "insulation_thickness": 0.050000000000000003,
+        "turns_number": 10
+      },
+      "layer_5": {
+        "conductor_width": 0.20000000000000001,
+        "conductor_height": 2.2,
+        "insulation_thickness": 0.050000000000000003,
+        "turns_number": 10
+      },
+      "layer_6": {
+        "conductor_width": 0.20000000000000001,
+        "conductor_height": 2.2,
+        "insulation_thickness": 0.050000000000000003,
+        "turns_number": 10
+      }
+    }
+  },
+  "setup_definition": {
+    "core_material": "4F1",
+    "adaptive_frequency": "100000.0",
+    "percentage_error": "1.0",
+    "number_passes": 5,
+    "transformer_sides": 3,
+    "side_loads": [
+      9.9999999999999995e-07,
+      1000000.0,
+      2
+    ],
+    "excitation_strategy": "Voltage",
+    "voltage": "1.0",
+    "offset": "50.0",
+    "full_model": false,
+    "project_path": "C:/Users/detwyman/OneDrive - ANSYS, Inc/Documents/Ansoft/",
+    "frequency_sweep_definition": {
+      "frequency_sweep": true,
+      "start_frequency": "1.0",
+      "start_frequency_unit": "kHz",
+      "stop_frequency": "100.0",
+      "stop_frequency_unit": "kHz",
+      "samples": 2,
+      "scale": "Logarithmic"
+    },
+    "layer_side_definition": {
+      "1": [
+        "1",
+        "6"
+      ],
+      "3": [
+        "3",
+        "4"
+      ],
+      "2": [
+        "2",
+        "5"
+      ]
+    },
+    "connections_definition": {
+      "1": {
+        "P2": {
+          "1": "Layer",
+          "6": "Layer"
+        }
+      },
+      "3": {
+        "S4": {
+          "3": "Layer",
+          "4": "Layer"
+        }
+      },
+      "2": {
+        "S3": {
+          "2": "Layer",
+          "5": "Layer"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,582 @@
+name:  "CI"
+on:
+  pull_request:
+  push:
+    tags:
+      - "v*.*.*"
+    branches:
+      - main
+  workflow_dispatch:
+    inputs:
+      logLevel:
+        description: 'Log level'
+        required: true
+        default: 'warning'
+
+env:
+  ANSYSLMD_LICENSE_FILE: ${{ format('1055@{0}', secrets.LICENSE_SERVER) }}
+  MAIN_PYTHON_VERSION: '3.10'
+  DOCUMENTATION_CNAME: 'etk.docs.pyansys.com'
+  LIBRARY_NAME: 'ansys-pyetk'
+  LIBRARY_NAMESPACE: 'ansys-pyetk'
+  ON_CI: True
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+
+  update-changelog:
+    name: "Update CHANGELOG (on release)"
+    if: github.event_name == 'push' && contains(github.ref, 'refs/tags')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - uses: ansys/actions/doc-deploy-changelog@c2fa7c93f6883114e0e643599431b33d29f0b13f # v10.1.4
+        with:
+          token: ${{ secrets.PYANSYS_CI_BOT_TOKEN }}
+          bot-user: ${{ secrets.PYANSYS_CI_BOT_USERNAME }}
+          bot-email: ${{ secrets.PYANSYS_CI_BOT_EMAIL }}
+          use-upper-case: true
+
+  # NOTE: We do not allow dependabot to trigger the CI/CD pipeline automatically.
+  # This is to mitigate supply chain attacks, where a malicious dependency update
+  # could execute arbitrary code in our build environment.
+  # Dependabot PRs must be reviewed carefully and approved manually before
+  # running the CI.
+  block-dependabot:
+    name: "Block dependabot (on dependabot PR)"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Exit if dependabot triggered the workflow
+        if: github.event.pull_request.user.login == 'dependabot[bot]'
+        run: |
+          echo "::warning::Dependabot is not allowed to trigger this workflow. Please review carefully the changes before running the workflow manually."
+          exit 1
+
+  # NOTE: We do not allow pyansys-ci-bot to trigger the CI/CD pipeline automatically
+  # on dependabot's PR. This is to mitigate supply chain attacks, where a malicious
+  # dependency update could execute arbitrary code in our build environment.
+  # Dependabot PRs must be reviewed carefully and approved manually before
+  # running the CI.
+  block-pyansys-ci-bot:
+    name: "Block PyAnsys-CI-bot (on dependabot PR)"
+    needs: block-dependabot
+    runs-on: ubuntu-latest
+    steps:
+      - name: Exit if pyansys-ci-bot triggered the workflow on dependabot's PR
+        if: github.triggering_actor == 'pyansys-ci-bot' && startsWith(github.head_ref, 'dependabot')
+        run: |
+          echo "::warning::PyAnsys CI bot is not allowed to trigger this workflow in dependabot's PR. Please review carefully the changes before running the workflow manually."
+          exit 1
+
+  pr-title:
+    name: Check the title of the PR
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    needs: [block-pyansys-ci-bot]
+    permissions:
+      pull-requests: read
+    steps:
+      - name: Check the title of the pull request
+        uses: ansys/actions/check-pr-title@c2fa7c93f6883114e0e643599431b33d29f0b13f # v10.1.4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          use-upper-case: true
+#
+## TODO: To update once public
+#  vulnerabilities:
+#    name: "Vulnerabilities"
+#    runs-on: ubuntu-latest
+#    steps:
+#      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+#        with:
+#          persist-credentials: false
+#
+#      - name: Set up Python
+#        uses: actions/setup-python@83679a892e2d95755f2dac6acb0bfd1e9ac5d548 # v6.1.0
+#        with:
+#          python-version: ${{ env.MAIN_PYTHON_VERSION }}
+#
+#      - name: Install Bandit
+#        run: pip install bandit
+#
+#      - name: Run Bandit
+#        run: |
+#          bandit -r src -f json -o bandit-result.json
+#
+#      - name: Install Safety
+#        run: pip install safety
+#
+#      - name: Run Safety
+#        run: |
+#          # Ignore vulnerability: https://data.safetycli.com/v/67599/97c
+#          safety check -o bare --continue-on-error -i 67599 --save-json safety.json
+#
+#  #    name: "Vulnerabilities"
+#  #    runs-on: ubuntu-latest
+#  #    steps:
+#  #      - uses: ansys/actions/check-vulnerabilities@c2fa7c93f6883114e0e643599431b33d29f0b13f # v10.1.4
+#  #        with:
+#  #          python-version: ${{ env.MAIN_PYTHON_VERSION }}
+#  #          python-package-name: ${{ env.PACKAGE_NAME }}
+#  #          token: ${{ secrets.PYANSYS_CI_BOT_TOKEN }}
+#  #          dev-mode: ${{ github.ref != 'refs/heads/main' }}
+#
+#  actions-security:
+#    name: Actions Security
+#    runs-on: ubuntu-latest
+#    steps:
+#      - uses: ansys/actions/check-actions-security@c2fa7c93f6883114e0e643599431b33d29f0b13f # v10.1.4
+#        with:
+#          generate-summary: true
+#          token: ${{ secrets.GITHUB_TOKEN }}
+#          auditing-level: 'high'
+
+  # TODO: To remove once public and use precommit.ci
+  code-style:
+    name: "Code style"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: ansys/actions/code-style@c2fa7c93f6883114e0e643599431b33d29f0b13f # v10.1.4
+        with:
+          python-version: ${{ env.MAIN_PYTHON_VERSION }}
+          use-python-cache: false
+
+  build-application-windows:
+    name: "Build Windows Application"
+    runs-on: windows-latest
+    needs: [code-style]
+    steps:
+      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-python@83679a892e2d95755f2dac6acb0bfd1e9ac5d548 # v6.1.0
+        with:
+          python-version: ${{ env.MAIN_PYTHON_VERSION }}
+
+      - name: Install Dependencies
+        run: pip install .[freeze]
+
+      - name: Extract version
+        run: |
+          python installer/extract_version.py
+
+      - name: Update local environment
+        run: pip install .
+
+      - name: Freeze application
+        run: pyinstaller frozen.spec
+
+      - name: Install NSIS
+        run: choco install nsis -y
+
+      - name: Debug build directory
+        run: Get-ChildItem -Path build -Recurse | ForEach-Object { $_.FullName }
+
+      - name: Check NSIS version
+        shell: pwsh
+        run: |
+          & "C:\Program Files (x86)\NSIS\makensis.exe" /VERSION
+
+      - name: Run NSIS
+        shell: pwsh
+        if: always()
+        run: |
+          Set-StrictMode -Version Latest
+          $ErrorActionPreference = "Stop"
+          if (!(Test-Path -Path "setup.nsi")) {
+            Write-Error "setup.nsi not found"
+          }
+          & "C:\Program Files (x86)\NSIS\makensis.exe" setup.nsi
+
+      - name: List output
+        shell: pwsh
+        run: Get-ChildItem -Recurse dist
+
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
+        with:
+          name: PyETK-Installer-Windows
+          path: dist/*.exe
+          if-no-files-found: error
+
+  build-application-linux-debian:
+    strategy:
+      matrix:
+        os: [ "24.04", "22.04" ]
+      fail-fast: false
+    name: "Build Application Linux - Ubuntu ${{ matrix.os }}"
+    runs-on: ubuntu-${{ matrix.os }}
+    needs: [code-style]
+    steps:
+      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-python@83679a892e2d95755f2dac6acb0bfd1e9ac5d548 # v6.1.0
+        with:
+          python-version: ${{ env.MAIN_PYTHON_VERSION }}
+
+      - name: Install Linux Dependencies
+        run: |
+          sudo apt update
+          sudo apt install aptitude -y;
+          sudo aptitude install libfontconfig1-dev \
+            libfreetype6-dev \
+            libx11-dev \
+            libx11-xcb-dev \
+            libxext-dev \
+            libxfixes-dev \
+            libxi-dev \
+            libxrender-dev \
+            libxcb1-dev \
+            libxcb-glx0-dev \
+            libxcb-keysyms1-dev \
+            libxcb-image0-dev \
+            libxcb-shm0-dev \
+            libxcb-icccm4-dev \
+            libxcb-sync-dev \
+            libxcb-xfixes0-dev \
+            libxcb-shape0-dev \
+            libxcb-randr0-dev \
+            libxcb-render-util0-dev \
+            libxcb-cursor-dev \
+            libxcb-util-dev \
+            libxcb-xkb-dev \
+            libxcb-xinerama0-dev \
+            libxkbcommon-dev \
+            libxkbcommon-x11-dev \
+            -y
+          sudo apt install ruby -y
+          sudo gem install fpm
+
+      - name: Install Python Dependencies
+        run: pip install .[freeze]
+
+      - name: Extract version
+        run: |
+          set -e
+          python installer/extract_version.py
+
+      - name: Freeze application
+        env:
+          ADD_PYTHON_BINARIES: true
+        run: pyinstaller frozen.spec
+
+      - name: Setup and Copy Linux files for packaging
+        run: |
+          mkdir -p package/opt
+          mkdir -p package/share/applications
+          mkdir -p package/share/icons
+          cp -r dist/ansys_pyetk package/opt/ansys_pyetk
+          cp installer/assets/splash_icon.svg package/share/icons/splash_icon.svg
+          cp installer/linux/debian/ansys_pyetk_prebuild.desktop package/share/applications
+          find package/opt/ansys_pyetk -type f -exec chmod 644 -- {} +
+          find package/opt/ansys_pyetk -type d -exec chmod 755 -- {} +
+          find package/share -type f -exec chmod 644 -- {} +
+          chmod +x package/opt/ansys_pyetk/ansys_pyetk
+          chmod +x package/opt/ansys_pyetk/_internal/assets/uninstaller_ubuntu.sh
+          version=v`cat ./installer/VERSION`
+          echo "APPLICATION_VERSION=$version" >> $GITHUB_ENV
+          set -x  # Debug mode
+          fpm -v $version --fpm-options-file installer/linux/debian/fpm-options-debian
+
+      - name: Create zip file
+        env:
+          OS_NAME: ${{ matrix.os }}
+        run: |
+          cp installer/linux/debian/installer.sh installer.sh
+          cp installer/linux/debian/postInstallScript.sh postInstallScript.sh
+          chmod +x installer.sh postInstallScript.sh ansys_pyetk.deb
+          version=$(cat ./installer/VERSION)
+          os_version_processed="${OS_NAME//./_}"
+          zip_name="PyETK-Installer-ubuntu_${os_version_processed}.zip"
+          echo "OS_VERSION_PROCESSED=${os_version_processed}" >> $GITHUB_ENV
+          echo "APPLICATION_VERSION=v${version}" >> $GITHUB_ENV
+          zip -r $zip_name ansys_pyetk.deb installer.sh postInstallScript.sh
+
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
+        with:
+          name: PyETK-Installer-ubuntu_${{ matrix.os }}
+          path: PyETK-Installer-ubuntu_${{ env.OS_VERSION_PROCESSED }}.zip
+
+  doc-style:
+    name: "Documentation style"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: ansys/actions/doc-style@c2fa7c93f6883114e0e643599431b33d29f0b13f # v10.1.4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          vale-version: "3.4.1"
+
+  doc-build:
+    name: "Build documentation"
+    if: github.event_name == 'push' && contains(github.ref, 'refs/tags')
+    runs-on: [ self-hosted, Windows, pyaedt-toolkit ]
+    needs: [ doc-style ]
+    timeout-minutes: 50
+    steps:
+      - uses: actions/setup-python@83679a892e2d95755f2dac6acb0bfd1e9ac5d548 # v6.1.0
+        with:
+          python-version: ${{ env.MAIN_PYTHON_VERSION }}
+
+      - name: Install Pypandoc
+        run: |
+          python -m pip install --upgrade pip
+          pip install pypandoc pypandoc-binary
+          python -c "import pypandoc; pypandoc.download_pandoc(targetfolder='/usr/local/bin')"
+
+      - name: Add pandoc to Path
+        run: echo "/usr/local/bin" >> $GITHUB_PATH
+
+      - name: Build documentation
+        uses: ansys/actions/doc-build@v10
+        with:
+          python-version: ${{ env.MAIN_PYTHON_VERSION }}
+          use-python-cache: false
+          add-pdf-html-docs-as-assets: true
+          check-links: false
+
+  smoke-tests:
+    name: "Build and Smoke tests"
+    needs: [code-style]
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os : [windows-latest, ubuntu-latest]
+        python-version: ['3.10', '3.11', '3.12', '3.13']
+    steps:
+      - uses: ansys/actions/build-wheelhouse@c2fa7c93f6883114e0e643599431b33d29f0b13f # v10.1.4
+        with:
+          library-name: ${{ env.LIBRARY_NAME }}
+          operating-system: ${{ matrix.os }}
+          python-version: ${{ matrix.python-version }}
+
+# # =================================================================================================
+# # vvvvvvvvvvvvvvvvvvvvvvvvvvvvvv    RUNNING ON SELF-HOSTED RUNNER    vvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
+# # =================================================================================================
+
+  tests_windows:
+    name: "Windows Tests"
+    runs-on: [self-hosted, Windows, pyaedt-toolkit]
+    needs: [smoke-tests]
+    steps:
+      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+        with:
+          persist-credentials: false
+
+      - name: Set up Python
+        uses: actions/setup-python@83679a892e2d95755f2dac6acb0bfd1e9ac5d548 # v6.1.0
+        with:
+          python-version: ${{ env.MAIN_PYTHON_VERSION }}
+
+      - name: Create Python venv
+        run: |
+          python -m venv .venv
+          .\.venv\Scripts\Activate.ps1
+
+      - name: Install packages for testing
+        run: |
+          .\.venv\Scripts\Activate.ps1
+          python -m pip install --upgrade pip
+          pip install --upgrade build wheel
+          pip install .[tests]
+
+      - name: Toolkit REST API testing
+        timeout-minutes: 30
+        run: |
+          .\.venv\Scripts\Activate.ps1
+          pytest -v -m rest_API --cov=ansys.aedt.toolkits.electronic_transformer --cov-append
+
+      - name: Toolkit Backend API testing
+        timeout-minutes: 30
+        run: |
+          .\.venv\Scripts\Activate.ps1
+          pytest -v -m backend_API --cov=ansys.aedt.toolkits.electronic_transformer --cov-append
+
+      - name: Toolkit Frontend testing
+        timeout-minutes: 30
+        run: |
+          .\.venv\Scripts\Activate.ps1
+          pytest -v -m frontend --cov=ansys.aedt.toolkits.electronic_transformer --cov-append
+
+      - name: "Combine coverage files"
+        run: |
+          .\.venv\Scripts\Activate.ps1
+          python -m coverage html -d .cov\total-html
+          python -m coverage xml -o .cov\total.xml
+
+      - name: "Upload coverage results"
+        if: ${{ matrix.python-version == env.MAIN_PYTHON_VERSION  }}
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
+        with:
+          path: .cov/total-html
+          name: html-total-coverage
+
+# TODO: To uncomment once public
+#      - uses: codecov/codecov-action@18283e04ce6e62d37312384ff67231eb8fd56d24 # v5.4.3
+#        with:
+#          name: codecov-unit-tests
+#          files: ./coverage.xml
+#          flags: linux_unit
+
+# # =================================================================================================
+# # vvvvvvvvvvvvvvvvvvvvvvvvvvvvvv    RUNNING ON SELF-HOSTED RUNNER    vvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
+# # =================================================================================================
+
+  tests_linux:
+    name: "Linux Tests"
+    runs-on: [ self-hosted, Linux, pyaedt-toolkit ]
+    needs: [ smoke-tests ]
+    env:
+      ANSYSEM_ROOT252: '/usr/ansys_inc/v252/AnsysEM'
+      ANS_NODEPCHECK: '1'
+    steps:
+      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+        with:
+          persist-credentials: false
+
+      - name: Set up Python
+        uses: actions/setup-python@83679a892e2d95755f2dac6acb0bfd1e9ac5d548 # v6.1.0
+        with:
+          python-version: ${{ env.MAIN_PYTHON_VERSION }}
+
+      - name: Create Python venv
+        run: |
+          python -m venv .venv_linux
+
+      - name: Install packages for testing
+        run: |
+          source .venv_linux/bin/activate
+          pip install .[tests]
+
+      - name: Toolkit REST API testing
+        timeout-minutes: 30
+        run: |
+          export LD_LIBRARY_PATH=${ANSYSEM_ROOT252}/common/mono/Linux64/lib64:$LD_LIBRARY_PATH
+          source .venv_linux/bin/activate
+          pytest -v -m rest_API
+
+      - name: Toolkit backend API testing
+        timeout-minutes: 30
+        run: |
+          export LD_LIBRARY_PATH=${ANSYSEM_ROOT252}/common/mono/Linux64/lib64:$LD_LIBRARY_PATH
+          source .venv_linux/bin/activate
+          pytest -v -m backend_API
+
+      - name: Toolkit Frontend testing
+        timeout-minutes: 30
+        run: |
+          export LD_LIBRARY_PATH=${ANSYSEM_ROOT252}/common/mono/Linux64/lib64:$LD_LIBRARY_PATH
+          source .venv_linux/bin/activate
+          pytest -v -m frontend
+
+
+
+  build-library:
+    name: "Build library artifacts"
+    needs: [doc-build, tests_windows, tests_linux]
+    runs-on: ubuntu-latest
+    permissions:
+      attestations: write
+      contents: read
+      id-token: write
+    steps:
+      - uses: ansys/actions/build-library@c2fa7c93f6883114e0e643599431b33d29f0b13f # v10.1.4
+        with:
+          library-name: ${{ env.LIBRARY_NAME }}
+          python-version: ${{ env.MAIN_PYTHON_VERSION }}
+          attest-provenance: true
+
+  release:
+    name: "Release"
+    if: github.event_name == 'push' && contains(github.ref, 'refs/tags')
+    needs: [build-library, build-application-windows, build-application-linux-debian, update-changelog]
+    runs-on: ubuntu-latest
+    # Specifying a GitHub environment is optional, but strongly encouraged
+    environment: release
+    permissions:
+      id-token: write
+      contents: write
+    steps:
+      - name: Download the library artifacts from build-library step
+        uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7.0.0
+        with:
+          name: ${{ env.LIBRARY_NAME }}-artifacts
+          path: ${{ env.LIBRARY_NAME }}-artifacts
+
+      - name: Release to GitHub
+        uses: ansys/actions/release-github@c2fa7c93f6883114e0e643599431b33d29f0b13f # v10.1.4
+        with:
+          library-name: ${{ env.LIBRARY_NAME }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+          add-artifact-attestation-notes: true
+          generate_release_notes: false
+
+      - name: "Download all artifacts that got generated in the CI/CD"
+        uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7.0.0
+        with:
+          path: /tmp/artifacts
+
+      - name: List artifacts
+        run: ls -R /tmp/artifacts
+
+      - uses: softprops/action-gh-release@a06a81a03ee405af7f2048a818ed3f03bbf83c7b # v2.5.0
+        with:
+          files: |
+            /tmp/artifacts/PyETK-Installer-Windows/*.exe
+
+      - uses: softprops/action-gh-release@a06a81a03ee405af7f2048a818ed3f03bbf83c7b # v2.5.0
+        with:
+          files: |
+            /tmp/artifacts/PyETK-Installer-ubuntu_22.04/*.zip
+
+      - uses: softprops/action-gh-release@a06a81a03ee405af7f2048a818ed3f03bbf83c7b # v2.5.0
+        with:
+          files: |
+            /tmp/artifacts/PyETK-Installer-ubuntu_24.04/*.zip
+
+# # TODO: To update once public
+#       - name: "Upload artifacts to PyPI using trusted publisher"
+#         uses: pypa/gh-action-pypi-publish@ed0c53931b1dc9bd32cbe73a98c7f6766f8a527e # v1.13.0
+#         with:
+#           repository-url: "https://upload.pypi.org/legacy/"
+#           print-hash: true
+#           packages-dir: ${{ env.PACKAGE_NAME }}-artifacts
+#           skip-existing: false
+
+
+  doc-deploy-dev:
+    name: "Deploy development documentation"
+    if: github.event_name == 'push'
+    needs: build-library
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: ansys/actions/doc-deploy-dev@c2fa7c93f6883114e0e643599431b33d29f0b13f # v10.1.4
+        with:
+          cname: ${{ env.DOCUMENTATION_CNAME }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+          bot-user: ${{ secrets.PYANSYS_CI_BOT_USERNAME }}
+          bot-email: ${{ secrets.PYANSYS_CI_BOT_EMAIL }}
+
+  doc-deploy-stable:
+    name: "Deploy stable documentation"
+    if: github.event_name == 'push' && contains(github.ref, 'refs/tags')
+    needs: release
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: ansys/actions/doc-deploy-stable@c2fa7c93f6883114e0e643599431b33d29f0b13f # v10.1.4
+        with:
+          cname: ${{ env.DOCUMENTATION_CNAME }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+          bot-user: ${{ secrets.PYANSYS_CI_BOT_USERNAME }}
+          bot-email: ${{ secrets.PYANSYS_CI_BOT_EMAIL }}

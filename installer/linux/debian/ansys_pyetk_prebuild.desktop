@@ -1,0 +1,20 @@
+[Desktop Entry]
+
+# The type of the thing this desktop file refers to (for example can be Link)
+Type=Application
+
+# The application name.
+Name=Electronic Transformer Toolkit
+
+# Tooltip comment to show in menus.
+Comment=ETK Toolkit.
+
+# The path (folder) in which the executable is run
+Path=${HOME}/.local/opt/ansys_pyetk
+
+# The executable (can include arguments)
+Exec=${HOME}/.local/opt/ansys_pyetk/ansys_pyetk
+
+# The icon for the entry, using the name from `hicolor/scalable` without the extension.
+# You can also use a full path to a file in /opt.
+Icon=${HOME}/.local/share/icons/splash_icon.svg

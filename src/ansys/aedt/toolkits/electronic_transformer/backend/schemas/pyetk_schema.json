@@ -1,0 +1,550 @@
+{
+  "$schema": "http://json-schema.org/draft-06/schema#",
+  "$ref": "#/definitions/pyetk",
+  "definitions": {
+    "pyetk": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "json_version": {
+          "type": "string"
+        },
+        "core": {
+          "$ref": "#/definitions/Core"
+        },
+        "bobbin": {
+          "$ref": "#/definitions/Bobbin"
+        },
+        "winding": {
+          "$ref": "#/definitions/Winding"
+        },
+        "circuit": {
+          "$ref": "#/definitions/Circuit"
+        },
+        "settings": {
+          "$ref": "#/definitions/Settings"
+        },
+        "materials": {
+          "$ref": "#/definitions/Materials"
+        }
+      },
+      "required": [
+        "bobbin",
+        "circuit",
+        "core",
+        "settings",
+        "json_version",
+        "winding"
+      ],
+      "title": "PyETK Main Configuration"
+    },
+    "Bobbin": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "draw_bobbin": {
+          "type": "boolean"
+        },
+        "board_thickness": {
+          "type": "number"
+        },
+        "material": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "board_thickness",
+        "draw_bobbin",
+        "material"
+      ],
+      "title": "Bobbin"
+    },
+    "Circuit": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "connections": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/definitions/Connection"
+          }
+        },
+        "side_loads": {
+          "type": "array",
+          "items": {
+            "type": "number"
+          }
+        },
+        "excitation": {
+          "$ref": "#/definitions/Excitation"
+        }
+      },
+      "required": [
+        "connections",
+        "excitation",
+        "side_loads"
+      ],
+      "title": "Circuit"
+    },
+    "Connection": {
+      "type": "object",
+      "additionalProperties": false,
+      "patternProperties": {
+        "^[0-9]+$": {
+          "oneOf": [
+            {
+              "type": "string",
+              "const": "Layer"
+            },
+            {
+              "type": "object",
+              "additionalProperties": {
+                "oneOf": [
+                  {
+                    "type": "string",
+                    "const": "Layer"
+                  },
+                  {
+                    "$ref": "#/definitions/Connection"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "^[PS][0-9]+$": {
+          "type": "object",
+          "additionalProperties": {
+            "oneOf": [
+              {
+                "type": "string",
+                "const": "Layer"
+              },
+              {
+                "$ref": "#/definitions/Connection"
+              }
+            ]
+          }
+        }
+      },
+      "required": [],
+      "title": "Connection"
+    },
+    "Excitation": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "type": "string"
+        },
+        "value": {
+          "type": "number"
+        }
+      },
+      "required": [
+        "type",
+        "value"
+      ],
+      "title": "Excitation"
+    },
+    "Core": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "supplier": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string"
+        },
+        "model": {
+          "type": "string"
+        },
+        "material": {
+          "type": "string"
+        },
+        "dimensions": {
+          "$ref": "#/definitions/Dimensions"
+        },
+        "airgap": {
+          "$ref": "#/definitions/Airgap"
+        }
+      },
+      "required": [
+        "airgap",
+        "dimensions",
+        "material",
+        "model",
+        "supplier",
+        "type"
+      ],
+      "title": "Core"
+    },
+    "Airgap": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "define_airgap": {
+          "type": "boolean"
+        },
+        "airgap_on_leg": {
+          "type": "string"
+        },
+        "airgap_value": {
+          "type": "number"
+        }
+      },
+      "required": [
+        "define_airgap"
+      ],
+      "title": "Airgap"
+    },
+    "Dimensions": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "D_1": {
+          "type": "number"
+        },
+        "D_2": {
+          "type": "number"
+        },
+        "D_3": {
+          "type": "number"
+        },
+        "D_4": {
+          "type": "number"
+        },
+        "D_5": {
+          "type": "number"
+        },
+        "D_6": {
+          "type": "number"
+        },
+        "D_7": {
+          "type": "number"
+        },
+        "D_8": {
+          "type": "number"
+        }
+      },
+      "required": [
+        "D_1",
+        "D_2",
+        "D_3",
+        "D_4",
+        "D_5",
+        "D_6",
+        "D_7",
+        "D_8"
+      ],
+      "title": "Dimensions"
+    },
+    "Materials": {
+      "type": "object",
+      "additionalProperties": false,
+      "patternProperties": {
+        "^.*$": {
+          "$ref": "#/definitions/MaterialProperties"
+        }
+      },
+      "required": [
+      ],
+      "title": "Materials"
+    },
+    "MaterialProperties": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "conductivity": {
+          "type": "number"
+        },
+        "power_ferrite_loss_params": {
+          "$ref": "#/definitions/PowerFerriteLossParams"
+        },
+        "density": {
+          "type": "number"
+        },
+        "mur": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "number"
+            }
+          ]
+        },
+        "eps_r": {
+          "type": "number"
+        },
+        "mu(freq)": {
+          "type": "array",
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            }
+          }
+        }
+      },
+      "required": [
+      ],
+      "title": "Material Property Structure"
+    },
+    "PowerFerriteLossParams": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "cm": {
+          "type": "number"
+        },
+        "x": {
+          "type": "number"
+        },
+        "y": {
+          "type": "number"
+        }
+      },
+      "required": [
+        "cm",
+        "x",
+        "y"
+      ],
+      "title": "PowerFerriteLossParams"
+    },
+    "Settings": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "full_model": {
+          "type": "boolean"
+        },
+        "region_offset": {
+          "type": "number"
+        },
+        "segmentation_angle": {
+          "type": "number"
+        },
+        "analysis_setup": {
+          "$ref": "#/definitions/AnalysisSetup"
+        }
+      },
+      "required": [
+        "analysis_setup",
+        "full_model",
+        "region_offset",
+        "segmentation_angle"
+      ],
+      "title": "Settings"
+    },
+    "AnalysisSetup": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "adaptive_frequency": {
+          "type": "number"
+        },
+        "percentage_error": {
+          "type": "number"
+        },
+        "number_passes": {
+          "type": "integer"
+        },
+        "frequency_sweep": {
+          "$ref": "#/definitions/FrequencySweep"
+        }
+      },
+      "required": [
+        "adaptive_frequency",
+        "frequency_sweep",
+        "number_passes",
+        "percentage_error"
+      ],
+      "title": "AnalysisSetup"
+    },
+    "FrequencySweep": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "frequency_sweep": {
+          "type": "boolean"
+        },
+        "start_frequency": {
+          "type": "number"
+        },
+        "stop_frequency": {
+          "type": "number"
+        },
+        "samples": {
+          "type": "integer"
+        },
+        "scale": {
+          "type": "string"
+        },
+        "start_frequency_unit": {
+          "type": "string"
+        },
+        "stop_frequency_unit": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "frequency_sweep"
+      ],
+      "title": "FrequencySweep"
+    },
+    "Winding": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "layer_type": {
+          "type": "string"
+        },
+        "layer_spacing": {
+          "type": "number"
+        },
+        "top_margin": {
+          "type": "number"
+        },
+        "side_margin": {
+          "type": "number"
+        },
+        "layers": {
+          "$ref": "#/definitions/Layers"
+        }
+      },
+      "required": [
+        "layer_spacing",
+        "layer_type",
+        "layers",
+        "side_margin",
+        "top_margin"
+      ],
+      "title": "Winding"
+    },
+    "Layers": {
+      "type": "object",
+      "additionalProperties": false,
+      "patternProperties": {
+        "^layer_[0-9]*": {
+          "$ref": "#/definitions/Layer"
+        }
+      },
+      "required": [
+      ],
+      "title": "Layers"
+    },
+    "Layer": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "conductor": {
+          "$ref": "#/definitions/Conductor"
+        },
+        "insulation": {
+          "$ref": "#/definitions/Insulation"
+        },
+        "turns": {
+          "$ref": "#/definitions/Turns"
+        }
+      },
+      "required": [
+        "conductor",
+        "turns"
+      ],
+      "title": "Layer"
+    },
+    "Conductor": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "draw_skin_layers": {
+          "type": "boolean"
+        },
+        "material": {
+          "type": "string"
+        },
+        "width": {
+          "type": "number"
+        },
+        "diameter": {
+          "type": "number"
+        },
+        "height": {
+          "type": "number"
+        },
+        "type": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "draw_skin_layers",
+        "material",
+        "type"
+      ],
+      "oneOf": [
+        {
+          "properties": {
+            "type": {
+              "const": "Circular"
+            }
+          },
+          "required": [
+            "diameter"
+          ]
+        },
+        {
+          "properties": {
+            "type": {
+              "const": "Rectangular"
+            }
+          },
+          "required": [
+            "width",
+            "height"
+          ]
+        }
+      ],
+      "title": "Conductor"
+    },
+    "Insulation": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "thickness": {
+          "type": "number"
+        },
+        "material": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "material",
+        "thickness"
+      ],
+      "title": "Insulation"
+    },
+    "Turns": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "quantity": {
+          "type": "integer"
+        },
+        "spacing": {
+          "type": "string"
+        },
+        "distance": {
+          "type": "number"
+        }
+      },
+      "required": [
+        "quantity",
+        "spacing",
+        "distance"
+      ],
+      "title": "Turns"
+    }
+  }
+}

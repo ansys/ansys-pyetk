@@ -1,0 +1,37 @@
+[defaults]
+"toolkit_name" = "Electronic Transformer Toolkit"
+"backend_url" = "127.0.0.1"
+"backend_port" = 5001
+"debug" = false
+"app_name" = "Electronic Transformer ToolKit, PyETK"
+"main_title" = "Electronic Transformer ToolKit"
+"welcome_message" = "Welcome to the Electronic Transformer toolKit (PyETK)"
+"version" = "0.2.dev0"
+"copyright" = ""
+"year" = 2025
+"theme" = "synopsys_light.json"
+"high_resolution" = false
+
+[[defaults.add_left_menus]]
+btn_icon= "icon_plot_3d.svg"
+btn_id= "geometry_menu"
+btn_text= "Transformer Builder"
+btn_tooltip= "Create Transformer"
+show_top= true
+is_active= false
+
+[[defaults.add_left_menus]]
+btn_icon= "help.svg"
+btn_id= "help_menu"
+btn_text= "Help"
+btn_tooltip= "Help"
+show_top= false
+is_active= false
+
+[[defaults.add_left_menus]]
+btn_icon= "icon_log.svg"
+btn_id= "progress_menu"
+btn_text= "Progress"
+btn_tooltip= "Progress"
+show_top= false
+is_active= false

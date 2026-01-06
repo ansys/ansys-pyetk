@@ -1,0 +1,374 @@
+{
+    "$schema": "http://json-schema.org/draft-06/schema#",
+    "$ref": "#/definitions/ACT",
+    "definitions": {
+        "ACT": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "core_dimensions": {
+                    "$ref": "#/definitions/CoreDimensions"
+                },
+                "winding_definition": {
+                    "$ref": "#/definitions/WindingDefinition"
+                },
+                "setup_definition": {
+                    "$ref": "#/definitions/SetupDefinition"
+                }
+            },
+            "required": [
+                "core_dimensions",
+                "setup_definition",
+                "winding_definition"
+            ],
+            "title": "Legacy ACT ETK Configuration"
+        },
+        "CoreDimensions": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "segmentation_angle": {
+                    "type": "integer"
+                },
+                "supplier": {
+                    "type": "string"
+                },
+                "core_type": {
+                    "type": "string"
+                },
+                "core_model": {
+                    "type": "string"
+                },
+                "dimensions": {
+                    "$ref": "#/definitions/Dimensions"
+                },
+                "airgap": {
+                    "$ref": "#/definitions/Airgap"
+                }
+            },
+            "required": [
+                "airgap",
+                "core_model",
+                "core_type",
+                "dimensions",
+                "segmentation_angle",
+                "supplier"
+            ],
+            "title": "CoreDimensions"
+        },
+        "Airgap": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "define_airgap": {
+                    "type": "boolean"
+                },
+                "airgap_on_leg": {
+                    "type": "string"
+                },
+                "airgap_value": {
+                    "anyOf": [
+                        {"type": "number"},
+                        {"type": "string"}
+                    ]
+                }
+            },
+            "required": [
+                "define_airgap"
+            ],
+            "title": "Airgap"
+        },
+        "Dimensions": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "D_1": {
+                  "anyOf": [
+                    {"type": "string"},
+                    {"type": "number"}
+                  ]                },
+                "D_2": {
+                  "anyOf": [
+                    {"type": "string"},
+                    {"type": "number"}
+                  ]                },
+                "D_3": {
+                  "anyOf": [
+                    {"type": "string"},
+                    {"type": "number"}
+                  ]                },
+                "D_4": {
+                  "anyOf": [
+                    {"type": "string"},
+                    {"type": "number"}
+                  ]                },
+                "D_5": {
+                  "anyOf": [
+                    {"type": "string"},
+                    {"type": "number"}
+                  ]                },
+                "D_6": {
+                  "anyOf": [
+                    {"type": "string"},
+                    {"type": "number"}
+                  ]                },
+                "D_7": {
+                  "anyOf": [
+                    {"type": "string"},
+                    {"type": "number"}
+                  ]                },
+                "D_8": {
+                  "anyOf": [
+                    {"type": "string"},
+                    {"type": "number"}
+                  ]                }
+            },
+            "required": [
+                "D_1",
+                "D_2",
+                "D_3",
+                "D_4",
+                "D_5",
+                "D_6",
+                "D_7",
+                "D_8"
+            ],
+            "title": "Dimensions"
+        },
+        "SetupDefinition": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "core_material": {
+                    "type": "string"
+                },
+                "coil_material": {
+                    "type": "string"
+                },
+                "adaptive_frequency": {
+                    "type": "string"
+                },
+                "percentage_error": {
+                    "type": "string"
+                },
+                "number_passes": {
+                    "type": "integer"
+                },
+                "transformer_sides": {
+                    "type": "integer"
+                },
+                "side_loads": {
+                    "type": "array",
+                    "items": {
+                        "type": "number"
+                    }
+                },
+                "excitation_strategy": {
+                    "type": "string"
+                },
+                "voltage": {
+                    "type": "string"
+                },
+                "current": {
+                    "type": "string"
+                },
+                "offset": {
+                    "type": "string",
+                    "format": "integer"
+                },
+                "full_model": {
+                    "type": "boolean"
+                },
+                "project_path": {
+                    "type": "string"
+                },
+                "frequency_sweep_definition": {
+                    "$ref": "#/definitions/FrequencySweepDefinition"
+                },
+                "layer_side_definition": {
+                    "type": "object",
+                    "additionalProperties": {
+                        "type": "array",
+                        "items": {
+                            "type": "string",
+                            "format": "integer"
+                        }
+                    }
+                },
+                "connections_definition": {
+                    "type": "object",
+                    "additionalProperties": {
+                        "$ref": "#/definitions/ConnectionsDefinition"
+                    }
+                }
+            },
+            "required": [
+                "adaptive_frequency",
+                "connections_definition",
+                "core_material",
+                "excitation_strategy",
+                "frequency_sweep_definition",
+                "full_model",
+                "layer_side_definition",
+                "number_passes",
+                "offset",
+                "percentage_error",
+                "project_path",
+                "side_loads",
+                "transformer_sides",
+                "voltage"
+            ],
+            "title": "SetupDefinition"
+        },
+        "ConnectionsDefinition": {
+            "type": "object",
+            "additionalProperties": false,
+            "patternProperties": {
+                "^P[0-9]*$": {
+                    "type": "object",
+                    "additionalProperties": {
+                        "type": "string"
+                    }
+                },
+                "^S[0-9]*$": {
+                    "type": "object",
+                    "additionalProperties": {
+                        "type": "string"
+                    }
+                },
+                "^[0-9]*$": {
+                    "type": "string"
+                }
+            },
+            "required": [],
+            "title": "ConnectionsDefinition"
+        },
+        "FrequencySweepDefinition": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "frequency_sweep": {
+                    "type": "boolean"
+                },
+                "start_frequency": {
+                    "type": "string"
+                },
+                "start_frequency_unit": {
+                    "type": "string"
+                },
+                "stop_frequency": {
+                    "type": "string"
+                },
+                "stop_frequency_unit": {
+                    "type": "string"
+                },
+                "samples": {
+                    "type": "integer"
+                },
+                "scale": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "frequency_sweep"
+            ],
+            "title": "FrequencySweepDefinition"
+        },
+        "WindingDefinition": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "material_name": {
+                    "type": "string"
+                },
+                "draw_skin_layers": {
+                    "type": "boolean"
+                },
+                "layer_type": {
+                    "type": "string"
+                },
+                "number_of_layers": {
+                    "type": "string",
+                    "format": "integer"
+                },
+                "layer_spacing": {
+                    "type": "string"
+                },
+                "bobbin_board_thickness": {
+                    "type": "string"
+                },
+                "top_margin": {
+                    "type": "string"
+                },
+                "side_margin": {
+                    "type": "string"
+                },
+                "conductor_type": {
+                    "type": "string"
+                },
+                "include_bobbin": {
+                    "type": "boolean"
+                },
+                "layers_definition": {
+                    "$ref": "#/definitions/LayersDefinition"
+                }
+            },
+            "required": [
+                "bobbin_board_thickness",
+                "conductor_type",
+                "draw_skin_layers",
+                "include_bobbin",
+                "layer_spacing",
+                "layer_type",
+                "layers_definition",
+                "material_name",
+                "number_of_layers",
+                "side_margin",
+                "top_margin"
+            ],
+            "title": "WindingDefinition"
+        },
+        "LayersDefinition": {
+            "type": "object",
+            "additionalProperties": false,
+            "patternProperties": {
+                "^layer_[0-9]*$": {
+                    "$ref": "#/definitions/Layer"
+                }
+            },
+            "required": [],
+            "title": "LayersDefinition"
+        },
+        "Layer": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "conductor_width": {
+                    "type": "number"
+                },
+                "conductor_height": {
+                    "type": "number"
+                },
+                "insulation_thickness": {
+                    "type": "number"
+                },
+                "turns_number": {
+                    "type": "integer"
+                },
+                "conductor_diameter": {
+                    "type": "number"
+                },
+                "segments_number": {
+                    "type": "integer"
+                },
+                "turn_spacing": {
+                    "type": "number"
+                }
+            },
+            "required": [
+                "turns_number"
+            ],
+            "title": "Layer"
+        }
+    }
+}

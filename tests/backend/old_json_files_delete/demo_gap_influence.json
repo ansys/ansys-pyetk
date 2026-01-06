@@ -1,0 +1,77 @@
+{
+  "core_dimensions": {
+    "segmentation_angle": 10,
+    "supplier": "Ferroxcube",
+    "core_type": "RM",
+    "core_model": "RM12/I",
+    "dimensions": {
+      "D_1": "37.4",
+      "D_2": "25.0",
+      "D_3": "12.8",
+      "D_4": "24.5",
+      "D_5": "16.8",
+      "D_6": "0.0",
+      "D_7": "29.8",
+      "D_8": "16.1"
+    },
+    "airgap": {
+      "define_airgap": true,
+      "airgap_on_leg": "Center",
+      "airgap_value": "2.561"
+    }
+  },
+  "winding_definition": {
+    "material_name": "Copper",
+    "draw_skin_layers": true,
+    "layer_type": "Wound",
+    "number_of_layers": "1",
+    "layer_spacing": "0.0",
+    "bobbin_board_thickness": "1.5",
+    "top_margin": "0.0",
+    "side_margin": "0.0",
+    "conductor_type": "Circular",
+    "include_bobbin": false,
+    "layers_definition": {
+      "layer_1": {
+        "conductor_diameter": 2.05,
+        "segments_number": 8,
+        "insulation_thickness": 0.12,
+        "turns_number": 6
+      }
+    }
+  },
+  "setup_definition": {
+    "core_material": "3C81",
+    "adaptive_frequency": "500000.0",
+    "percentage_error": "1.0",
+    "number_passes": 5,
+    "transformer_sides": 1,
+    "excitation_strategy": "Voltage",
+    "voltage": "1.0",
+    "side_loads": [
+      1e-06
+    ],
+    "offset": "50",
+    "full_model": false,
+    "project_path": "C:/Files/",
+    "frequency_sweep_definition": {
+      "frequency_sweep": true,
+      "start_frequency": "10.0",
+      "start_frequency_unit": "kHz",
+      "stop_frequency": "500.0",
+      "stop_frequency_unit": "kHz",
+      "samples": 4,
+      "scale": "Logarithmic"
+    },
+    "layer_side_definition": {
+      "1": [
+        "1"
+      ]
+    },
+    "connections_definition": {
+      "1": {
+        "1": "Layer"
+      }
+    }
+  }
+}

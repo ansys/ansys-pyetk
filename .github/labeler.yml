@@ -1,0 +1,19 @@
+documentation:
+- changed-files:
+  - any-glob-to-any-file:
+    - "doc/source/*"
+    - "README.md"
+
+maintenance:
+- changed-files:
+  - any-glob-to-any-file:
+    - ".github/**/*"
+    - ".flake8"
+    - "pyproject.toml"
+
+testing:
+- changed-files:
+  - any-glob-to-any-file:
+    - "tests/conftest.py"
+    - "tests/backend/conftest.py"
+    - "tests/backend/tests_toolkit_rest_api/conftest.py"

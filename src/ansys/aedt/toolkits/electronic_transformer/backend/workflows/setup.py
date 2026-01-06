@@ -1,0 +1,312 @@
+# -*- coding: utf-8 -*-
+#
+# Copyright (C) 2023 - 2025 ANSYS, Inc. and/or its affiliates.
+# SPDX-License-Identifier: MIT
+#
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in all
+# copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
+import copy
+
+from ansys.aedt.toolkits.electronic_transformer.backend.workflows.bobbin import Bobbin
+from ansys.aedt.toolkits.electronic_transformer.backend.workflows.core import Core
+from ansys.aedt.toolkits.electronic_transformer.backend.workflows.winding import Winding
+
+
+class Setup:
+    """Manages the model setup, including the AEDT settings."""
+
+    def __init__(self, aedtapp, setup_def, winding_definitions, circuit_properties):
+        """Initialize and launch the setup component.
+
+        Parameters
+        ----------
+        aedtapp : :class:`pyaedt.Maxwell3d`
+            AEDT application instance.
+        setup_def : :class:`ansys.aedt.toolkits.common.properties.SetupProperties`
+            Setup properties.
+        winding_definitions : :class:`ansys.aedt.toolkits.common.properties.WindingProperties`
+            Winding properties.
+        circuit_properties : :class:`ansys.aedt.toolkits.common.properties.CircuitProperties`
+            Circuit properties.
+        """
+        self.__setup_definitions = setup_def
+        self.__aedt = aedtapp
+        self.__winding_definitions = winding_definitions
+        self.__circuit_properties = circuit_properties
+        self.__matrix = None
+
+    @property
+    def definitions(self):
+        """Get the setup definitions."""
+        return self.__setup_definitions
+
+    def create_setup(self):
+        """Create the AEDT setup."""
+        self.__aedt.solution_type = "EddyCurrent"
+
+        max_num_passes = self.__setup_definitions.analysis_setup.number_passes
+        percent_error = self.__setup_definitions.analysis_setup.percentage_error
+        adapt_freq = self.__setup_definitions.analysis_setup.adaptive_frequency
+        sweep = self.__setup_definitions.analysis_setup.frequency_sweep
+
+        if sweep.frequency_sweep:
+            start_frequency = sweep.start_frequency
+            stop_frequency = sweep.stop_frequency
+            samples = sweep.samples
+
+            if sweep.scale == "Linear":
+                sweep_scale = "LinearCount"
+            else:
+                sweep_scale = "LogScale"
+
+            self.insert_setup(
+                max_num_passes=max_num_passes,
+                percent_error=percent_error,
+                frequency=str(adapt_freq) + "Hz",
+                start_sweep_freq=start_frequency,
+                stop_sweep_freq=stop_frequency,
+                samples=samples,
+                sweep_type=sweep_scale,
+            )
+
+        else:
+            self.insert_setup(max_num_passes=max_num_passes, percent_error=percent_error, frequency=adapt_freq)
+
+        return adapt_freq
+
+    def insert_setup(
+        self,
+        max_num_passes,
+        percent_error,
+        frequency,
+        sweep_type=None,
+        start_sweep_freq=None,
+        stop_sweep_freq=None,
+        samples=None,
+    ):
+        """Create and configure an analysis setup in AEDT.
+
+        Parameters
+        ----------
+        max_num_passes : int
+            Maximum number of passes.
+        percent_error : float
+            Percentage of error.
+        frequency : str
+            Adaptive frequency.
+        sweep_type : str, optional
+            Type of sweep. The default is ``None``.
+        start_sweep_freq : str, optional
+            Start frequency for the sweep. The default is ``None``.
+        stop_sweep_freq : str, optional
+            Stop frequency for the sweep. The default is ``None``.
+        samples : int, optional
+            Number of samples. The default is ``None``.
+        """
+        setup = self.__aedt.create_setup(setupname="Setup1")
+        setup.props["MinimumPasses"] = 2
+        setup.props["MaximumPasses"] = max_num_passes
+        setup.props["MinimumConvergedPasses"] = 1
+        setup.props["PercentError"] = percent_error
+        setup.props["Frequency"] = frequency
+        setup.props["PercentRefinement"] = 30
+        setup.props["SolveFieldOnly"] = False
+        setup.props["SolveMatrixAtLast"] = True
+        setup.props["UseIterativeSolver"] = False
+        setup.props["RelativeResidual"] = 0.0001
+        setup.props["HasSweepSetup"] = True
+
+        setup.add_eddy_current_sweep(
+            range_type=sweep_type,
+            start=start_sweep_freq,
+            end=stop_sweep_freq,
+            count=samples,
+            units="Hz",
+            save_all_fields=True,
+        )
+
+    def assign_matrix_winding(self):
+        """Assign an RL matrix to a winding group."""
+        matrix_entry = []
+
+        counter = 1
+        for layer_name, layer in self.__winding_definitions.layers.items():
+            matrix_entry.append("Layer_" + str(counter))
+            counter = counter + 1
+
+        self.__matrix = self.__aedt.assign_matrix(matrix_name="Matrix1", assignment=matrix_entry)
+        self.reduce_matrix()
+
+    def reduce_matrix(self):
+        """Run the matrix reduction algorithm."""
+
+        def reduce(target_dict):
+            """Run matrix reduction to join serial and parallel connections.
+
+            Parameters
+            ----------
+            target_dict : dict
+                Dictionary with the connections.
+
+            Returns
+            -------
+            str
+                Reduction string.
+            """
+            reduction_list = []
+            for key, val in target_dict.items():
+                if isinstance(val, dict):
+                    new_red_str = reduce(val)
+                    reduction_type = "Series" if "S" in key[:1] else "Parallel"
+                    name = key.split("_", maxsplit=1)[1] if "Side" in key else key
+
+                    # Includes the matrix reduction
+                    new_red_list = new_red_str.split(",")
+                    if reduction_type == "Series":
+                        self.__matrix.join_series(sources=new_red_list, matrix_name="ReducedMatrix1", join_name=name)
+                    elif reduction_type == "Parallel":
+                        self.__matrix.join_parallel(sources=new_red_list, matrix_name="ReducedMatrix1", join_name=name)
+
+                    reduction_list.append(key)
+                else:
+                    reduction_list.append("Layer_" + key)
+
+            reduction_str = ",".join(reduction_list)
+            return reduction_str
+
+        # TODO: Remove if not used
+        # def rename(side_num, side_definition):
+        #     """
+        #     rename winding and circuit element to be Side_XXX for better UX
+        #     :param side_num: transformer side number
+        #     :param side_definition: dict with single layer in it
+        #     :return:
+        #     """
+        #     layer = "Layer_" + list(side_definition.keys())[0]
+        #     self.__aedt.odesign.ChangeProperty(
+        #         [
+        #             "NAME:AllTabs",
+        #             [
+        #                 "NAME:Maxwell3D",
+        #                 ["NAME:PropServers", "BoundarySetup:" + layer],
+        #                 ["NAME:ChangedProps", ["NAME:Name", "Value:=", "Side_" + side_num]],
+        #             ],
+        #         ]
+        #     )
+        #     # self.circuit.change_prop(comp, "name", "Side_" + side_num)
+        #     # also rename component in circuit
+        #     comp = self.__aedt.oeditor.FindElements(
+        #         ["NAME:SearchProps", "Prop:=", ["name", layer, 2]],
+        #         [
+        #             "NAME:Parameters",
+        #             "Filter:=",
+        #             2,
+        #             "MatchAll:=",
+        #             False,
+        #             "MatchCase:=",
+        #             False,
+        #             "SearchSubCkt:=",
+        #             True,
+        #             "SearchSelectionOnly:=",
+        #             False,
+        #         ],
+        #     )
+        #     # comp = self.circuit.get_comp_by_name(layer)[0]
+        #     # self.circuit.change_prop(comp, "name", "Side_" + side_num)
+        #
+        #     netlist_unit = ""
+        #     units = ["NetlistUnits:=", netlist_unit] if netlist_unit else []
+        #     self.editor.ChangeProperty(
+        #         [
+        #             "NAME:AllTabs",
+        #             [
+        #                 "NAME:PassedParameterTab",
+        #                 ["NAME:PropServers", comp],
+        #                 [
+        #                     "NAME:ChangedProps",
+        #                     ["NAME:" + "name", "OverridingDef:=", True, "Value:=", "Side_" + side_num + netlist_unit]
+        #                     + units,
+        #                 ],
+        #             ],
+        #         ]
+        #     )
+
+        connections = copy.deepcopy(self.__circuit_properties.connections)
+        for side_num, side_def in connections.items():
+            # if not any(isinstance(val, dict) for val in side_def.values()):
+            #     # rename(side_num, side_def) it does not seem to be used. In fact, it breaks some cases
+            #     pass
+            # else:
+            # replace key and append name of the side for main key, for better UX
+            main_connection = list(side_def.keys())[0]
+            side_def[main_connection + "_Side_" + side_num] = side_def.pop(main_connection)
+
+            reduce(side_def)
+
+    def apply_symmetry(self, core: Core, winding: Winding, bobbin: Bobbin):
+        """Apply symmetry to the model.
+
+        Parameters
+        ----------
+        core : :class:`ansys.aedt.toolkits.electronic_transformer.backend.workflows.core.Core`
+            Core object.
+        winding : :class:`ansys.aedt.toolkits.electronic_transformer.backend.workflows.winding.Winding`
+            Winding object.
+        bobbin : :class:`ansys.aedt.toolkits.electronic_transformer.backend.workflows.bobbin.Bobbin`
+            Bobbin object.
+        """
+        if not self.__setup_definitions.full_model:
+            obs_list = []
+            obs_list.extend(core.objects_list)
+            obs_list.extend(winding.objects_list)
+            obs_list.extend(winding.skin_layers_list)
+            obs_list.extend(bobbin.objects_list)
+
+            first_vertex_id_first_terminal = self.__aedt.modeler.get_object_vertices(winding.terminals_list[0])[0]
+            x_coord = float(self.__aedt.modeler.get_vertex_position(first_vertex_id_first_terminal)[0])
+
+            if x_coord >= 0:
+                self.__aedt.modeler.mirror(assignment=winding.terminals_list, origin=[0, 0, 0], vector=[-1, 0, 0])
+
+            self.__aedt.change_symmetry_multiplier(value=2)
+            self.__aedt.modeler.split(assignment=obs_list, plane="YZ", sides="NegativeOnly", tool=None)
+
+            self.__aedt.modeler.change_region_padding("0", padding_type="Percentage Offset", direction="+X")
+
+            self.__aedt.modeler.fit_all()
+
+    def assign_mesh_operations(self, core: Core, winding: Winding):
+        """Assign mesh operations to the model.
+
+        Parameters
+        ----------
+        core : :class:`ansys.aedt.toolkits.electronic_transformer.backend.workflows.core.Core`
+            Core object.
+        winding : :class:`ansys.aedt.toolkits.electronic_transformer.backend.workflows.winding.Winding`
+            Winding object.
+        """
+        dimension_list = []
+        for each_dim_key, each_dim_val in core.properties.dimensions.items():
+            dimension_list.append(float(each_dim_val))
+        mesh_op_sz = max(dimension_list) / 20.0
+
+        self.__aedt.mesh.assign_length_mesh(assignment=core.objects_list, maximum_length=mesh_op_sz, name="Core")
+        self.__aedt.mesh.assign_length_mesh(
+            assignment=winding.objects_list, maximum_length=mesh_op_sz / 2, name="Layers"
+        )

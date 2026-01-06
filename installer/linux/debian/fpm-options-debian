@@ -1,0 +1,13 @@
+-d "libffi-dev"
+-d "libssl-dev"
+-d "build-essential"
+-d "libsqlite3-dev"
+-d "libxcb-xinerama0"
+-C package
+-s dir
+-t deb
+-n "ansys_pyetk"
+-p ansys_pyetk.deb
+--description "Ansys Template Toolkit."
+--url "https://aedt.toolkit.electronic_transformer.docs.pyansys.com/"
+--maintainer "ANSYS, Inc. <pyansys.core@ansys.com>"
