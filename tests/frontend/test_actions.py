@@ -1,33 +1,32 @@
-# Copyright (C) 2023 - 2025 ANSYS, Inc. and/or its affiliates.
-# SPDX-License-Identifier: MIT
+# -*- coding: utf-8 -*-
+#
+# Copyright (C) 2023 - 2026 ANSYS, Inc. and/or its affiliates.
+# SPDX-License-Identifier: Apache-2.0
 #
 #
-# Permission is hereby granted, free of charge, to any person obtaining a copy
-# of this software and associated documentation files (the "Software"), to deal
-# in the Software without restriction, including without limitation the rights
-# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-# copies of the Software, and to permit persons to whom the Software is
-# furnished to do so, subject to the following conditions:
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
 #
-# The above copyright notice and this permission notice shall be included in all
-# copies or substantial portions of the Software.
+#     http://www.apache.org/licenses/LICENSE-2.0
 #
-# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-# SOFTWARE.
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
 
 """Unit tests for the Frontend actions class."""
 
-from unittest.mock import Mock, patch
+from unittest.mock import Mock
+from unittest.mock import patch
+
 import pytest
 
 from ansys.aedt.toolkits.electronic_transformer.ui.actions import Frontend
 
 pytestmark = [pytest.mark.frontend]
+
 
 class TestFrontend:
     """Test the Frontend class."""
@@ -59,12 +58,14 @@ class TestFrontend:
 
         frontend = Frontend()
         frontend.url = "http://localhost:5000"
-        frontend.get_properties = Mock(return_value={
-            "active_project": "Test_Project",
-            "active_design": "Test_Design",
-            "project_list": ["Test_Project"],
-            "design_list": {"Test_Project": ["Test_Design"]},
-        })
+        frontend.get_properties = Mock(
+            return_value={
+                "active_project": "Test_Project",
+                "active_design": "Test_Design",
+                "project_list": ["Test_Project"],
+                "design_list": {"Test_Project": ["Test_Design"]},
+            }
+        )
         frontend._update_backend_properties = Mock()
         frontend.get_project_name = Mock(side_effect=lambda x: x)
 
@@ -86,12 +87,14 @@ class TestFrontend:
 
         frontend = Frontend()
         frontend.url = "http://localhost:5000"
-        frontend.get_properties = Mock(return_value={
-            "active_project": "Test_Project",
-            "active_design": "Test_Design",
-            "project_list": ["Test_Project"],
-            "design_list": {"Test_Project": ["Test_Design"]},
-        })
+        frontend.get_properties = Mock(
+            return_value={
+                "active_project": "Test_Project",
+                "active_design": "Test_Design",
+                "project_list": ["Test_Project"],
+                "design_list": {"Test_Project": ["Test_Design"]},
+            }
+        )
         frontend._update_backend_properties = Mock()
         frontend.get_project_name = Mock(side_effect=lambda x: x)
 
@@ -114,12 +117,14 @@ class TestFrontend:
 
         frontend = Frontend()
         frontend.url = "http://localhost:5000"
-        frontend.get_properties = Mock(return_value={
-            "active_project": "Test_Project",
-            "active_design": "Test_Design",
-            "project_list": ["Test_Project"],
-            "design_list": {"Test_Project": ["Test_Design"]},
-        })
+        frontend.get_properties = Mock(
+            return_value={
+                "active_project": "Test_Project",
+                "active_design": "Test_Design",
+                "project_list": ["Test_Project"],
+                "design_list": {"Test_Project": ["Test_Design"]},
+            }
+        )
         frontend._update_backend_properties = Mock()
         frontend.get_project_name = Mock(side_effect=lambda x: x)
 
@@ -347,12 +352,14 @@ class TestFrontend:
 
         frontend = Frontend()
         frontend.url = "http://localhost:5000"
-        frontend.get_properties = Mock(return_value={
-            "active_project": "Test_Project",
-            "active_design": "",
-            "project_list": ["Test_Project"],
-            "design_list": {},  # Empty design list
-        })
+        frontend.get_properties = Mock(
+            return_value={
+                "active_project": "Test_Project",
+                "active_design": "",
+                "project_list": ["Test_Project"],
+                "design_list": {},  # Empty design list
+            }
+        )
         frontend._update_backend_properties = Mock()
         frontend.get_project_name = Mock(side_effect=lambda x: x)
 
@@ -384,5 +391,4 @@ class TestFrontend:
 
         assert frontend.properties is not None
         assert frontend.data_manager is not None
-        assert hasattr(frontend.data_manager, 'create_backend_data')
-
+        assert hasattr(frontend.data_manager, "create_backend_data")

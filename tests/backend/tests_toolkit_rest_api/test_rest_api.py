@@ -1,7 +1,8 @@
-# Copyright (C) 2023 - 2024 ANSYS, Inc. and/or its affiliates.
+# -*- coding: utf-8 -*-
+#
+# Copyright (C) 2023 - 2026 ANSYS, Inc. and/or its affiliates.
 # SPDX-License-Identifier: MIT
-#
-#
+
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
 # in the Software without restriction, including without limitation the rights
@@ -21,8 +22,9 @@
 # SOFTWARE.
 
 import pytest
-from tests.backend.tests_toolkit_rest_api.conftest import geometry_properties
+
 from tests.backend.conftest import DEFAULT_CONFIG
+from tests.backend.tests_toolkit_rest_api.conftest import geometry_properties
 
 pytestmark = [pytest.mark.rest_API]
 
@@ -64,7 +66,6 @@ class TestRestAPI:
         Send geometry properties to the API and trigger bobbin geometry creation.
         Assert that the response status code is 200, indicating success.
         """
-
         client.put("/properties", json=geometry_properties)
 
         response = client.post("/create_bobbin_geometry")
