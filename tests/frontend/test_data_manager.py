@@ -22,7 +22,8 @@
 
 """Unit tests for the DataManager class."""
 
-
+import json
+from pathlib import Path
 from ansys.aedt.toolkits.electronic_transformer.ui.common.data_manager import DataManager
 import pytest
 
@@ -457,3 +458,46 @@ class TestDataManager:
         assert "layer_1" in winding["layers"]
         assert "layer_2" in winding["layers"]
 
+    def test_create_backend_data_lowercase_and_disabled(self):
+        """Test lowercase conversion of excitation and disabled bobbin branch."""
+        dm = DataManager()
+        dm.properties.circuit.excitation.type = "VOLTAGE"  # Test .lower()
+        dm.properties.bobbin.enabled = False  # Test boolean mapping
+
+        result = dm.create_backend_data()
+
+        assert result["circuit"]["excitation"]["type"] == "voltage"
+        assert result["bobbin"]["draw_bobbin"] is False
+
+    def test_format_input_version_unsupported(self):
+        """Test branch: if data["json_version"] < self.supported_json."""
+        dm = DataManager()
+        # Version lower than 0.1.0
+        unsupported_json_model = Path(__file__).parent / "versioned_json" / "not_supported" / "not_supported_version.json"
+        with unsupported_json_model.open("rb") as f:
+            data = json.load(f)
+        result = dm._format_input_version(data)
+
+        assert "Version 0.0.1 Not Supported" == result
+
+    def test_format_input_version_legacy_act(self):
+        """Test branch: if "json_version" not in data.keys()."""
+        dm = DataManager()
+        # Data missing the json_version key entirely
+        act_json_model = Path(__file__).parent / "act_json" / "demo_IEEE.json"
+        with act_json_model.open("rb") as f:
+            data = json.load(f)
+        result = dm._format_input_version(data)
+
+        # This triggers the outer 'else' block for legacy ACT format
+        assert "Input in Legacy Format. Save data in new format." == result
+
+    def test_format_input_version_current_exact(self):
+        """Ensure boundary condition for version comparison is covered."""
+        dm = DataManager()
+        versioned_json_model = Path(__file__).parent / "versioned_json" / "v0_1_0" / "EI_planar_rectangular.json"
+        with versioned_json_model.open("rb") as f:
+            data = json.load(f)
+
+        result = dm._format_input_version(data)
+        assert "Working with version: 0.1.0" == result
