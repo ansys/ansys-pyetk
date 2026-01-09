@@ -320,21 +320,8 @@ jobs:
     needs: [ doc-style ]
     timeout-minutes: 50
     steps:
-      - uses: actions/setup-python@83679a892e2d95755f2dac6acb0bfd1e9ac5d548 # v6.1.0
-        with:
-          python-version: ${{ env.MAIN_PYTHON_VERSION }}
-
-      - name: Install Pypandoc
-        run: |
-          python -m pip install --upgrade pip
-          pip install pypandoc pypandoc-binary
-          python -c "import pypandoc; pypandoc.download_pandoc(targetfolder='/usr/local/bin')"
-
-      - name: Add pandoc to Path
-        run: echo "/usr/local/bin" >> $GITHUB_PATH
-
       - name: Build documentation
-        uses: ansys/actions/doc-build@v10
+        uses: ansys/actions/doc-build@41f86da4c9ead510db9135e428e33df9cc6f92e1 # v10.2.3
         with:
           python-version: ${{ env.MAIN_PYTHON_VERSION }}
           use-python-cache: false
@@ -458,25 +445,20 @@ jobs:
       - name: Toolkit REST API testing
         timeout-minutes: 30
         run: |
-          export LD_LIBRARY_PATH=${ANSYSEM_ROOT252}/common/mono/Linux64/lib64:$LD_LIBRARY_PATH
           source .venv_linux/bin/activate
           pytest -v -m rest_API
 
       - name: Toolkit backend API testing
         timeout-minutes: 30
         run: |
-          export LD_LIBRARY_PATH=${ANSYSEM_ROOT252}/common/mono/Linux64/lib64:$LD_LIBRARY_PATH
           source .venv_linux/bin/activate
           pytest -v -m backend_API
 
       - name: Toolkit Frontend testing
         timeout-minutes: 30
         run: |
-          export LD_LIBRARY_PATH=${ANSYSEM_ROOT252}/common/mono/Linux64/lib64:$LD_LIBRARY_PATH
           source .venv_linux/bin/activate
           pytest -v -m frontend
-
-
 
   build-library:
     name: "Build library artifacts"

@@ -1,24 +1,20 @@
-# Copyright (C) 2023 - 2025 ANSYS, Inc. and/or its affiliates.
-# SPDX-License-Identifier: MIT
+# -*- coding: utf-8 -*-
+#
+# Copyright (C) 2023 - 2026 ANSYS, Inc. and/or its affiliates.
+# SPDX-License-Identifier: Apache-2.0
 #
 #
-# Permission is hereby granted, free of charge, to any person obtaining a copy
-# of this software and associated documentation files (the "Software"), to deal
-# in the Software without restriction, including without limitation the rights
-# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-# copies of the Software, and to permit persons to whom the Software is
-# furnished to do so, subject to the following conditions:
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
 #
-# The above copyright notice and this permission notice shall be included in all
-# copies or substantial portions of the Software.
+#     http://www.apache.org/licenses/LICENSE-2.0
 #
-# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-# SOFTWARE.
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
 
 """
 Test module for AEDT application properties and circuit functionality.
@@ -27,9 +23,11 @@ This module contains unit tests for the AEDT application object properties
 including mesh operations, design setups, ports, and circuit creation functionality.
 """
 
-import pytest
 from pathlib import Path
-from tests.backend.conftest import DEFAULT_CONFIG
+
+import pytest
+
+from ansys.aedt.core.generic.general_methods import is_linux
 
 json_files_path = Path(__file__).parents[1] / "json_files"
 vol_limit = 1e-5
@@ -37,11 +35,9 @@ vol_limit = 1e-5
 pytestmark = [pytest.mark.backend_API]
 
 
-@pytest.mark.skipif(DEFAULT_CONFIG["non_graphical"], reason="Not running in non-graphical mode.")
+@pytest.mark.skipif(is_linux, reason="Crashing on Linux")
 class TestBackendAPI:
-
     def test_01_create_model(self, aedt_common_fixture_class):
-
         json_file_name = "RM_wound_circular.json"
         json_path = Path(json_files_path) / json_file_name
         aedt_common_fixture_class.read_props_from_json(json_path)
@@ -74,14 +70,26 @@ class TestBackendAPI:
         # Verify first setup properties
         if setups_count > 0:
             assert setups[0].name == "Setup1"
-            assert setups[0].properties['Max. Number of Passes'] == 5
+            assert setups[0].properties["Max. Number of Passes"] == 5
 
         # Verify solution type is AC Magnetic
         assert solution_type == "AC Magnetic", f"Solution type is {solution_type}, expected 'AC Magnetic'"
 
-    def test_05_post_processing(self, aedt_common_fixture_class):
+    def test_04_post_processing(self, aedt_common_fixture_class):
         aedt_common_fixture_class.connect_design("Maxwell3D")
         aedtapp = aedt_common_fixture_class.aedtapp
-        assert aedtapp.post.field_plot_names == ['B', 'Core_Loss', 'J', 'Ohmic_Loss']
-        assert aedtapp.post.plots[0].plot_name == 'PyETK Leakage_Inductance'
-        assert aedtapp.post.plots[0].expressions == ['L(Layer_1,Layer_1)*(1-sqr(CplCoef(Layer_1,Layer_1)))']
+        assert aedtapp.post.field_plot_names == ["B", "Core_Loss", "J", "Ohmic_Loss"]
+        assert aedtapp.post.plots[0].plot_name == "PyETK Leakage_Inductance"
+        assert aedtapp.post.plots[0].expressions == ["L(Layer_1,Layer_1)*(1-sqr(CplCoef(Layer_1,Layer_1)))"]
+
+    def test_05_circut(self, aedt_common_fixture_class):
+        aedt_common_fixture_class.connect_design("Maxwell3D")
+        aedtapp = aedt_common_fixture_class.aedtapp
+
+        if "circuit" in aedtapp.design_list[0].lower():
+            circuit_design_name = aedtapp.design_list[0]
+        else:
+            circuit_design_name = aedtapp.design_list[1]
+
+        cir = aedtapp.desktop_class[[aedtapp.project_name, circuit_design_name]]
+        assert len(cir.modeler.schematic.components) == 4

@@ -1,7 +1,7 @@
 Electronic Transformer toolKit (PyETK)
 =============================================
 
-|pyansys| |PythonVersion| |GH-CI| |MIT| |coverage| |ruff|
+|pyansys| |PythonVersion| |GH-CI| |Apache| |coverage| |ruff|
 
 .. |pyansys| image:: https://img.shields.io/badge/Py-Ansys-ffc107.svg?logo=data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAABDklEQVQ4jWNgoDfg5mD8vE7q/3bpVyskbW0sMRUwofHD7Dh5OBkZGBgW7/3W2tZpa2tLQEOyOzeEsfumlK2tbVpaGj4N6jIs1lpsDAwMJ278sveMY2BgCA0NFRISwqkhyQ1q/Nyd3zg4OBgYGNjZ2ePi4rB5loGBhZnhxTLJ/9ulv26Q4uVk1NXV/f///////69du4Zdg78lx//t0v+3S88rFISInD59GqIH2esIJ8G9O2/XVwhjzpw5EAam1xkkBJn/bJX+v1365hxxuCAfH9+3b9/+////48cPuNehNsS7cDEzMTAwMMzb+Q2u4dOnT2vWrMHu9ZtzxP9vl/69RVpCkBlZ3N7enoDXBwEAAA+YYitOilMVAAAAAElFTkSuQmCC
    :target: https://docs.pyansys.com/
@@ -13,8 +13,8 @@ Electronic Transformer toolKit (PyETK)
 .. |GH-CI| image:: https://github.com/ansys/ansys-pyetk/actions/workflows/ci_cd.yml/badge.svg
    :target: https://github.com/ansys/ansys-pyetk/actions/workflows/ci_cd.yml
 
-.. |MIT| image:: https://img.shields.io/badge/License-MIT-yellow.svg
-   :target: https://opensource.org/licenses/MIT
+.. |Apache| image:: https://img.shields.io/badge/License-Apache%202.0-blue.svg
+   :target: https://opensource.org/licenses/Apache-2.0
 
 .. |coverage| image:: https://codecov.io/gh/ansys/ansys-pyetk/branch/main/graph/badge.svg
    :target: https://codecov.io/gh/ansys/ansys-pyetk
@@ -49,26 +49,15 @@ Documentation is currently Work in Progress.
 On the `issues <https://github.com/ansys/ansys-pyetk/issues>`_ page, you can
 create issues to submit questions, report bugs, and request new features.
 
-The following are known Issues
+The following are known missing functionality / current work in progress
 
-1) ETK does not create a unique Maxwell model every time "Create Transformer" button is pressed, after the first click it will create a model on top of the previous one
-2) Side1 load always set to 100 Ohm in external circuit.
-3) Frequency sweep missing.
-4) Maxwell post processing Matrix parameters, Rectangular plots and Field overlays missing.
-5) Save ETK button missing from UI.
-6) Remove button not working.
-7) Segmentation Angle line edit missing.
-8) Fractional Model tick box missing.
-9) Skin Layers tick box missing.
-10) Core Material properties can be selected in UI combo but do not appear in Maxwell model
-11) Core dimensions (D_1 to D_9) not editable in UI
-12) Auto population of "Start New Design" and behaviour of arrow buttons in UI not fully functional
-13) Example models "demo_planarComponents", "demo_rectangular_EC" and "demo_rectangular_EQ" produce cores with incorrect sizes due to 11)
-14) Combo boxes in UI are dark when windows dark mode is used
-15) Check of windings fitting in cores not implemented.
+- Remove button logic in Winding menu has not been implemented.
+- Check of windings fitting in cores not implemented.
 
-Tests:
-Run tests_backend_api and tests_toolkit_rest_api independtly.
+Expected Behaviour
+------------------
+ETK does not create a unique Maxwell model every time "Create Transformer" button is pressed, after the first click it will create a model on top of the previous one
+
 
 Installation
 ~~~~~~~~~~~~
@@ -92,7 +81,7 @@ site. Information on how to report vulenrabilities is also found.
 
 License
 ~~~~~~~
-This toolkit is licensed under the MIT license.
+This toolkit is licensed under the Apache-2.0 license.
 
 This module makes no commercial claim over Ansys whatsoever.
 The use of the interactive control of this toolkit requires a legally licensed
