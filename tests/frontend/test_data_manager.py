@@ -20,6 +20,7 @@
 
 import json
 from pathlib import Path
+
 import pytest
 
 from ansys.aedt.toolkits.electronic_transformer.ui.common.data_manager import DataManager
@@ -483,7 +484,9 @@ class TestDataManager:
         """Test branch: if data["json_version"] < self.supported_json."""
         dm = DataManager()
         # Version lower than 0.1.0
-        unsupported_json_model = Path(__file__).parent / "versioned_json" / "not_supported" / "not_supported_version.json"
+        unsupported_json_model = (
+            Path(__file__).parent / "versioned_json" / "not_supported" / "not_supported_version.json"
+        )
         with unsupported_json_model.open("rb") as f:
             data = json.load(f)
         result = dm._format_input_version(data)
