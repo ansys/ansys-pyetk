@@ -1,31 +1,8 @@
-# Copyright (C) 2024 - 2025 ANSYS, Inc. and/or its affiliates.
-# SPDX-License-Identifier: MIT
-#
-#
-# Permission is hereby granted, free of charge, to any person obtaining a copy
-# of this software and associated documentation files (the "Software"), to deal
-# in the Software without restriction, including without limitation the rights
-# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-# copies of the Software, and to permit persons to whom the Software is
-# furnished to do so, subject to the following conditions:
-#
-# The above copyright notice and this permission notice shall be included in all
-# copies or substantial portions of the Software.
-#
-# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-# SOFTWARE.
-
 """Sphinx documentation configuration file."""
 
 from datetime import datetime
 import os
 from pathlib import Path
-import subprocess
 import sys
 
 from ansys_sphinx_theme import ansys_favicon
@@ -37,14 +14,12 @@ from ansys_sphinx_theme import pyansys_logo_black
 from ansys_sphinx_theme import watermark
 from sphinx.util import logging
 
+os.environ["PYANSYS_VISUALIZER_HTML_BACKEND"] = "true"
+
 root_path = str(Path(__file__).parent.parent.parent)
 src_path = Path(root_path) / "src"
 sys.path.insert(0, str(root_path))
 sys.path.insert(0, str(src_path))
-print("root_path:", root_path)
-print("src_path:", str(src_path))
-
-install_pypandoc = subprocess.run(["pip", "install", "pypandoc-binary"], capture_output=True, text=True)
 
 try:
     from ansys.aedt.toolkits.electronic_transformer import __version__
@@ -78,10 +53,6 @@ def setup(app):
     app.connect("builder-inited", check_pandoc_installed)
 
 
-os.environ["PYANSYS_VISUALIZER_HTML_BACKEND"] = "true"
-
-
-print(__version__)
 # Project information
 project = "ansys-pyetk"
 copyright = f"(c) {datetime.now().year} ANSYS, Inc. All rights reserved"
@@ -89,7 +60,6 @@ author = "ANSYS, Inc."
 release = version = __version__
 cname = os.getenv("DOCUMENTATION_CNAME", default="etk.docs.pyansys.com")
 switcher_version = get_version_match(__version__)
-print(copyright)
 
 # Select desired logo, theme, and declare the html title
 html_logo = pyansys_logo_black

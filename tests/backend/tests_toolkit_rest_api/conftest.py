@@ -1,31 +1,24 @@
-# Copyright (C) 2023 - 2024 ANSYS, Inc. and/or its affiliates.
-# SPDX-License-Identifier: MIT
+# -*- coding: utf-8 -*-
+#
+# Copyright (C) 2023 - 2026 ANSYS, Inc. and/or its affiliates.
+# SPDX-License-Identifier: Apache-2.0
 #
 #
-# Permission is hereby granted, free of charge, to any person obtaining a copy
-# of this software and associated documentation files (the "Software"), to deal
-# in the Software without restriction, including without limitation the rights
-# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-# copies of the Software, and to permit persons to whom the Software is
-# furnished to do so, subject to the following conditions:
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
 #
-# The above copyright notice and this permission notice shall be included in all
-# copies or substantial portions of the Software.
+#     http://www.apache.org/licenses/LICENSE-2.0
 #
-# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-# SOFTWARE.
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
 
 """
-API Test Configuration Module
------------------------------
+API Test Configuration Module.
 
-Description
-===========
 This module contains the configuration and fixture for the pytest-based tests for the API.
 
 The default configuration can be changed by placing a file called local_config.json.
@@ -41,14 +34,18 @@ You can enable the API log file in the backend_properties.json.
 
 """
 
-import pytest
-from pathlib import Path
 import json
-from tests.backend.conftest import read_local_config, setup_aedt_settings, DEFAULT_CONFIG
-from ansys.aedt.toolkits.electronic_transformer.backend.api import ToolkitBackend
+from pathlib import Path
+
+import pytest
+
 from ansys.aedt.core import generate_unique_project_name
-from ansys.aedt.toolkits.electronic_transformer.backend.run_backend import app
+from ansys.aedt.toolkits.electronic_transformer.backend.api import ToolkitBackend
 from ansys.aedt.toolkits.electronic_transformer.backend.models import properties
+from ansys.aedt.toolkits.electronic_transformer.backend.run_backend import app
+from tests.backend.conftest import DEFAULT_CONFIG
+from tests.backend.conftest import read_local_config
+from tests.backend.conftest import setup_aedt_settings
 
 
 def load_json_properties():
@@ -65,13 +62,12 @@ def load_json_properties():
     dict
         Parsed JSON data as a dictionary.
     """
-    json_file_name="EI_planar_rectangular.json"
+    json_file_name = "EI_planar_rectangular.json"
     json_path = Path(__file__).parents[1]
     json_path = Path(json_path) / "json_files" / json_file_name
-    with open(json_path) as f:
+    with json_path.open() as f:
         return json.load(f)
         pass
-
 
 
 @pytest.fixture(scope="function")
@@ -89,16 +85,16 @@ def client(logger, common_temp_dir):
     is_aedt_launched = aedt_common.wait_to_be_idle()
     aedt_common.active_project = generate_unique_project_name(common_temp_dir)
     properties.active_project = aedt_common.active_project
-    properties.active_design ="No Design"
+    properties.active_design = "No Design"
     aedt_common.connect_design("Maxwell3D")
 
     if not is_aedt_launched:
         logger.error("AEDT is not launched")
 
-    app.testing  =  True
+    app.testing = True
 
     with app.test_client() as test_client:
-        new_properties ={
+        new_properties = {
             "aedt_version": properties.aedt_version,
             "non_graphical": properties.non_graphical,
             "use_grpc": properties.use_grpc,
@@ -108,7 +104,6 @@ def client(logger, common_temp_dir):
             "design_list": properties.design_list,
             "project_list": properties.project_list,
             "selected_process": properties.selected_process,
-
         }
         test_client.put("/properties", json=new_properties)
         yield test_client

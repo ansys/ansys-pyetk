@@ -1,0 +1,331 @@
+{
+  "json_version": "0.1.0",
+  "core": {
+    "supplier": "Phillips",
+    "type": "EFD",
+    "model": "EFD30",
+    "material": "4F1",
+    "dimensions": {
+      "D_1": 30.0,
+      "D_2": 22.4,
+      "D_3": 14.6,
+      "D_4": 15.0,
+      "D_5": 12.3,
+      "D_6": 9.1,
+      "D_7": 4.9,
+      "D_8": -0.75
+    },
+    "airgap": {
+      "define_airgap": false,
+      "airgap_on_leg": "None",
+      "airgap_value": 0.0
+    }
+  },
+  "winding": {
+    "layer_type": "Wound",
+    "layer_spacing": 0.1,
+    "top_margin": 0.0,
+    "side_margin": 0.0,
+    "layers": {
+      "layer_1": {
+        "conductor": {
+          "draw_skin_layers": false,
+          "material": "Copper",
+          "type": "Rectangular",
+          "width": 0.2,
+          "height": 2.2
+        },
+        "turns": {
+          "quantity": 10,
+          "spacing": "top",
+          "distance": 0.0
+        }
+      },
+      "layer_2": {
+        "conductor": {
+          "draw_skin_layers": false,
+          "material": "Copper",
+          "type": "Rectangular",
+          "width": 0.2,
+          "height": 2.2
+        },
+        "turns": {
+          "quantity": 10,
+          "spacing": "top",
+          "distance": 0.0
+        }
+      },
+      "layer_3": {
+        "conductor": {
+          "draw_skin_layers": false,
+          "material": "Copper",
+          "type": "Rectangular",
+          "width": 0.2,
+          "height": 2.2
+        },
+        "turns": {
+          "quantity": 10,
+          "spacing": "top",
+          "distance": 0.0
+        }
+      },
+      "layer_4": {
+        "conductor": {
+          "draw_skin_layers": false,
+          "material": "Copper",
+          "type": "Rectangular",
+          "width": 0.2,
+          "height": 2.2
+        },
+        "turns": {
+          "quantity": 10,
+          "spacing": "top",
+          "distance": 0.0
+        }
+      },
+      "layer_5": {
+        "conductor": {
+          "draw_skin_layers": false,
+          "material": "Copper",
+          "type": "Rectangular",
+          "width": 0.2,
+          "height": 2.2
+        },
+        "turns": {
+          "quantity": 10,
+          "spacing": "top",
+          "distance": 0.0
+        }
+      },
+      "layer_6": {
+        "conductor": {
+          "draw_skin_layers": false,
+          "material": "Copper",
+          "type": "Rectangular",
+          "width": 0.2,
+          "height": 2.2
+        },
+        "turns": {
+          "quantity": 10,
+          "spacing": "top",
+          "distance": 0.0
+        }
+      }
+    }
+  },
+  "bobbin": {
+    "draw_bobbin": true,
+    "board_thickness": 0.1,
+    "material": "material_bobbin"
+  },
+  "circuit": {
+    "connections": {
+      "1": {
+        "P2": {
+          "1": "Layer",
+          "6": "Layer"
+        }
+      },
+      "3": {
+        "S4": {
+          "3": "Layer",
+          "4": "Layer"
+        }
+      },
+      "2": {
+        "S3": {
+          "2": "Layer",
+          "5": "Layer"
+        }
+      }
+    },
+    "side_loads": [
+      1e-06,
+      2.0,
+      1000000.0
+    ],
+    "excitation": {
+      "type": "voltage",
+      "value": 1.0
+    }
+  },
+  "settings": {
+    "analysis_setup": {
+      "adaptive_frequency": 100000.0,
+      "frequency_sweep": {
+        "frequency_sweep": true,
+        "samples": 2,
+        "scale": "Logarithmic",
+        "start_frequency": 1000.0,
+        "stop_frequency": 100000.0
+      },
+      "number_passes": 5,
+      "percentage_error": 1.0
+    },
+    "full_model": false,
+    "region_offset": 50.0,
+    "segmentation_angle": 10.0
+  },
+  "materials": {
+    "material_insulation": {
+      "mur": 1,
+      "eps_r": 4
+    },
+    "Copper": {
+      "conductivity": 58000000.0,
+      "mur": 1,
+      "eps_r": 1
+    },
+    "4F1": {
+      "conductivity": 1e-06,
+      "power_ferrite_loss_params": {
+        "cm": 15.358,
+        "x": 1.29,
+        "y": 2.181
+      },
+      "density": 4600,
+      "mu(freq)": [
+        [
+          0.0,
+          80.0
+        ],
+        [
+          984562.393205353,
+          81.1
+        ],
+        [
+          2013974.90175465,
+          82.0
+        ],
+        [
+          5043159.48717136,
+          83.0
+        ],
+        [
+          7101520.60278034,
+          84.9
+        ],
+        [
+          8968146.67757928,
+          86.0
+        ],
+        [
+          10316051.7838208,
+          87.0
+        ],
+        [
+          12433534.237776,
+          89.0
+        ],
+        [
+          16197927.8235767,
+          92.1
+        ],
+        [
+          19221345.4398991,
+          94.3
+        ],
+        [
+          22456979.9553977,
+          97.7
+        ],
+        [
+          26648678.3964615,
+          101.1
+        ],
+        [
+          29714811.0468401,
+          106.0
+        ],
+        [
+          33653251.1825056,
+          111.0
+        ],
+        [
+          35814101.0012546,
+          115.0
+        ],
+        [
+          38711307.293913,
+          119.0
+        ],
+        [
+          42498967.4273376,
+          123.2
+        ],
+        [
+          47388796.0971766,
+          124.7
+        ],
+        [
+          51222345.2975163,
+          124.7
+        ],
+        [
+          55366012.092768,
+          121.8
+        ],
+        [
+          58921021.876123,
+          115.0
+        ],
+        [
+          62704296.1503099,
+          108.4
+        ],
+        [
+          64686076.6154633,
+          100.0
+        ],
+        [
+          67776803.2440111,
+          90.0
+        ],
+        [
+          74408340.9926387,
+          70.5
+        ],
+        [
+          80427654.8305764,
+          50.3
+        ],
+        [
+          89681466.7757929,
+          32.7
+        ],
+        [
+          103160517.838208,
+          20.0
+        ],
+        [
+          113254131.515281,
+          14.5
+        ],
+        [
+          124335342.37776,
+          10.2
+        ],
+        [
+          145265392.594678,
+          7.1
+        ],
+        [
+          161979278.235767,
+          5.0
+        ],
+        [
+          177827941.003892,
+          4.0
+        ],
+        [
+          204555335.00502,
+          3.0
+        ]
+      ]
+    },
+    "material_bobbin": {
+      "mur": 1,
+      "eps_r": 4
+    }
+  }
+}
