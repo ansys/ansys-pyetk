@@ -1,0 +1,212 @@
+{
+  "core_dimensions": {
+    "segmentation_angle": 10,
+    "supplier": "Ferroxcube",
+    "core_type": "RM",
+    "core_model": "RM12/I",
+    "dimensions": {
+      "D_1": "37.4",
+      "D_2": "25.0",
+      "D_3": "12.8",
+      "D_4": "24.5",
+      "D_5": "16.8",
+      "D_6": "0.0",
+      "D_7": "29.8",
+      "D_8": "16.1"
+    },
+    "airgap": {
+      "define_airgap": false
+    }
+  },
+  "winding_definition": {
+    "material_name": "Copper",
+    "draw_skin_layers": false,
+    "layer_type": "Planar",
+    "number_of_layers": "15",
+    "layer_spacing": "0.0",
+    "bobbin_board_thickness": "0.2",
+    "top_margin": "2.0",
+    "side_margin": "1.0",
+    "conductor_type": "Rectangular",
+    "include_bobbin": true,
+    "layers_definition": {
+      "layer_1": {
+        "conductor_width": 4.0,
+        "conductor_height": 0.7,
+        "turn_spacing": 0.1,
+        "turns_number": 1,
+        "segments_number": 8
+
+      },
+      "layer_2": {
+        "conductor_width": 4.0,
+        "conductor_height": 0.7,
+        "turn_spacing": 0.1,
+        "turns_number": 1,
+        "segments_number": 8
+      },
+      "layer_3": {
+        "conductor_width": 4.0,
+        "conductor_height": 0.7,
+        "turn_spacing": 0.1,
+        "turns_number": 1,
+        "segments_number": 8
+      },
+      "layer_4": {
+        "conductor_width": 4.0,
+        "conductor_height": 0.7,
+        "turn_spacing": 0.1,
+        "turns_number": 1,
+        "segments_number": 8
+      },
+      "layer_5": {
+        "conductor_width": 4.0,
+        "conductor_height": 0.7,
+        "turn_spacing": 0.1,
+        "turns_number": 1,
+        "segments_number": 8
+      },
+      "layer_6": {
+        "conductor_width": 4.0,
+        "conductor_height": 0.7,
+        "turn_spacing": 0.1,
+        "turns_number": 1,
+        "segments_number": 8
+      },
+      "layer_7": {
+        "conductor_width": 4.0,
+        "conductor_height": 0.7,
+        "turn_spacing": 0.1,
+        "turns_number": 1,
+        "segments_number": 8
+      },
+      "layer_8": {
+        "conductor_width": 4.0,
+        "conductor_height": 0.7,
+        "turn_spacing": 0.1,
+        "turns_number": 1,
+        "segments_number": 8
+      },
+      "layer_9": {
+        "conductor_width": 4.0,
+        "conductor_height": 0.7,
+        "turn_spacing": 0.1,
+        "turns_number": 1,
+        "segments_number": 8
+      },
+      "layer_10": {
+        "conductor_width": 4.0,
+        "conductor_height": 0.7,
+        "turn_spacing": 0.1,
+        "turns_number": 1,
+        "segments_number": 8
+      },
+      "layer_11": {
+        "conductor_width": 4.0,
+        "conductor_height": 0.7,
+        "turn_spacing": 0.1,
+        "turns_number": 1,
+        "segments_number": 8
+      },
+      "layer_12": {
+        "conductor_width": 4.0,
+        "conductor_height": 0.7,
+        "turn_spacing": 0.1,
+        "turns_number": 1,
+        "segments_number": 8
+      },
+      "layer_13": {
+        "conductor_width": 4.0,
+        "conductor_height": 0.7,
+        "turn_spacing": 0.1,
+        "turns_number": 1,
+        "segments_number": 8
+      },
+      "layer_14": {
+        "conductor_width": 4.0,
+        "conductor_height": 0.7,
+        "turn_spacing": 0.1,
+        "turns_number": 1,
+        "segments_number": 8
+      },
+      "layer_15": {
+        "conductor_width": 4.0,
+        "conductor_height": 0.7,
+        "turn_spacing": 0.1,
+        "turns_number": 1,
+        "segments_number": 8
+      }
+    }
+  },
+  "setup_definition": {
+    "core_material": "3C90",
+    "adaptive_frequency": "500000.0",
+    "percentage_error": "1.0",
+    "number_passes": 5,
+    "transformer_sides": 2,
+    "side_loads": [
+      1e-06,
+      3.0
+    ],
+    "excitation_strategy": "Voltage",
+    "voltage": "1.0",
+    "offset": "50",
+    "full_model": false,
+    "project_path": "D:/Files/",
+    "frequency_sweep_definition": {
+      "frequency_sweep": true,
+      "start_frequency": "50",
+      "start_frequency_unit": "kHz",
+      "stop_frequency": "500.0",
+      "stop_frequency_unit": "kHz",
+      "samples": 4,
+      "scale": "Logarithmic"
+    },
+    "layer_side_definition": {
+      "1": [
+        "1",
+        "3",
+        "5",
+        "7",
+        "9",
+        "11",
+        "13",
+        "15"
+      ],
+      "2": [
+        "2",
+        "4",
+        "6",
+        "8",
+        "10",
+        "12",
+        "14"
+      ]
+    },
+    "connections_definition": {
+      "1": {
+        "S2": {
+          "1": "Layer",
+          "3": "Layer",
+          "5": "Layer",
+          "7": "Layer",
+          "9": "Layer",
+          "11": "Layer",
+          "13": "Layer",
+          "15": "Layer"
+        }
+      },
+      "2": {
+        "S3": {
+          "2": "Layer",
+          "4": "Layer",
+          "6": "Layer",
+          "8": "Layer",
+          "10": "Layer",
+          "12": "Layer",
+          "14": "Layer"
+        }
+      }
+    }
+  }
+}
