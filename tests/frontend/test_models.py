@@ -1,54 +1,49 @@
-# Copyright (C) 2023 - 2025 ANSYS, Inc. and/or its affiliates.
-# SPDX-License-Identifier: MIT
+# -*- coding: utf-8 -*-
+#
+# Copyright (C) 2023 - 2026 ANSYS, Inc. and/or its affiliates.
+# SPDX-License-Identifier: Apache-2.0
 #
 #
-# Permission is hereby granted, free of charge, to any person obtaining a copy
-# of this software and associated documentation files (the "Software"), to deal
-# in the Software without restriction, including without limitation the rights
-# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-# copies of the Software, and to permit persons to whom the Software is
-# furnished to do so, subject to the following conditions:
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
 #
-# The above copyright notice and this permission notice shall be included in all
-# copies or substantial portions of the Software.
+#     http://www.apache.org/licenses/LICENSE-2.0
 #
-# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-# SOFTWARE.
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
 
 """Unit tests for the models module."""
 
 import pytest
-pytestmark = [pytest.mark.frontend]
 
-from ansys.aedt.toolkits.electronic_transformer.ui.models import (
-    AirGapConfig,
-    BobbinProperties,
-    CircuitProperties,
-    Conductor,
-    ConnectionDefinitionProperties,
-    CoreGUIProperties,
-    CoreProperties,
-    ElectricalGUIProperties,
-    ExcitationProperties,
-    FrequencySweepProperties,
-    GUIProperties,
-    Insulation,
-    Layer,
-    LayerSideDefinitionProperties,
-    Properties,
-    SettingsGUIProperties,
-    SettingsProperties,
-    Turns,
-    WindingConductorProperties,
-    WindingGUIProperties,
-    WindingLayerProperties,
-    WindingProperties,
-)
+from ansys.aedt.toolkits.electronic_transformer.ui.models import AirGapConfig
+from ansys.aedt.toolkits.electronic_transformer.ui.models import BobbinProperties
+from ansys.aedt.toolkits.electronic_transformer.ui.models import CircuitProperties
+from ansys.aedt.toolkits.electronic_transformer.ui.models import Conductor
+from ansys.aedt.toolkits.electronic_transformer.ui.models import ConnectionDefinitionProperties
+from ansys.aedt.toolkits.electronic_transformer.ui.models import CoreGUIProperties
+from ansys.aedt.toolkits.electronic_transformer.ui.models import CoreProperties
+from ansys.aedt.toolkits.electronic_transformer.ui.models import ElectricalGUIProperties
+from ansys.aedt.toolkits.electronic_transformer.ui.models import ExcitationProperties
+from ansys.aedt.toolkits.electronic_transformer.ui.models import FrequencySweepProperties
+from ansys.aedt.toolkits.electronic_transformer.ui.models import GUIProperties
+from ansys.aedt.toolkits.electronic_transformer.ui.models import Insulation
+from ansys.aedt.toolkits.electronic_transformer.ui.models import Layer
+from ansys.aedt.toolkits.electronic_transformer.ui.models import LayerSideDefinitionProperties
+from ansys.aedt.toolkits.electronic_transformer.ui.models import Properties
+from ansys.aedt.toolkits.electronic_transformer.ui.models import SettingsGUIProperties
+from ansys.aedt.toolkits.electronic_transformer.ui.models import SettingsProperties
+from ansys.aedt.toolkits.electronic_transformer.ui.models import Turns
+from ansys.aedt.toolkits.electronic_transformer.ui.models import WindingConductorProperties
+from ansys.aedt.toolkits.electronic_transformer.ui.models import WindingGUIProperties
+from ansys.aedt.toolkits.electronic_transformer.ui.models import WindingLayerProperties
+from ansys.aedt.toolkits.electronic_transformer.ui.models import WindingProperties
+
+pytestmark = [pytest.mark.frontend]
 
 
 class TestAirGapConfig:
@@ -291,9 +286,11 @@ class TestLayer:
     def test_default_values(self):
         """Test default values for Layer."""
         layer = Layer()
-        assert layer.conductor == Conductor(draw_skin_layers=True, material='', width=54.0, diameter=1.0, height=34.0, type='')
-        assert layer.insulation == Insulation(material='', thickness=0.05)
-        assert layer.turns == Turns(quantity=10, spacing='', distance=0.0)
+        assert layer.conductor == Conductor(
+            draw_skin_layers=True, material="", width=54.0, diameter=1.0, height=34.0, type=""
+        )
+        assert layer.insulation == Insulation(material="", thickness=0.05)
+        assert layer.turns == Turns(quantity=10, spacing="", distance=0.0)
 
 
 class TestCoreGUIProperties:
@@ -465,10 +462,7 @@ class TestFrequencySweepPropertiesAdvanced:
 
     def test_frequency_units(self):
         """Test different frequency units."""
-        sweep = FrequencySweepProperties(
-            start_frequency_unit="kHz",
-            stop_frequency_unit="MHz"
-        )
+        sweep = FrequencySweepProperties(start_frequency_unit="kHz", stop_frequency_unit="MHz")
         assert sweep.start_frequency_unit == "kHz"
         assert sweep.stop_frequency_unit == "MHz"
 
@@ -546,4 +540,3 @@ class TestComplexWindingConfiguration:
 
         assert conductor.enabled_skin_depth_mesh is False
         assert conductor.cross_section == "Circular"
-

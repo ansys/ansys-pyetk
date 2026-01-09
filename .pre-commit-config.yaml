@@ -1,13 +1,11 @@
 ci:
     autofix_commit_msg: 'CHORE: Auto fixes from pre-commit hooks'
-    autoupdate_branch: 'chore/pre-commit-autoupdate'
     autoupdate_commit_msg: 'CHORE: Pre-commit automatic update'
     autoupdate_schedule: weekly
 
 exclude: |
     (?x)(
         src/ansys/aedt/toolkits/electronic_transformer/ui/windows/.* |
-        tests/.* |
         README.rst
     )
 
@@ -39,7 +37,7 @@ repos:
   hooks:
     - id: check-github-workflows
 
-- repo: https://github.com/asottile/blacken-docs
+- repo: https://github.com/adamchainz/blacken-docs
   rev: 1.19.1
   hooks:
     - id: blacken-docs
@@ -52,10 +50,11 @@ repos:
     - id: check-pre-commit-ci-config
 
 - repo: https://github.com/ansys/pre-commit-hooks
-  rev: v0.4.4
+  rev: v0.5.2
   hooks:
     - id: add-license-headers
       files: '(src|tests|installer)/.*\.(py)'
       args:
-      - --custom_template=mit_license.jinja2
+      - --custom_license=Apache-2.0
+      - --custom_template=apache_2.0_license.jinja2
       - --start_year=2023

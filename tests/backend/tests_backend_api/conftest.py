@@ -1,30 +1,29 @@
-# Copyright (C) 2023 - 2024 ANSYS, Inc. and/or its affiliates.
-# SPDX-License-Identifier: MIT
+# -*- coding: utf-8 -*-
+#
+# Copyright (C) 2023 - 2026 ANSYS, Inc. and/or its affiliates.
+# SPDX-License-Identifier: Apache-2.0
 #
 #
-# Permission is hereby granted, free of charge, to any person obtaining a copy
-# of this software and associated documentation files (the "Software"), to deal
-# in the Software without restriction, including without limitation the rights
-# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-# copies of the Software, and to permit persons to whom the Software is
-# furnished to do so, subject to the following conditions:
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
 #
-# The above copyright notice and this permission notice shall be included in all
-# copies or substantial portions of the Software.
+#     http://www.apache.org/licenses/LICENSE-2.0
 #
-# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-# SOFTWARE.
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
 
 import pytest
+
 from ansys.aedt.core import generate_unique_project_name
 from ansys.aedt.toolkits.electronic_transformer.backend.api import ToolkitBackend
-from tests.backend.conftest import read_local_config, setup_aedt_settings, DEFAULT_CONFIG, PROJECT_NAME
 from ansys.aedt.toolkits.electronic_transformer.backend.models import properties
+from tests.backend.conftest import DEFAULT_CONFIG
+from tests.backend.conftest import read_local_config
+from tests.backend.conftest import setup_aedt_settings
 
 # Setup config
 config = DEFAULT_CONFIG.copy()
@@ -54,7 +53,6 @@ def _initialize_aedt_common(logger, common_temp_dir):
     properties.active_design = "No Design"
     aedt_common.connect_design("Maxwell3D")
 
-
     return aedt_common, is_aedt_launched
 
 
@@ -73,6 +71,7 @@ def aedt_common_fixture_function(logger, common_temp_dir):
         logger.error("AEDT is not launched")
 
     _close_aedt_common(aedt_common)
+
 
 @pytest.fixture(scope="class")
 def aedt_common_fixture_class(logger, common_temp_dir):
