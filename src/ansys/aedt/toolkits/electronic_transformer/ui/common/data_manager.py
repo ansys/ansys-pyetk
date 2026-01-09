@@ -180,6 +180,8 @@ class DataManager:
 
                 msg = "Working with version: " + str(data["json_version"])
                 return msg
+            else:
+                return "Version " + str(data["json_version"]) + " Not Supported"
 
         else:
             self.gui_properties.core.supplier = data["core_dimensions"]["supplier"]
