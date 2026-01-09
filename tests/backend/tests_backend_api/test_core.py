@@ -80,3 +80,57 @@ class TestBackendAPI:
         core = aedt_common_fixture_function.create_core_geometry()
 
         assert core.volume > 0 and round(abs(core.volume - 20334.080000000005), 4) < vol_limit
+
+    def test_create_core_geometry_efd(self, aedt_common_fixture_function):
+        json_file_name = "EFD_wound_rectangular.json"
+        json_path = Path(json_files_path) / json_file_name
+        aedt_common_fixture_function.read_props_from_json(json_path)
+
+        core = aedt_common_fixture_function.create_core_geometry()
+
+        assert core.volume > 0 and round(abs(core.volume - 6443.891999999998), 4) < vol_limit
+
+    def test_create_core_geometry_ep(self, aedt_common_fixture_function):
+        json_file_name = "EP_planar_rectangular.json"
+        json_path = Path(json_files_path) / json_file_name
+        aedt_common_fixture_function.read_props_from_json(json_path)
+
+        core = aedt_common_fixture_function.create_core_geometry()
+
+        assert core.volume > 0 and round(abs(core.volume - 5971.088286446697), 4) < vol_limit
+
+    def test_create_core_geometry_er(self, aedt_common_fixture_function):
+        json_file_name = "ER_wound_rectangular.json"
+        json_path = Path(json_files_path) / json_file_name
+        aedt_common_fixture_function.read_props_from_json(json_path)
+
+        core = aedt_common_fixture_function.create_core_geometry()
+
+        assert core.volume > 0 and round(abs(core.volume - 21561.735919032937), 4) < vol_limit
+
+    def test_create_core_geometry_ph(self, aedt_common_fixture_function):
+        json_file_name = "PH_wound_rectangular.json"
+        json_path = Path(json_files_path) / json_file_name
+        aedt_common_fixture_function.read_props_from_json(json_path)
+
+        core = aedt_common_fixture_function.create_core_geometry()
+
+        assert core.volume > 0 and round(abs(core.volume - 5628.59734607602), 4) < vol_limit
+
+    def test_create_core_geometry_pq(self, aedt_common_fixture_function):
+        json_file_name = "PQ_wound_rectangular.json"
+        json_path = Path(json_files_path) / json_file_name
+        aedt_common_fixture_function.read_props_from_json(json_path)
+
+        core = aedt_common_fixture_function.create_core_geometry()
+
+        assert core.volume > 0 and round(abs(core.volume - 42290.20919233184), 4) < vol_limit
+
+    def test_create_core_geometry_pt(self, aedt_common_fixture_function):
+        json_file_name = "PT_wound_rectangular.json"
+        json_path = Path(json_files_path) / json_file_name
+        aedt_common_fixture_function.read_props_from_json(json_path)
+
+        core = aedt_common_fixture_function.create_core_geometry()
+
+        assert core.volume > 0 and round(abs(core.volume - 4300.668011078688), 4) < vol_limit
