@@ -3,7 +3,6 @@
 from datetime import datetime
 import os
 from pathlib import Path
-import subprocess
 import sys
 
 from ansys_sphinx_theme import ansys_favicon
@@ -15,14 +14,12 @@ from ansys_sphinx_theme import pyansys_logo_black
 from ansys_sphinx_theme import watermark
 from sphinx.util import logging
 
+os.environ["PYANSYS_VISUALIZER_HTML_BACKEND"] = "true"
+
 root_path = str(Path(__file__).parent.parent.parent)
 src_path = Path(root_path) / "src"
 sys.path.insert(0, str(root_path))
 sys.path.insert(0, str(src_path))
-print("root_path:", root_path)
-print("src_path:", str(src_path))
-
-install_pypandoc = subprocess.run(["pip", "install", "pypandoc-binary"], capture_output=True, text=True)
 
 try:
     from ansys.aedt.toolkits.electronic_transformer import __version__
@@ -56,10 +53,6 @@ def setup(app):
     app.connect("builder-inited", check_pandoc_installed)
 
 
-os.environ["PYANSYS_VISUALIZER_HTML_BACKEND"] = "true"
-
-
-print(__version__)
 # Project information
 project = "ansys-pyetk"
 copyright = f"(c) {datetime.now().year} ANSYS, Inc. All rights reserved"
@@ -67,7 +60,6 @@ author = "ANSYS, Inc."
 release = version = __version__
 cname = os.getenv("DOCUMENTATION_CNAME", default="etk.docs.pyansys.com")
 switcher_version = get_version_match(__version__)
-print(copyright)
 
 # Select desired logo, theme, and declare the html title
 html_logo = pyansys_logo_black
