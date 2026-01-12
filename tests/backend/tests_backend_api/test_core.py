@@ -134,3 +134,24 @@ class TestBackendAPI:
         core = aedt_common_fixture_function.create_core_geometry()
 
         assert core.volume > 0 and round(abs(core.volume - 4300.668011078688), 4) < vol_limit
+
+    def test_create_core_geometry_ui(self, aedt_common_fixture_function):
+        json_file_name = "UI_wound_rectangular.json"
+        json_path = Path(json_files_path) / json_file_name
+        aedt_common_fixture_function.read_props_from_json(json_path)
+
+        core = aedt_common_fixture_function.create_core_geometry()
+
+        assert core.volume > 0 and round(abs(core.volume - 171999.656), 4) < vol_limit
+
+    def test_create_core_geometry_ui_airgap(self, aedt_common_fixture_function):
+        json_file_name = "UI_wound_rectangular.json"
+        json_path = Path(json_files_path) / json_file_name
+        aedt_common_fixture_function.read_props_from_json(json_path)
+        aedt_common_fixture_function.properties.core.airgap.define_airgap = True
+        aedt_common_fixture_function.properties.core.airgap.airgap_on_leg = "Both"
+        aedt_common_fixture_function.properties.core.airgap.airgap_value = 1.23
+
+        core = aedt_common_fixture_function.create_core_geometry()
+
+        assert core.volume > 0 and round(abs(core.volume - 171999.656), 4) < vol_limit

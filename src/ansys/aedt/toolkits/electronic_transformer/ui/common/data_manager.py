@@ -137,7 +137,9 @@ class DataManager:
                 self.gui_properties.core.model = data["core"]["model"]
                 self.gui_properties.core.material = data["core"]["material"]
                 self.gui_properties.core.dimensions = data["core"]["dimensions"]
-                self.gui_properties.core.airgap = data["core"]["airgap"]
+                self.gui_properties.core.airgap.enabled = data["core"]["airgap"]["define_airgap"]
+                self.gui_properties.core.airgap.height = data["core"]["airgap"]["airgap_value"]
+                self.gui_properties.core.airgap.location = data["core"]["airgap"]["airgap_on_leg"]
 
                 self.gui_properties.settings.include_bobbin = data["bobbin"]["draw_bobbin"]
                 self.gui_properties.bobbin_board_and_margin.thickness = data["bobbin"]["board_thickness"]
