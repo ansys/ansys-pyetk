@@ -128,7 +128,7 @@ class Setup:
         setup.props["HasSweepSetup"] = True
 
         setup.add_eddy_current_sweep(
-            range_type=sweep_type,
+            sweep_type=sweep_type,
             start=start_sweep_freq,
             end=stop_sweep_freq,
             count=samples,
