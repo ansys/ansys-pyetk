@@ -14,7 +14,7 @@ from ansys.aedt.toolkits.electronic_transformer.ui.windows.help.help_page import
 
 DOCUMENTATION_URL = "https://aedt.toolkit.electronic_transformer.docs.pyansys.com/"
 ISSUE_TRACKER_URL = "https://github.com/ansys/ansys-pyetk/issues"
-ABOUT_TEXT = f"""<h2>Template Toolkit {__version__}</h2>
+ABOUT_TEXT = f"""<h2>PyETK Electronic Transformer Toolkit {__version__}</h2>
 <p>Project using <a href='https://wiki.qt.io/Qt_for_Python'> PySide6</a>, Copyright 2024 The Qt Company Ltd.</p>
 <p>The graphical user interface (GUI) components are licensed under
  <a href='https://www.gnu.org/licenses/lgpl-3.0.en.html'>LGPL v3.0</a>.
