@@ -23,8 +23,8 @@
   },
   "winding": {
     "layer_type": "Wound",
-    "layer_spacing": 0.0,
-    "top_margin": 0.0,
+    "layer_spacing": 0.1,
+    "top_margin": 0.1,
     "side_margin": 0.0,
     "layers": {
       "layer_1": {
