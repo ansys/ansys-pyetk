@@ -129,9 +129,9 @@ class Setup:
 
         setup.add_eddy_current_sweep(
             sweep_type=sweep_type,
-            start=start_sweep_freq,
-            end=stop_sweep_freq,
-            count=samples,
+            start_frequency=start_sweep_freq,
+            stop_frequency=stop_sweep_freq,
+            step_size=samples,
             units="Hz",
             save_all_fields=True,
         )
