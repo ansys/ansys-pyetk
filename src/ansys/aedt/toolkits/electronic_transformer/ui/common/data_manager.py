@@ -175,7 +175,7 @@ class DataManager:
                 self.gui_properties.winding.layer_side_definition = self._flatten_connections(
                     self.gui_properties.winding.connections_definition
                 )
-                self._get_layers_from_json(data["winding"]["layers"])
+                self._set_layers_from_json(data["winding"]["layers"])
                 self.gui_properties.winding.side_loads = data["circuit"]["side_loads"]
 
                 msg = "Working with version: " + str(data["json_version"])
@@ -234,7 +234,7 @@ class DataManager:
             msg = "Input in Legacy Format. Save data in new format."
             return msg
 
-    def _get_layers_from_json(self, data):
+    def _set_layers_from_json(self, data):
         """Get winding layers from a JSON file.
 
         Args:

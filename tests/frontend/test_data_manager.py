@@ -24,6 +24,8 @@ from pathlib import Path
 import pytest
 
 from ansys.aedt.toolkits.electronic_transformer.ui.common.data_manager import DataManager
+from ansys.aedt.toolkits.electronic_transformer.ui.models import fe_properties
+from ansys.aedt.toolkits.electronic_transformer.ui.models import gui_properties
 
 pytestmark = [pytest.mark.frontend]
 
@@ -513,4 +515,43 @@ class TestDataManager:
             data = json.load(f)
 
         result = dm._format_input_version(data)
-        assert "Working with version: 0.1.0" == result
+        assert result == "Working with version: 0.1.0"
+
+    def test_import_data_from_json(self):
+        """Import data only if valid."""
+        dm = DataManager()
+        versioned_json_model = Path(__file__).parent / "versioned_json" / "v0_1_0" / "EI_planar_rectangular.json"
+        not_supported_json = Path(__file__).parent / "not_supported_json" / "not_supported_version.json"
+
+        msg, is_valid = dm._import_data_from_json(versioned_json_model)
+        assert is_valid is True
+        assert msg == "Working with version: 0.1.0"
+
+        msg, is_valid = dm._import_data_from_json(not_supported_json)
+        assert is_valid is False
+        assert msg == "Incompatible/Not Selected JSON file"
+
+    def test_create_layers_for_backend(self):
+        """Create layers in same data structure as backend needs it."""
+        dm = DataManager()
+
+        versioned_json_model = Path(__file__).parent / "versioned_json" / "v0_1_0" / "EI_planar_rectangular.json"
+        with versioned_json_model.open("rb") as f:
+            versioned_json = json.load(f)
+
+        _ = dm._format_input_version(versioned_json)
+        dm._set_layers_from_json(versioned_json["winding"]["layers"])
+        backend_layers = dm._create_layers_for_backend(gui_properties.winding.layers_definition)
+
+        # compare output against versioned json file format
+        versioned_json_layers = versioned_json["winding"]["layers"]
+        assert backend_layers["layer_1"] == versioned_json_layers["layer_1"]
+
+    def test_update_frontend_properties(self):
+        """Create layers in same data structure as backend needs it."""
+        dm = DataManager()
+        versioned_json_model = Path(__file__).parent / "versioned_json" / "v0_1_0" / "EI_planar_rectangular.json"
+        _ = dm._import_data_from_json(versioned_json_model)
+        dm._update_frontend_properties()
+        assert fe_properties.core.type == gui_properties.core.type
+        assert fe_properties.core.model == gui_properties.core.model
