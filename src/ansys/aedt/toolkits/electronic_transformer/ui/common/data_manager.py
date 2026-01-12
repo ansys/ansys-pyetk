@@ -235,7 +235,7 @@ class DataManager:
             return msg
 
     def _set_layers_from_json(self, data):
-        """Get winding layers from a JSON file.
+        """Set winding layers from a JSON file.
 
         Args:
             data (dict): The JSON data.

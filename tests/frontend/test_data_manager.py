@@ -548,7 +548,7 @@ class TestDataManager:
         assert backend_layers["layer_1"] == versioned_json_layers["layer_1"]
 
     def test_update_frontend_properties(self):
-        """Create layers in same data structure as backend needs it."""
+        """Load model and ensure that the properties sent to the backend are the same as the UI."""
         dm = DataManager()
         versioned_json_model = Path(__file__).parent / "versioned_json" / "v0_1_0" / "EI_planar_rectangular.json"
         _ = dm._import_data_from_json(versioned_json_model)
