@@ -114,7 +114,7 @@ class Setup:
         samples : int, optional
             Number of samples. The default is ``None``.
         """
-        setup = self.__aedt.create_setup(setupname="Setup1")
+        setup = self.__aedt.create_setup(name="Setup1")
         setup.props["MinimumPasses"] = 2
         setup.props["MaximumPasses"] = max_num_passes
         setup.props["MinimumConvergedPasses"] = 1
@@ -128,10 +128,10 @@ class Setup:
         setup.props["HasSweepSetup"] = True
 
         setup.add_eddy_current_sweep(
-            range_type=sweep_type,
-            start=start_sweep_freq,
-            end=stop_sweep_freq,
-            count=samples,
+            sweep_type=sweep_type,
+            start_frequency=start_sweep_freq,
+            stop_frequency=stop_sweep_freq,
+            step_size=samples,
             units="Hz",
             save_all_fields=True,
         )
