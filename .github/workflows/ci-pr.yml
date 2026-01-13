@@ -90,7 +90,7 @@ jobs:
     runs-on: windows-latest
     needs: [code-style]
     steps:
-      - uses: ./actions/build-windows-app
+      - uses: ./.github/actions/build-windows-app
         with:
           artifact-name: 'PyETK-Installer-Windows'
           python-version: ${{ env.MAIN_PYTHON_VERSION }}
@@ -104,7 +104,7 @@ jobs:
     runs-on: ubuntu-${{ matrix.os }}
     needs: [code-style]
     steps:
-      - uses: ./actions/build-linux-app
+      - uses: ./.github/actions/build-linux-app
         with:
           artifact-name: 'PyETK-Installer-ubuntu_${{ matrix.os }}'
           python-version: ${{ env.MAIN_PYTHON_VERSION }}
