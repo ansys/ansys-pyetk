@@ -31,51 +31,51 @@
     "include_bobbin": true,
     "layers_definition": {
       "layer_1": {
-        "conductor_width": 0.17799999999999999,
-        "conductor_height": 0.070000000000000007,
-        "turn_spacing": 0.29999999999999999,
+        "conductor_width": 0.178,
+        "conductor_height": 0.07,
+        "turn_spacing": 0.3,
         "turns_number": 7
       },
       "layer_2": {
-        "conductor_width": 0.17799999999999999,
-        "conductor_height": 0.070000000000000007,
-        "turn_spacing": 0.29999999999999999,
+        "conductor_width": 0.178,
+        "conductor_height": 0.07,
+        "turn_spacing": 0.3,
         "turns_number": 7
       },
       "layer_3": {
-        "conductor_width": 0.81000000000000005,
-        "conductor_height": 0.070000000000000007,
-        "turn_spacing": 0.29999999999999999,
+        "conductor_width": 0.81,
+        "conductor_height": 0.07,
+        "turn_spacing": 0.3,
         "turns_number": 3
       },
       "layer_4": {
         "conductor_width": 1.37,
-        "conductor_height": 0.070000000000000007,
-        "turn_spacing": 0.29999999999999999,
+        "conductor_height": 0.07,
+        "turn_spacing": 0.3,
         "turns_number": 2
       },
       "layer_5": {
         "conductor_width": 1.37,
-        "conductor_height": 0.070000000000000007,
-        "turn_spacing": 0.29999999999999999,
+        "conductor_height": 0.07,
+        "turn_spacing": 0.3,
         "turns_number": 2
       },
       "layer_6": {
-        "conductor_width": 0.81000000000000005,
-        "conductor_height": 0.070000000000000007,
-        "turn_spacing": 0.29999999999999999,
+        "conductor_width": 0.81,
+        "conductor_height": 0.07,
+        "turn_spacing": 0.3,
         "turns_number": 3
       },
       "layer_7": {
-        "conductor_width": 0.17799999999999999,
-        "conductor_height": 0.070000000000000007,
-        "turn_spacing": 0.29999999999999999,
+        "conductor_width": 0.178,
+        "conductor_height": 0.07,
+        "turn_spacing": 0.3,
         "turns_number": 7
       },
       "layer_8": {
-        "conductor_width": 0.17799999999999999,
-        "conductor_height": 0.070000000000000007,
-        "turn_spacing": 0.29999999999999999,
+        "conductor_width": 0.178,
+        "conductor_height": 0.07,
+        "turn_spacing": 0.3,
         "turns_number": 7
       }
     }
