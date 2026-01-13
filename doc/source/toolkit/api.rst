@@ -1,5 +1,5 @@
-PyETK API
-===========
+API reference
+=============
 
 The PyETK API contains the ``ToolkitBackend`` class, which provides methods for
 controlling the toolkit workflow. This API provides methods
