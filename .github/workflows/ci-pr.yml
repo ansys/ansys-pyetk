@@ -76,6 +76,46 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           use-upper-case: true
 
+  labeler:
+    name: Set labels
+    needs: pr-title
+    permissions:
+      contents: read        # Required to read repository files and .github/labeler.yml configuration
+      pull-requests: write  # Required to add/modify labels on pull requests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+        with:
+          clean: true
+          persist-credentials: false
+
+      - name: Update labels
+        uses: micnncim/action-label-syncer@3abd5ab72fda571e69fffd97bd4e0033dd5f495c # v1.3.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Label pull-request
+        uses: actions/labeler@634933edcd8ababfe52f92936142cc22ac488b1b # v6.0.1
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+
+  changelog-fragment:
+    name: Create changelog fragment
+    needs: labeler
+    permissions:
+      contents: write # Read the pull-request title
+      pull-requests: write # Write a fragment file in the pull-request
+    runs-on: ubuntu-latest
+    steps:
+      - uses: ansys/actions/doc-changelog@41f86da4c9ead510db9135e428e33df9cc6f92e1 # v10.2.3
+        with:
+          token: ${{ secrets.PYANSYS_CI_BOT_TOKEN }}
+          use-pull-request-title: true
+          use-default-towncrier-config: true
+          bot-user: ${{ secrets.PYANSYS_CI_BOT_USERNAME }}
+          bot-email: ${{ secrets.PYANSYS_CI_BOT_EMAIL }}
+
   # TODO: To remove once public and use precommit.ci
   code-style:
     name: Code style check
@@ -93,20 +133,27 @@ jobs:
     name: Build Windows application
     runs-on: windows-latest
     needs: [code-style]
+    permissions:
+      contents: read
     steps:
+      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+        with:
+          persist-credentials: false
       - uses: ./.github/actions/build-windows-app
         with:
           artifact-name: 'PyETK-Installer-Windows'
           python-version: ${{ env.MAIN_PYTHON_VERSION }}
 
   build-application-linux-debian:
+    name: Build Linux application - Ubuntu ${{ matrix.os }}
+    runs-on: ubuntu-${{ matrix.os }}
+    needs: [code-style]
     strategy:
       matrix:
         os: [ "22.04", "24.04" ]
       fail-fast: false
-    name: Build Linux application - Ubuntu ${{ matrix.os }}
-    runs-on: ubuntu-${{ matrix.os }}
-    needs: [code-style]
+    permissions:
+      contents: read
     steps:
       - uses: ./.github/actions/build-linux-app
         with:
@@ -149,6 +196,10 @@ jobs:
       matrix:
         os : [windows-latest, ubuntu-latest]
         python-version: ['3.10', '3.11', '3.12', '3.13']
+    permissions:
+      attestations: write   # Required to create and publish build attestations (SLSA provenance)
+      contents: read        # Required to read repository content for building
+      id-token: write       # Required for OIDC token generation (for provenance signing)
     steps:
       - uses: ansys/actions/build-wheelhouse@41f86da4c9ead510db9135e428e33df9cc6f92e1 # v10.2.3
         with:
