@@ -90,23 +90,20 @@ runs:
         chmod +x package/opt/ansys_pyetk/ansys_pyetk
         chmod +x package/opt/ansys_pyetk/_internal/assets/uninstaller_ubuntu.sh
         version=v$(cat ./installer/VERSION)
-        echo "APPLICATION_VERSION=$version" >> $GITHUB_ENV
         set -x  # Debug mode
         fpm -v $version --fpm-options-file installer/linux/debian/fpm-options-debian
 
     - name: Create zip file
       id: create-zip
+      env:
+        UBUNTU_VERSION: ${{ inputs.ubuntu-version }}
       shell: bash
       run: |
         cp installer/linux/debian/installer.sh installer.sh
         cp installer/linux/debian/postInstallScript.sh postInstallScript.sh
         chmod +x installer.sh postInstallScript.sh ansys_pyetk.deb
-        version=$(cat ./installer/VERSION)
-        os_version_processed="${{ inputs.ubuntu-version }}"
-        os_version_processed="${os_version_processed//./_}"
+        os_version_processed="${UBUNTU_VERSION//./_}"
         zip_name="PyETK-Installer-ubuntu_${os_version_processed}.zip"
-        echo "OS_VERSION_PROCESSED=${os_version_processed}" >> $GITHUB_ENV
-        echo "APPLICATION_VERSION=v${version}" >> $GITHUB_ENV
         zip -r $zip_name ansys_pyetk.deb installer.sh postInstallScript.sh
 
     - name: Upload artifact

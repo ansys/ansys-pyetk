@@ -12,13 +12,10 @@ updates:
       default-days: 7
       include:
         - "*"  # Include all dependencies in cooldown
-      exclude:
-        - "ansys-sphinx-theme"
-        - "ansys-tools-visualization-interface"
-        - "ansys-pythonnet"
     reviewers:
-      - "Samuelopez-ansys"
-      - "gmalinve"
+      - "DaveTwyman"
+      - "jvela018"
+      - "nunesanderson"
     assignees:
       - "pyansys-ci-bot"
     labels:
@@ -27,7 +24,7 @@ updates:
     commit-message:
       prefix: "BUILD(pip)"
 
-  - package-ecosystem: "github-actions"
+  - package-ecosystem: "github-actions" # zizmor: ignore[dependabot-cooldown] cooldown feature is not available for github actions yet.
     directory: "/"
     schedule:
       interval: "weekly"
@@ -35,7 +32,9 @@ updates:
       time: "06:00"
       timezone: "Europe/Paris"
     reviewers:
-      - "Samuelopez-ansys"
+      - "DaveTwyman"
+      - "jvela018"
+      - "nunesanderson"
     assignees:
       - "pyansys-ci-bot"
     labels:
