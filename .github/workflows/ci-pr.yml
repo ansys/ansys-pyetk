@@ -209,6 +209,7 @@ jobs:
           library-name: ${{ env.LIBRARY_NAME }}
           operating-system: ${{ matrix.os }}
           python-version: ${{ matrix.python-version }}
+          whitelist-license-check: 'fpdf2 PySide6 PySide6_Addons PySide6_Essentials shiboken6'
 
 # # =================================================================================================
 # # vvvvvvvvvvvvvvvvvvvvvvvvvvvvvv    RUNNING ON SELF-HOSTED RUNNER    vvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
