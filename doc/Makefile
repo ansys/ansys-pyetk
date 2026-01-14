@@ -12,27 +12,27 @@ BUILDDIR      = _build
 help:
 	@$(SPHINXBUILD) -M help "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
 
-.PHONY: help Makefile
+.PHONY: help Makefile .install-deps
 
 .install-deps:
-	@pip freeze | grep -q "vtk-osmesa" && is_vtk_osmesa_installed="yes" || is_vtk_osmesa_installed="no"
-	@pip freeze | grep -q "pypandoc_binary" && is_pypandoc_binary_installed="yes" || is_pypandoc_binary_installed="no"
-	@if [ "${ON_CI}" = "True" ] && [ "$$is_vtk_osmesa_installed" != "yes" ]; then \
-		@echo "Removing vtk to avoid conflicts with vtk-osmesa needed for CI/CD"; \
+	@is_vtk_osmesa_installed=$$(pip freeze | grep -q "vtk-osmesa" && echo "yes" || echo "no"); \
+	is_pypandoc_binary_installed=$$(pip freeze | grep -q "pypandoc_binary" && echo "yes" || echo "no"); \
+	if [ "${ON_CI}" = "True" ] && [ "$$is_vtk_osmesa_installed" != "yes" ]; then \
+		echo "Removing vtk to avoid conflicts with vtk-osmesa needed for CI/CD"; \
 		pip uninstall --yes vtk; \
-		@echo "Installing vtk-osmesa"; \
+		echo "Installing vtk-osmesa"; \
 		pip install --index-url https://wheels.vtk.org vtk-osmesa==9.3.1; \
 	fi
-	@if [ "${ON_CI}" = "True" ] && [ "$$is_pypandoc_binary_installed" != "yes" ]; then \
-		@echo "Removing pypandoc to avoid conflicts with pypandoc-binary needed for CI/CD"; \
+	if [ "${ON_CI}" = "True" ] && [ "$$is_pypandoc_binary_installed" != "yes" ]; then \
+		echo "Removing pypandoc to avoid conflicts with pypandoc-binary needed for CI/CD"; \
 		pip uninstall --yes pypandoc; \
-		@echo "Installing pypandoc-binary"; \
+		echo "Installing pypandoc-binary"; \
 		pip install pypandoc-binary==1.13; \
 	fi
 
 # Catch-all target: route all unknown targets to Sphinx using the new
 # "make mode" option.  $(O) is meant as a shortcut for $(SPHINXOPTS).
-%: .install-deps Makefile
+%: Makefile
 	@$(SPHINXBUILD) -M $@ "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
 
 clean: .install-deps
