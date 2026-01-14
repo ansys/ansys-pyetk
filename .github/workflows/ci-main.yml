@@ -8,7 +8,7 @@ env:
   MAIN_PYTHON_VERSION: '3.10'
   DOCUMENTATION_CNAME: 'etk.docs.pyansys.com'
   LIBRARY_NAME: 'ansys-pyetk'
-  ON_CI: True
+  ON_CI: true
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}

@@ -17,13 +17,13 @@ help:
 .install-deps:
 	@is_vtk_osmesa_installed=$$(pip freeze | grep -q "vtk-osmesa" && echo "yes" || echo "no"); \
 	is_pypandoc_binary_installed=$$(pip freeze | grep -q "pypandoc_binary" && echo "yes" || echo "no"); \
-	if [ "${ON_CI}" = "True" ] && [ "$$is_vtk_osmesa_installed" != "yes" ]; then \
+	if [ "${ON_CI}" = "true" ] && [ "$$is_vtk_osmesa_installed" != "yes" ]; then \
 		echo "Removing vtk to avoid conflicts with vtk-osmesa needed for CI/CD"; \
 		pip uninstall --yes vtk; \
 		echo "Installing vtk-osmesa"; \
 		pip install --index-url https://wheels.vtk.org vtk-osmesa==9.3.1; \
 	fi
-	if [ "${ON_CI}" = "True" ] && [ "$$is_pypandoc_binary_installed" != "yes" ]; then \
+	if [ "${ON_CI}" = "true" ] && [ "$$is_pypandoc_binary_installed" != "yes" ]; then \
 		echo "Removing pypandoc to avoid conflicts with pypandoc-binary needed for CI/CD"; \
 		pip uninstall --yes pypandoc; \
 		echo "Installing pypandoc-binary"; \
