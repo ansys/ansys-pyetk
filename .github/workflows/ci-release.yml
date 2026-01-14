@@ -8,6 +8,7 @@ env:
   MAIN_PYTHON_VERSION: '3.10'
   DOCUMENTATION_CNAME: 'etk.docs.pyansys.com'
   LIBRARY_NAME: 'ansys-pyetk'
+  ON_CI: True
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -45,8 +46,10 @@ jobs:
 
   build-application-windows:
     name: Build Windows application
-    runs-on: windows-latest
     needs: [code-style]
+    runs-on: windows-latest
+    permissions:
+      contents: read
     steps:
       - uses: ./.github/actions/build-windows-app
         with:
@@ -54,13 +57,15 @@ jobs:
           python-version: ${{ env.MAIN_PYTHON_VERSION }}
 
   build-application-linux-debian:
+    name: Build Linux application - Ubuntu ${{ matrix.os }}
+    needs: [code-style]
+    runs-on: ubuntu-${{ matrix.os }}
     strategy:
       matrix:
         os: [ "22.04", "24.04" ]
       fail-fast: false
-    name: Build Linux application - Ubuntu ${{ matrix.os }}
-    runs-on: ubuntu-${{ matrix.os }}
-    needs: [code-style]
+    permissions:
+      contents: read
     steps:
       - uses: ./.github/actions/build-linux-app
         with:
@@ -82,8 +87,10 @@ jobs:
 
   doc-build:
     name: Documentation build
-    runs-on: ubuntu-latest
     needs: [doc-style]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - name: Build documentation
         uses: ansys/actions/doc-build@41f86da4c9ead510db9135e428e33df9cc6f92e1 # v10.2.3

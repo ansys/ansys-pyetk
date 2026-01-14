@@ -8,6 +8,7 @@ env:
   MAIN_PYTHON_VERSION: '3.10'
   DOCUMENTATION_CNAME: 'etk.docs.pyansys.com'
   LIBRARY_NAME: 'ansys-pyetk'
+  ON_CI: True
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -20,6 +21,8 @@ jobs:
   doc-build:
     name: Documentation build
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - name: Build documentation
         uses: ansys/actions/doc-build@41f86da4c9ead510db9135e428e33df9cc6f92e1 # v10.2.3
