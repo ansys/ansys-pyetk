@@ -1,47 +1,46 @@
-# Contributing
+# Contribute
 
-We welcome code contributions and hope that this
-page explains how you can contribute to the PyETK. While this
-Python package is maintained by Ansys and any submissions are reviewed
-thoroughly before merging, we still seek to foster a community that can
-support user questions and develop new features to make this package
-a useful tool for all users. As such, we welcome and encourage any
-questions or submissions to this repository.
+Overall guidance on contributing to a PyAnsys library appears in the
+[Contributing] topic in the *PyAnsys developer's guide*. Ensure that you
+are thoroughly familiar with this guide before attempting to contribute to
+PyETK.
 
-For overall information on contributing to this project, see the [PyAnsys developer's guide].
+The following contribution information is specific to PyETK.
 
-[PyAnsys Developer's Guide]: https://dev.docs.pyansys.com/index.html
+[Contributing]: https://dev.docs.pyansys.com/how-to/contributing.html
 
-## Issues and features requests
+<!-- Begin content specific to your library here. -->
 
-To report bugs and propose new features, use the **Issues** page instead of the **Discussions** page. This helps us track and prioritize work in a more organized manner.
+## Directing Issues and Features Requests
 
-## Discussions
+For reporting bugs and proposing new features, please use the Issues tab instead of the Discussions tab. This will help us track and prioritize work in a more organized manner.
 
-To post general questions and discussions about the project, use the **Discussions** page. Posts can include discussions about potential improvements, questions about the future direction of the project, brainstorming of ideas, help with using the package, and other topics that don't exactly fit as an issue.
+## Purpose of Discussions
 
-Remember, maintaining distinct places for different types of interactions helps us to keep our project organized and move forward in a coordinated manner.
+The Discussions tab should primarily be used for general questions and discussions about the project. This could include discussions about potential improvements, the future direction of the project, brainstorming ideas, help with using the software, and other topics that don't exactly fit as an Issue.
 
-## Code contributions
+Remember, maintaining distinct places for different types of interactions helps keep our project organized and moving forward in a coordinated manner.
 
-Everyone can contribute to this project, regardless of their level of expertise. Your diverse skills, perspectives, and experiences are valuable, and we welcome them.
+## Modify the Code
 
-Here's an overview of how you can start making contributions:
+Everyone can contribute to this project, irrespective of their level of expertise. Your diverse skills, perspectives, and experiences are valuable and we welcome them.
 
-**Fork the repository:** Forking means creating a personal copy of this repository on your GitHub account.
+Here's a simple overview of how you can start making contributions:
 
-**Clone the repository:** After forking, you must download the repository to your local machine. This can be done using the `git clone` command.
+**Fork the Repository:** "Forking" means creating a personal copy of this repository on your GitHub account.
 
-**Create a branch:** A branch is used to isolate your changes from the main project. You can create a branch using the `git branch` command. Remember to switch to your new branch with the `git checkout` command.
+**Clone the Repository:** After forking, you need to download the repository to your local machine. This can be done using the `git clone` command.
 
-**Commit your changes:** After making your changes, you must "commit" them. A commit is a packaged set of alterations. Use the `git add` command to add your files to staging, and then use the `git commit -m "your message"` command to commit them.
+**Create a New Branch:** A branch is used to isolate your changes from the main project. You can create a new branch using the `git branch` command. Remember to switch to your new branch with the `git checkout` command.
 
-**Push your changes:** After committing your changes, "push" them to your forked repository on GitHub with the `git push origin <branch-name> command`.
+**Commit Your Changes:** After making your changes, you need to "commit" them. A commit is a packaged set of alterations. Use `git add` to add your files to staging, and then `git commit -m "your message"` to commit them.
 
-**Create a pull request:** A pull request (PR) lets us know you have changes that you think should be included in the main project. Go to your forked repository on GitHub and click the **Pull request** button.
+**Push Your Changes:** After committing your changes, "push" them to your forked repository on GitHub with `git push origin <branch-name>`.
 
-Following these steps ensures that your contributions can be easily reviewed and potentially included in the project much faster.
+**Create a Pull Request:** A Pull Request (PR) lets us know you have changes you think should be included in the main project. Go to your forked repository on GitHub and click on the 'Pull request' button. The title of your 'Pull request' must follow the `conventional commits standard <https://github.com/commitizen/conventional-commit-types/blob/master/index.json>`_ where the type field is expected to be defined with upper cases.
 
-Please don't get discouraged if you find these steps complex. We are here to help you throughout the process.
+Following these steps ensures that your contributions will be easily reviewed and potentially included in the project much faster.
 
-We hope that these rules make the **Discussions** page a better place for every contributor.
+Please don't get discouraged if you find these steps complex, we are here to help you throughout the process.
+
+We hope these rules will make the Discussions section a better place for every contributor.
