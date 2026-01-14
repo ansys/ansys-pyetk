@@ -88,25 +88,13 @@ class Bobbin(GeometryCommon):
         layers_definition = self.__winding_properties.layers
 
         # Get core cross-section depending on core type: Circular or Rectangular
-        if self.all_cores[self.__core_properties.type] == "ETDCore":
+        core_type = self.all_cores[self.__core_properties.type]
+        circular_cores = {"ETDCore", "RMCore", "EPCore", "PCore", "PQCore"}
+        rectangular_cores = {"ECore", "UCore", "EICore", "EFDCore", "UICore"}
+
+        if core_type in circular_cores:
             self.core_cross_section = CoreCrossSection.circular
-        elif self.all_cores[self.__core_properties.type] == "ECore":
-            self.core_cross_section = CoreCrossSection.rectangular
-        elif self.all_cores[self.__core_properties.type] == "RMCore":
-            self.core_cross_section = CoreCrossSection.circular
-        elif self.all_cores[self.__core_properties.type] == "UCore":
-            self.core_cross_section = CoreCrossSection.rectangular
-        elif self.all_cores[self.__core_properties.type] == "EICore":
-            self.core_cross_section = CoreCrossSection.rectangular
-        elif self.all_cores[self.__core_properties.type] == "EFDCore":
-            self.core_cross_section = CoreCrossSection.rectangular
-        elif self.all_cores[self.__core_properties.type] == "EPCore":
-            self.core_cross_section = CoreCrossSection.circular
-        elif self.all_cores[self.__core_properties.type] == "PCore":
-            self.core_cross_section = CoreCrossSection.circular
-        elif self.all_cores[self.__core_properties.type] == "PQCore":
-            self.core_cross_section = CoreCrossSection.circular
-        elif self.all_cores[self.__core_properties.type] == "UICore":
+        elif core_type in rectangular_cores:
             self.core_cross_section = CoreCrossSection.rectangular
         else:
             logger.info("Bobbin type not implemented.")
