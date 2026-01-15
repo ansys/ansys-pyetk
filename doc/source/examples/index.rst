@@ -1,12 +1,16 @@
 Examples
 ========
-End-to-end examples show how to use API.
+Examples are available to demonstrate how to use pyETK in different ways.
 
-``PyETK`` examples
+``PyETK`` API Examples
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-This examples show how to use the ``Electronic Transformer Toolkit`` class of the backend API:
+.. grid:: 2
 
-.. nbgallery::
+    .. grid-item-card:: Create a transformer model.
+        :padding: 2 2 2 2
+        :link: ETK_example
+        :link-type: doc
 
-    ETK_example.py
+        Example of how to use the pyETK API to create the whole model.
+
 

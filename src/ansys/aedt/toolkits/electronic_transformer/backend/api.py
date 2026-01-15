@@ -41,7 +41,7 @@ from ansys.aedt.toolkits.electronic_transformer.backend.workflows.winding import
 class ToolkitBackend(AEDTCommon):
     """Control the toolkit workflow.
 
-    This class provides methods to connect to a selected design and create geometries.
+    This class provides methods to connect to a selected design and create the model or the parts of the transformer.
 
     Examples
     --------
