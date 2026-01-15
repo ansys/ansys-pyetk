@@ -190,6 +190,7 @@ jobs:
           add-pdf-html-docs-as-assets: true
           check-links: false
           python-version: ${{ env.MAIN_PYTHON_VERSION }}
+          sphinxopts: '-j auto --color -w build_errors.txt'
           use-python-cache: false
 
 #   smoke-tests:

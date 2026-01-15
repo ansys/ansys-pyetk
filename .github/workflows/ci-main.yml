@@ -27,10 +27,11 @@ jobs:
       - name: Build documentation
         uses: ansys/actions/doc-build@41f86da4c9ead510db9135e428e33df9cc6f92e1 # v10.2.3
         with:
-          python-version: ${{ env.MAIN_PYTHON_VERSION }}
-          use-python-cache: false
           add-pdf-html-docs-as-assets: true
           check-links: false
+          python-version: ${{ env.MAIN_PYTHON_VERSION }}
+          sphinxopts: '-j auto --color -w build_errors.txt'
+          use-python-cache: false
 
   doc-deploy-dev:
     name: Deploy development documentation
