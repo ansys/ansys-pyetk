@@ -1,5 +1,5 @@
-Electric transformer toolkit documentation |version|
-====================================================
+Electronic transformer toolkit documentation |version|
+======================================================
 
 **Useful links**:
 :ref:`Installation <installation>` |

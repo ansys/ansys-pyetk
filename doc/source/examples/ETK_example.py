@@ -1,7 +1,4 @@
-"""
-pyETK Example.
-
------------
+"""PyETK Example.
 
 This example shows how to use the ``ToolkitBackend`` API to create a transformer model in AEDT.
 
@@ -12,6 +9,7 @@ The example does the following:
 - Reads the properties from the JSON file.
 - Launches AEDT.
 - Creates the transformer model.
+
 """
 
 from pathlib import Path
