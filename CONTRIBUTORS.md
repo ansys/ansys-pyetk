@@ -3,7 +3,7 @@
 ## Project Lead
 
 * [Anderson Santos Nunes](https://github.com/nunesanderson)
-* [DaveTwyman](https://github.com/DaveTwyman)
+* [David Twyman](https://github.com/DaveTwyman)
 * [Jonathan Velasco](https://github.com/jvela018)
 
 ## Individual Contributors
