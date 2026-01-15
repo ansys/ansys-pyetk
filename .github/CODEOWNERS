@@ -1,1 +1,6 @@
-.github/* @nunesanderson @DaveTwyman @jvela018
+.github/* @nunesanderson @DaveTwyman @jvela018 @SMoraisAnsys
+
+# These owners will be the default owners for everything in the repo. Unless a
+# later match takes precedence, the PyETK maintainers team will be requested
+# for review when someone opens a pull request.
+* @nunesanderson @DaveTwyman @jvela018

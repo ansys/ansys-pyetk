@@ -24,10 +24,10 @@ Electronic Transformer toolKit (PyETK)
    :alt: Ruff
 
 
-The ``ansys-pyetk`` package provides a user-friendly interface to set up \
-electronic transformer models in Ansys Electronic Desktop (AEDT).
-The toolkit could be used inside AEDT or launched from a python console.
-The toolkit leverages the common toolkit library that consists of two main parts: a backend and a User Interface (UI).
+The ``ansys-pyetk`` package provides a user-friendly interface to set up electronic transformer
+models in Ansys Electronic Desktop (AEDT). The toolkit could be used inside AEDT or launched
+from a python console. The toolkit leverages the common toolkit library that consists of two
+main parts: a backend and a User Interface (UI).
 
 - The backend has some common methods for controlling an AEDT session and also an
   API based on `Flask <https://flask.palletsprojects.com/en/2.3.x/>`_.
@@ -56,21 +56,19 @@ The following are known missing functionality / current work in progress
 
 Expected Behaviour
 ------------------
-ETK does not create a unique Maxwell model every time "Create Transformer" button is pressed, after the first click it will create a model on top of the previous one
-
+ETK does not create a unique Maxwell model every time "Create Transformer" button is pressed,
+after the first click it will create a model on top of the previous one.
 
 Installation
 ~~~~~~~~~~~~
-Visit the `Releases
-<https://github.com/ansys/ansys-pyetk/releases>`__ page and pull
+Visit the `Releases <https://github.com/ansys/ansys-pyetk/releases>`__ page and pull
 down the latest installer.
-
 
 Distributing
 ~~~~~~~~~~~~
 This project is vectored to be an open-source project. For the time being, feel
-free to distribute it internally, but direct users to visit the `Releases
-<https://github.com/ansys/ansys-pyetk/releases>`__ page
+free to distribute it internally, but direct users to visit the
+`Releases <https://github.com/ansys/ansys-pyetk/releases>`__ page.
 
 Security
 ~~~~~~~~
@@ -78,13 +76,10 @@ The versions that are still supported for security updates can be found at
 the `Security guidelines <https://github.com/ansys/python-installer-qt-gui/blob/main/SECURITY.md>`_
 site. Information on how to report vulenrabilities is also found.
 
-
 License
 ~~~~~~~
 This toolkit is licensed under the Apache-2.0 license.
 
-This module makes no commercial claim over Ansys whatsoever.
-The use of the interactive control of this toolkit requires a legally licensed
-local copy of AEDT. For more information about AEDT,
-visit the `AEDT page <https://www.ansys.com/products/electronics>`_
-on the Ansys website.
+This module makes no commercial claim over Ansys whatsoever. The use of the interactive control
+of this toolkit requires a legally licensed local copy of AEDT. For more information about AEDT,
+visit the `AEDT page <https://www.ansys.com/products/electronics>`_ on the Ansys website.
