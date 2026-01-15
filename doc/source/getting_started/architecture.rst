@@ -87,4 +87,4 @@ The PyETK's file structure is the following
   unit tests.
 
 - `installer <https://github.com/ansys/ansys-pyetk/tree/main/installer>`_: Folder containing the
-installer configuration files.
+  installer configuration files.
