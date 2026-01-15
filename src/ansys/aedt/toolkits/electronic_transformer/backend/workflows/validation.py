@@ -36,8 +36,6 @@ class Validation:
         ----------
         data : :class:`pathlib.Path`
             Path to the input data in JSON format.
-        section : str, optional
-            Section of the JSON file to validate. The default is ``None``.
         """
         with self.schema.open("r", encoding="utf-8") as file:
             schema = json.load(file)

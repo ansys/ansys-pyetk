@@ -415,5 +415,12 @@ class ToolkitBackend(AEDTCommon):
         return True
 
     def validate_json(self, data):
+        """Validate input data from a JSON file.
+
+        Parameters
+        ----------
+        data : :class:`pathlib.Path`
+            Path to the input data in JSON format.
+        """
         validator = Validation()
         validator.validate_json(data)
