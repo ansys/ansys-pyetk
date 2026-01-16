@@ -2,8 +2,6 @@ Examples
 ========
 Examples are available to demonstrate how to use pyETK in different ways.
 
-``PyETK`` API Examples
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 .. grid:: 2
 
     .. grid-item-card:: Create a transformer model.
