@@ -1,0 +1,113 @@
+name: 'Build Linux Application'
+description: 'Build the Linux application using PyInstaller and create Debian package'
+
+inputs:
+  python-version:
+    description: 'Python version to use'
+    required: false
+    default: '3.10'
+  ubuntu-version:
+    description: 'Ubuntu version (e.g., 22.04, 24.04)'
+    required: true
+  artifact-name:
+    description: 'Name for the artifact upload'
+    required: false
+    default: 'PyETK-Installer-Linux'
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Set up Python
+      uses: actions/setup-python@83679a892e2d95755f2dac6acb0bfd1e9ac5d548 # v6.1.0
+      with:
+        python-version: ${{ inputs.python-version }}
+
+    - name: Install Linux Dependencies
+      shell: bash
+      run: |
+        sudo apt update
+        sudo apt install aptitude -y
+        sudo aptitude install libfontconfig1-dev \
+          libfreetype6-dev \
+          libx11-dev \
+          libx11-xcb-dev \
+          libxext-dev \
+          libxfixes-dev \
+          libxi-dev \
+          libxrender-dev \
+          libxcb1-dev \
+          libxcb-glx0-dev \
+          libxcb-keysyms1-dev \
+          libxcb-image0-dev \
+          libxcb-shm0-dev \
+          libxcb-icccm4-dev \
+          libxcb-sync-dev \
+          libxcb-xfixes0-dev \
+          libxcb-shape0-dev \
+          libxcb-randr0-dev \
+          libxcb-render-util0-dev \
+          libxcb-cursor-dev \
+          libxcb-util-dev \
+          libxcb-xkb-dev \
+          libxcb-xinerama0-dev \
+          libxkbcommon-dev \
+          libxkbcommon-x11-dev \
+          -y
+        sudo apt install ruby -y
+        sudo gem install fpm
+
+    - name: Install Python Dependencies
+      shell: bash
+      run: |
+        pip install --upgrade pip
+        pip install .[freeze]
+
+    - name: Extract version
+      id: extract-version
+      shell: bash
+      run: |
+        set -e
+        python installer/extract_version.py
+
+    - name: Freeze application
+      shell: bash
+      env:
+        ADD_PYTHON_BINARIES: true
+      run: pyinstaller frozen.spec
+
+    - name: Setup and Copy Linux files for packaging
+      shell: bash
+      run: |
+        mkdir -p package/opt
+        mkdir -p package/share/applications
+        mkdir -p package/share/icons
+        cp -r dist/ansys_pyetk package/opt/ansys_pyetk
+        cp installer/assets/splash_icon.svg package/share/icons/splash_icon.svg
+        cp installer/linux/debian/ansys_pyetk_prebuild.desktop package/share/applications
+        find package/opt/ansys_pyetk -type f -exec chmod 644 -- {} +
+        find package/opt/ansys_pyetk -type d -exec chmod 755 -- {} +
+        find package/share -type f -exec chmod 644 -- {} +
+        chmod +x package/opt/ansys_pyetk/ansys_pyetk
+        chmod +x package/opt/ansys_pyetk/_internal/assets/uninstaller_ubuntu.sh
+        version=v$(cat ./installer/VERSION)
+        set -x  # Debug mode
+        fpm -v $version --fpm-options-file installer/linux/debian/fpm-options-debian
+
+    - name: Create zip file
+      id: create-zip
+      env:
+        UBUNTU_VERSION: ${{ inputs.ubuntu-version }}
+      shell: bash
+      run: |
+        cp installer/linux/debian/installer.sh installer.sh
+        cp installer/linux/debian/postInstallScript.sh postInstallScript.sh
+        chmod +x installer.sh postInstallScript.sh ansys_pyetk.deb
+        os_version_processed="${UBUNTU_VERSION//./_}"
+        zip_name="PyETK-Installer-ubuntu_${os_version_processed}.zip"
+        zip -r $zip_name ansys_pyetk.deb installer.sh postInstallScript.sh
+
+    - name: Upload artifact
+      uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
+      with:
+        name: ${{ inputs.artifact-name }}
+        path: PyETK-Installer-ubuntu_${{ env.OS_VERSION_PROCESSED }}.zip

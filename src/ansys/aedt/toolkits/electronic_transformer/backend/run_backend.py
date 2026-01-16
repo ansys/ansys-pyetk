@@ -123,16 +123,17 @@ def create_model():
 
 @app.route("/validate_json", methods=["POST"])
 def validate_json():
-    logger.info("[POST] /validate_json (Validates the Json file).")
+    """Validate the JSON file."""
+    logger.info("[POST] /validate_json (Validates JSON file).")
 
     # Get properties from frontend
     properties_frontend = toolkit_api.get_properties()
 
     answer = toolkit_api.validate_json(properties_frontend)
     if answer:
-        return jsonify("Json file valid"), 200
+        return jsonify("JSON file is valid"), 200
     else:  # pragma: no cover
-        return jsonify("Json file not valid"), 500
+        return jsonify("JSON file is not valid"), 500
 
 
 def run_backend(port=0):

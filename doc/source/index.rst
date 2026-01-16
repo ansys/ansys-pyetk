@@ -1,12 +1,12 @@
-Electric Transformer toolKit (PyETK) documentation |version|
-============================================================
+Electronic transformer toolkit documentation |version|
+======================================================
 
 **Useful links**:
 :ref:`Installation <installation>` |
 `Source repository <https://github.com/ansys/ansys-pyetk>`_ |
 `Issues <https://github.com/ansys/ansys-pyetk/issues>`_
 
-PyETK is a custom solution for electronic transformer design.
+The Electronic Transformer ToolKit (PyETK) is a custom solution for electronic transformer design.
 
 .. grid:: 2
 
@@ -15,7 +15,7 @@ PyETK is a custom solution for electronic transformer design.
         :link: getting_started/index
         :link-type: doc
 
-        Learn how to install the PyADT Electronic Transformer toolKit (PyETK), understand its architecture
+        Learn how to install the Electronic Transformer toolKit (PyETK), understand its architecture
         and use this toolkit's common methods to develop electronic transformer models.
 
     .. grid-item-card:: User interface :fa:`scroll`

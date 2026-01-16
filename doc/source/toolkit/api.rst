@@ -1,5 +1,5 @@
-PyETK API
-===========
+API reference
+=============
 
 The PyETK API contains the ``ToolkitBackend`` class, which provides methods for creating the whole model or some of
 the geometries, such as core, winding, bobbin, to help the user to visualize those parts only

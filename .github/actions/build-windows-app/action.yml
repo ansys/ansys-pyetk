@@ -1,0 +1,84 @@
+name: 'Build Windows Application'
+description: 'Build the Windows application using PyInstaller and create NSIS installer'
+
+inputs:
+  python-version:
+    description: 'Python version to use'
+    required: false
+    default: '3.10'
+  artifact-name:
+    description: 'Name for the artifact upload'
+    required: false
+    default: 'PyETK-Installer-Windows'
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Set up Python
+      uses: actions/setup-python@83679a892e2d95755f2dac6acb0bfd1e9ac5d548 # v6.1.0
+      with:
+        python-version: ${{ inputs.python-version }}
+
+    - name: Create virtual environment
+      shell: pwsh
+      run: python -m venv .venv
+
+    - name: Install dependencies
+      shell: pwsh
+      run: |
+        .\.venv\Scripts\Activate.ps1
+        pip install --upgrade pip
+        pip install .[freeze]
+
+    - name: Extract version
+      id: extract-version
+      shell: pwsh
+      run: |
+        .\.venv\Scripts\Activate.ps1
+        python installer/extract_version.py
+
+    - name: Update local environment
+      shell: pwsh
+      run: |
+        .\.venv\Scripts\Activate.ps1
+        pip install .
+
+    - name: Freeze application
+      shell: pwsh
+      run: |
+        .\.venv\Scripts\Activate.ps1
+        pyinstaller frozen.spec
+
+    - name: Install NSIS
+      shell: pwsh
+      run: choco install nsis -y
+
+    - name: Debug build directory
+      shell: pwsh
+      run: Get-ChildItem -Path build -Recurse | ForEach-Object { $_.FullName }
+
+    - name: Check NSIS version
+      shell: pwsh
+      run: |
+        & "C:\Program Files (x86)\NSIS\makensis.exe" /VERSION
+
+    - name: Run NSIS
+      shell: pwsh
+      run: |
+        Set-StrictMode -Version Latest
+        $ErrorActionPreference = "Stop"
+        if (!(Test-Path -Path "setup.nsi")) {
+          Write-Error "setup.nsi not found"
+        }
+        & "C:\Program Files (x86)\NSIS\makensis.exe" setup.nsi
+
+    - name: List output
+      shell: pwsh
+      run: Get-ChildItem -Recurse dist
+
+    - name: Upload artifact
+      uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
+      with:
+        name: ${{ inputs.artifact-name }}
+        path: dist/*.exe
+        if-no-files-found: error
