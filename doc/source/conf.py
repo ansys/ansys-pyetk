@@ -195,7 +195,17 @@ nbsphinx_custom_formats = {
     ".py": ["jupytext.reads", {"fmt": ""}],
 }
 
-exclude_patterns = ["_build", "sphinx_boogergreen_theme_1", "Thumbs.db", ".DS_Store", "*.txt", "conf.py"]
+exclude_patterns = [
+    "_build",
+    "sphinx_boogergreen_theme_1",
+    "Thumbs.db",
+    ".DS_Store",
+    "*.txt",
+    "conf.py",
+    "_static/README.md",
+    "_static/**/README.md",
+    "_autosummary",
+]
 
 # -- Options for LaTeX output ------------------------------------------------
 
