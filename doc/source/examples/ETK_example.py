@@ -43,12 +43,17 @@ toolkit_api = ToolkitBackend()
 toolkit_api.properties.non_graphical = False
 toolkit_api.properties.aedt_version = "2025.2"
 
-# ## Define the JSON path
+# Defines the Json path. The majority of this block is to ensure it finds the file in the examples folder.
+# In the user's own code, they can simply set json_path to the path of their JSON file.
 json_file_name = "RM_wound_circular.json"
-
 temp_dir = tempfile.TemporaryDirectory(suffix="_ansys")
 project_name = generate_unique_project_name(root_name=temp_dir.name, project_name="ETK_example")
-json_path = Path(__file__).parents[3]
+try:
+    # Works in standard .py scripts
+    json_path = Path(__file__).resolve().parents[3]
+except NameError:
+    # Fallback for Jupyter / Interactive sessions
+    json_path = Path.cwd().parents[2]
 json_path = Path(json_path) / "tests" / "backend" / "json_files" / json_file_name
 
 # ## Set JSON reading properties

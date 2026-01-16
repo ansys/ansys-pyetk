@@ -6,13 +6,12 @@ ci:
 exclude: |
     (?x)(
         src/ansys/aedt/toolkits/electronic_transformer/ui/windows/.* |
-        README.rst
     )
 
 repos:
 
 - repo: https://github.com/astral-sh/ruff-pre-commit
-  rev: v0.12.1
+  rev: v0.12.10
   hooks:
     - id: ruff-check
     - id: ruff-format
