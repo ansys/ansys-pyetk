@@ -202,7 +202,7 @@ class BackendResetProperties:
         self.materials: Dict[str, Material] = {}
         self.settings: Settings = Settings()
         self.circuit: Circuit = Circuit()
-        self.json_version: str = JsonVersion()
+        self.json_version: JsonVersion = JsonVersion()
 
 
 # All properties

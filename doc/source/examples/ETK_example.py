@@ -28,12 +28,12 @@
 # - Creates the transformer model.
 
 # ## Perform required imports
-
-import importlib.resources
+from pathlib import Path
 import sys
-
 from ansys.aedt.toolkits.electronic_transformer.backend.api import ToolkitBackend
+import tempfile
 
+from ansys.aedt.core import generate_unique_project_name
 # ## Create backend instance
 toolkit_api = ToolkitBackend()
 
@@ -42,8 +42,17 @@ toolkit_api.properties.non_graphical = False
 toolkit_api.properties.aedt_version = "2025.2"
 
 # ## Define the JSON path
-package_root = importlib.resources.files("ansys.aedt.toolkits.electronic_transformer")
-json_path = package_root / "tests" / "backend" / "json_files" / "RM_wound_circular.json"
+json_file_name = "RM_wound_circular.json"
+temp_dir = tempfile.TemporaryDirectory(suffix="_ansys")
+project_name = generate_unique_project_name(root_name=temp_dir.name, project_name="ETK_example")
+try:
+    # Works in standard .py scripts
+    json_path = Path(__file__).resolve().parents[3]
+except NameError:
+    # Fallback for Jupyter / Interactive sessions
+    json_path = Path.cwd().parents[2]
+json_path = Path(json_path) / "tests" / "backend" / "json_files" / json_file_name
+
 
 # ## Set JSON reading properties
 toolkit_api.read_props_from_json(json_path)
