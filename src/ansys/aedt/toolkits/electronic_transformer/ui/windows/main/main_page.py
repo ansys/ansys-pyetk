@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'main_page.ui'
+## Form generated from reading UI file 'main_pagevyBveP.ui'
 ##
-## Created by: Qt User Interface Compiler version 6.10.0
+## Created by: Qt User Interface Compiler version 6.9.2
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
@@ -815,6 +815,6 @@ class Ui_Geometry(object):
         self.winding_label.setText(QCoreApplication.translate("Geometry", u"winding_label", None))
         self.groupBox_5.setTitle(QCoreApplication.translate("Geometry", u"File and Create", None))
         self.New_button.setText(QCoreApplication.translate("Geometry", u"Create Transformer", None))
-        self.save_etk.setText(QCoreApplication.translate("Geometry", u"Save", None))
+        self.save_etk.setText(QCoreApplication.translate("Geometry", u"Save As...", None))
     # retranslateUi
 
