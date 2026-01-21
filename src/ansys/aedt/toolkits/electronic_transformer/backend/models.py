@@ -190,7 +190,7 @@ class Material(BaseModel, validate_assignment=True):
 class JsonVersion(BaseModel, validate_assignment=True):
     """Json."""
 
-    json_vertsion: str = ""
+    json_version: str = ""
 
 
 # All properties
