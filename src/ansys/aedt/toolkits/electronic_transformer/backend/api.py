@@ -220,7 +220,7 @@ class ToolkitBackend(AEDTCommon):
 
     def __read_json_version(self):
         """Read circuit properties from the input data."""
-        self.properties.json_version = self.__input_props["json_version"]["json_version"]
+        self.properties.json_version = self.__input_props["json_version"]
 
     def read_props_from_json(self, file_path):
         """Read properties from a JSON file.

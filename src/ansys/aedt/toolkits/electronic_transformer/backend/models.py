@@ -187,12 +187,6 @@ class Material(BaseModel, validate_assignment=True):
     name: str = ""
 
 
-class JsonVersion(BaseModel, validate_assignment=True):
-    """Json."""
-
-    json_version: str = ""
-
-
 # All properties
 class BackendResetProperties:
     def __init__(self):
@@ -202,7 +196,7 @@ class BackendResetProperties:
         self.materials: Dict[str, Material] = {}
         self.settings: Settings = Settings()
         self.circuit: Circuit = Circuit()
-        self.json_version: JsonVersion = JsonVersion()
+        self.json_version: str = ""
 
 
 # All properties
@@ -215,7 +209,7 @@ class Properties(CommonProperties, validate_assignment=True):
     materials: Dict[str, Material] = {}
     settings: Settings = Settings()
     circuit: Circuit = Circuit()
-    json_version: str = JsonVersion()
+    json_version: str =""
 
 
 properties = Properties()
