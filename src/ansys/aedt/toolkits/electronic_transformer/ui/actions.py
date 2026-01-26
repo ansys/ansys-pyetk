@@ -206,5 +206,5 @@ class Frontend(FrontendGeneric):
         """
         etk_model = self.data_manager.create_backend_data()
         be_props.update(etk_model)
-        for each in etk_model:
-            self.set_properties({each: be_props[each]})
+        for prop in etk_model:
+            self.set_properties({prop: be_props[prop]})
