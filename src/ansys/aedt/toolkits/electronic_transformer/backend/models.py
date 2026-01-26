@@ -209,7 +209,7 @@ class Properties(CommonProperties, validate_assignment=True):
     materials: Dict[str, Material] = {}
     settings: Settings = Settings()
     circuit: Circuit = Circuit()
-    json_version: str =""
+    json_version: str = ""
 
 
 properties = Properties()
