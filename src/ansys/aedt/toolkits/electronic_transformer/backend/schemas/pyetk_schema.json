@@ -7,7 +7,7 @@
       "additionalProperties": false,
       "properties": {
         "json_version": {
-          "type": "string"
+          "$ref": "#/definitions/JsonVersion"
         },
         "core": {
           "$ref": "#/definitions/Core"
@@ -37,6 +37,11 @@
         "winding"
       ],
       "title": "PyETK Main Configuration"
+    },
+    "JsonVersion": {
+      "json_version": {
+        "type": "object"
+      }
     },
     "Bobbin": {
       "type": "object",
