@@ -86,6 +86,7 @@ class Bobbin(GeometryCommon):
         include_bobbin = self.properties.draw_bobbin
         bobbin_board_thickness = float(self.properties.board_thickness)
         layers_definition = self.__winding_properties.layers
+        self.__layer_spacing = self.__winding_properties.layer_spacing
 
         # Get core cross-section depending on core type: Circular or Rectangular
         core_type = self.all_cores[self.__core_properties.type]
@@ -102,11 +103,11 @@ class Bobbin(GeometryCommon):
 
         # Rescale dimensions according to core shape
         if (
-            self.__core_properties.type == "RM"
-            or self.__core_properties.type == "EP"
-            or self.__core_properties.type == "P"
-            or self.__core_properties.type == "PQ"
-            or self.__core_properties.type == "PT"
+                self.__core_properties.type == "RM"
+                or self.__core_properties.type == "EP"
+                or self.__core_properties.type == "P"
+                or self.__core_properties.type == "PQ"
+                or self.__core_properties.type == "PT"
         ):
             dim_d6 = self.__core_properties.dimensions["D_5"] / 2
             dim_d5 = self.__core_properties.dimensions["D_5"] / 2 + airgap_both / 2
@@ -162,7 +163,7 @@ class Bobbin(GeometryCommon):
                 return False
 
     def __draw_board_rectangular(
-        self, slot_height, dim_d2, dim_d3, dim_d5, dim_d6, margin, board_thickness, layers_definition
+            self, slot_height, dim_d2, dim_d3, dim_d5, dim_d6, margin, board_thickness, layers_definition
     ):
         """Draw a rectangular board.
 
@@ -212,7 +213,7 @@ class Bobbin(GeometryCommon):
             else:
                 this_conductor_height = definition.conductor.diameter
 
-            z_position += this_conductor_height + board_thickness
+            z_position += this_conductor_height + board_thickness + self.__layer_spacing
 
     def __draw_board_circular(self, slot_height, dim_d2, dim_d3, dim_d5, margin, board_thickness, layers_definition):
         """Draw a circular board.
@@ -262,7 +263,7 @@ class Bobbin(GeometryCommon):
             else:
                 this_conductor_height = definition.conductor.diameter
 
-            z_position += this_conductor_height + board_thickness
+            z_position += this_conductor_height + board_thickness + self.__layer_spacing
 
     def __draw_bobbin_rectangular(self, slot_height, dim_d2, dim_d3, dim_d6, bobbin_thickness):
         """Draw a rectangular bobbin.
