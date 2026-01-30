@@ -147,7 +147,7 @@ jobs:
   release:
     name: Release
     runs-on: ubuntu-latest
-    needs: build-library
+    needs: [build-library, build-application-windows, build-application-linux-debian]
     permissions:
       id-token: write # Needed for trusted publishing OIDC
       contents: write # Needed for releasing to GitHub
