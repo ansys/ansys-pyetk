@@ -19,6 +19,7 @@ from PySide6.QtWidgets import QGroupBox
 from PySide6.QtWidgets import QHBoxLayout
 from PySide6.QtWidgets import QLabel
 from PySide6.QtWidgets import QLineEdit
+from PySide6.QtWidgets import QMessageBox
 from PySide6.QtWidgets import QPushButton
 from PySide6.QtWidgets import QTreeWidget
 from PySide6.QtWidgets import QTreeWidgetItem
@@ -1129,6 +1130,16 @@ class GeometryMenu(object):
         side_payload.pop("conn_wip", None)
         side_item.setData(0, Qt.UserRole, side_payload)
 
+    def __warn_empty_selection(self):
+        """Display a warning message box when no connections are selected."""
+        msg_box = QMessageBox(self.main_window)
+        msg_box.setIcon(QMessageBox.Warning)
+        msg_box.setWindowTitle("Selection Required")
+        msg_box.setText("Please select a connection")
+        msg_box.setInformativeText("You must select at least one connection to perform this action.")
+        msg_box.setStandardButtons(QMessageBox.Ok)
+        msg_box.exec()
+
     def connect_connections(self, connection_type="Series"):
         """Apply a series or parallel connection.
         - Applying to multiple rows results in grouping them into a new series or parallel connection.
@@ -1138,6 +1149,10 @@ class GeometryMenu(object):
             connection_type (str, optional): The type of connection. Defaults to ``"Series"``.
         """
         selected = self.selected_rows()
+
+        if not selected or len(selected) == 0:
+            self.__warn_empty_selection()
+            return
 
         # Apply Series/Parallel connection to single row returns if a Layer is selected
         if len(selected) == 1:
