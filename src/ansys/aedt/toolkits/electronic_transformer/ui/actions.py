@@ -78,16 +78,28 @@ class Frontend(FrontendGeneric):
         # update backend properties
         self._update_backend_properties(be_properties)
 
-        response = requests.post(self.url + "/create_model")
-
-        if response.ok:
-            msg = "Model Created."
-            logger.info(msg)
-            return True
-        else:
-            msg = f"Failed backend call: {self.url}"
+        #Validates the model before creating it
+        validation = requests.post(self.url + "/validate_model")
+        if not validation.ok:
+            msg = f"Model Validation Failed: {self.url}"
             logger.error(msg)
+            msg_list=validation.text.split("\n")
+            for msg in msg_list:
+                logger.error(msg)
             return False
+
+
+        # Creates the model
+        if validation.ok:
+            response = requests.post(self.url + "/create_model")
+            if response.ok:
+                msg = "Model Created."
+                logger.info(msg)
+                return True
+            else:
+                msg = f"Failed backend call: {self.url}"
+                logger.error(msg)
+                return False
 
     def _create_core(self):
         """Create the core geometry.

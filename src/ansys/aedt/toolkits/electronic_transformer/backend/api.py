@@ -20,6 +20,7 @@
 from pathlib import Path
 import sys
 
+
 sys.path.append(str(Path(__file__).parent))
 
 import json
@@ -374,6 +375,45 @@ class ToolkitBackend(AEDTCommon):
             return False
         return obobbin
 
+    def __validate_model(self):
+        """Validate the model configuration. Considers that the properties are already read.
+
+        Returns
+        -------
+        list
+            List of validation error messages. Empty list if validation passes.
+        """
+        validator = Validation()
+        error_messages = validator.validate_model(
+            properties.core,
+            properties.winding,
+            properties.bobbin,
+        )
+
+        if len(error_messages) > 0:
+            for msg in error_messages:
+                logger.error(msg)
+            return False,error_messages
+        return True,error_messages
+
+    def validate_model(self, frontend_properties=None):
+        """Validate the transformer model configuration.
+
+        Parameters
+        ----------
+        frontend_properties : dict, optional
+            Frontend properties. The default is ``None``.
+
+        Returns
+        -------
+        tuple
+            Tuple containing validation status (bool) and list of error messages.
+        """
+        if frontend_properties:
+            self.__read_props_from_frontend(frontend_properties)
+
+        return self.__validate_model()
+
     def create_model(self, frontend_properties=None):
         """Create the complete model.
 
@@ -390,6 +430,11 @@ class ToolkitBackend(AEDTCommon):
         # Updates the backend data structure
         if frontend_properties:
             self.__read_props_from_frontend(frontend_properties)
+
+        # Validates the model
+        validated,error_messages=self.__validate_model()
+        if not validated:
+            return False
 
         self.connect_design("Maxwell3D")
         if self.aedtapp is None:

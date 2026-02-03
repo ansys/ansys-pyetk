@@ -135,6 +135,24 @@ def validate_json():
     else:  # pragma: no cover
         return jsonify("JSON file is not valid"), 500
 
+@app.route("/validate_model", methods=["POST"])
+def validate_model():
+    """Validate the model."""
+    logger.info("[POST] /validate_model (Validates the model).")
+
+    # Get properties from frontend
+    properties_frontend = toolkit_api.get_properties()
+
+    validated,error_messages = toolkit_api.validate_model(properties_frontend)
+    error_msg=""
+    for each_message in error_messages:
+        error_msg=error_msg + each_message + "\n"
+
+    if validated:
+        return jsonify("Model valid."), 200
+    else:  # pragma: no cover
+        return jsonify(error_msg), 500
+
 
 def run_backend(port=0):
     """Run the server.
