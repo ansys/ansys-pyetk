@@ -1228,9 +1228,6 @@ class GeometryMenu(object):
                 self.connections_tree_widget.insertTopLevelItem(insert_index, child_item)
                 insert_index += 1
 
-            # Remove the original parent connection
-            self.connections_tree_widget.takeTopLevelItem(insert_index)
-
         # Disconnect only creates WIP state and not a valid index so we stash instead updating connections
         self._stash_connections()
 
