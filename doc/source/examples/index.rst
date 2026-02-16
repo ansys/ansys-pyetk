@@ -17,3 +17,10 @@ Examples are available to demonstrate how to use pyETK in different ways.
         :link-type: doc
 
         Example of how to use the pyETK's UI to create an electronic transformer.
+
+    .. grid-item-card:: Migrate from ETK to PyETK.
+        :padding: 2 2 2 2
+        :link: act_to_pyetk_example
+        :link-type: doc
+
+        Using the User Interface to migrate ACT's json files to PyETK.

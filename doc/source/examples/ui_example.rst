@@ -1,12 +1,6 @@
-==============
-User Interface
-==============
+============================================
+Create Transformer using the User Interface
+============================================
 
-This section describes how to use the PyETK. It assumes that you have already launched the
-toolkit. For toolkit installation, see :ref:`installation`
-
-The first section focuses on the general tools available in the UI, coming from the common toolkit framework.
-The second section focuses on the application specific fields and tools to design and model electronic transformers.
-
-Toolkit Common Framework
-=========================
+This example demonstrates how to use the PyETK's User Interface (UI) to create an electronic transformer.
+It provides a step-by-step guide on how to navigate through the UI, specify settings, and design a transformer using the available fields and tools.
