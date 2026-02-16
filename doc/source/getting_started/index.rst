@@ -5,7 +5,7 @@ Getting started
 ===============
 
 This section explains how to install the Electronic Transformer toolKit (PyETK).
-It then explains this toolkit's architecture and provides an example
+It then explains the general terminology used and provides an example
 of how to use its common methods.
 
 .. grid:: 2
@@ -18,12 +18,21 @@ of how to use its common methods.
         Learn how to install the PyAEDT Common Toolkit.
 
 
-    .. grid-item-card:: Architecture :fa:`person-running`
+    .. grid-item-card:: Terminology :fa:`person-running`
         :padding: 2 2 2 2
-        :link: architecture
+        :link: terminology
         :link-type: doc
 
-        Learn about this toolkit's architecture.
+        Learn about this toolkit's terminology.
+
+    .. grid-item-card:: Examples :fa:`person-running`
+        :padding: 2 2 2 2
+        :link: ../examples/index
+        :link-type: doc
+
+        Basic Examples using the backend API and the User Interface.
+
+
 
 
 .. toctree::

@@ -14,7 +14,7 @@ The following installers are available for different operating systems:
 
    * - `Installer Link <https://github.com/ansys/ansys-pyetk/releases/latest/>`_
      - Operating System
-   * - `Windows Installer <https://github.com/ansys/ansys-pyetk/releases/latest/download/PyETK-Installer-Windows.exe.exe>`_
+   * - `Windows Installer <https://github.com/ansys/ansys-pyetk/releases/latest/download/PyETK-Installer-Windows.exe>`_
      - Windows
    * - `Ubuntu 22.04 Installer <https://github.com/ansys/ansys-pyetk/releases/latest/download/PyETK-Installer-ubuntu_22_04.zip>`_
      - Ubuntu 22.04
