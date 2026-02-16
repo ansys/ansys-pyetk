@@ -28,7 +28,7 @@ done
 if [ $dependencies_available = true ]; then
     dpkg -x ./ansys_pyetk.deb ${HOME}/.local
     ./postInstallScript.sh
-    available=$(cat ~/.bashrc | grep -zoP "# Add alias for Electronic Transformer Toolkit \nalias ansys_pyetk=~/.local/opt/ansys_pyetk/ansys_pyetk" | wc -l)
+    available=$(cat ~/.bashrc | grep -zoP "# Add alias for Electronic Transformer toolKit \nalias ansys_pyetk=~/.local/opt/ansys_pyetk/ansys_pyetk" | wc -l)
     echo $available
     if [ $available -lt 1 ]
     then
