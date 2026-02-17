@@ -25,7 +25,7 @@ of how to use its common methods.
 
         PyETK's Transformer Build Reference.
 
-    .. grid-item-card:: Examples :fa:`feed-rocket`
+    .. grid-item-card:: Examples :fa:`book`
         :padding: 2 2 2 2
         :link: ../examples/index
         :link-type: doc
