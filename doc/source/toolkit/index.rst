@@ -14,7 +14,7 @@ The Electronic Transformer ToolKit (PyETK) is a custom solution for electronic t
 
     .. grid-item-card:: Getting started :fa:`person-running`
         :padding: 2 2 2 2
-        :link: getting_started/index
+        :link: ../getting_started/index
         :link-type: doc
 
         Learn how to install the Electronic Transformer toolKit (PyETK), understand its architecture
@@ -22,14 +22,14 @@ The Electronic Transformer ToolKit (PyETK) is a custom solution for electronic t
 
     .. grid-item-card:: User interface :fa:`scroll`
         :padding: 2 2 2 2
-        :link: toolkit/ui
+        :link: ../toolkit/ui
         :link-type: doc
 
         How to use the user interface.
 
     .. grid-item-card:: API reference :fa:`book-bookmark`
         :padding: 2 2 2 2
-        :link: toolkit/api
+        :link: ../toolkit/api
         :link-type: doc
 
         Understand the APIs available for the PyETK.
@@ -37,11 +37,11 @@ The Electronic Transformer ToolKit (PyETK) is a custom solution for electronic t
 .. toctree::
    :hidden:
 
-   getting_started/index
-   toolkit/ui
-   toolkit/api
-   examples/index
-   changelog
+   ../getting_started/index
+   ../toolkit/ui
+   ../toolkit/api
+   ../examples/index
+   ../changelog
 
 What is this library?
 ---------------------

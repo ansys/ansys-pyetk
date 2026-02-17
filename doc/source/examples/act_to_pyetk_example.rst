@@ -1,4 +1,3 @@
-============================================
 From ACT to PyETK Example
 ============================================
 
@@ -10,6 +9,7 @@ It provides a step-by-step guide on how to transition your existing ACT json fil
    It looks similar to the following:
 
    .. image:: ../_static/act-toolkit-json.png
+      :align: center
       :width: 400
       :alt: UI start page tab
 
@@ -20,8 +20,18 @@ It provides a step-by-step guide on how to transition your existing ACT json fil
    If you're planning on reusing the configuration file, click on *Save As...*. This way the ACT json file is saved in the latest working json format.
 
    .. image:: ../_static/load-act-json.png
+      :align: center
       :width: 800
       :alt: Builder Window
 
    .. note::
       The Log window will provide information about the loading process, including any errors or warnings that may occur during the migration.
+
+#. PyETK's versioned json file looks similar to the original ACT json configuration file, however the differences enable better organization that allows for better readability and easier access to the different sections of the transformer configuration. The PyETK json file contains a version number, which helps to track changes and updates to the file format over time. The PyETK json file also has a more structured format, with clear sections for core dimensions, winding definitions, and setup definitions. This structure allows for easier navigation and understanding of the different components of the transformer configuration.
+   Furthermore, it's versioned which implies that it can be updated and improved over time -- including further feature development -- without breaking compatibility with existing files.
+   The versioned json file looks like the following:
+
+   .. image:: ../_static/pyetk-toolkit-json.png
+      :align: center
+      :width: 250
+      :alt: Versioned Json File

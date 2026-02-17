@@ -18,21 +18,12 @@ of how to use its common methods.
         Learn how to install the PyAEDT Common Toolkit.
 
 
-    .. grid-item-card:: Terminology :fa:`person-running`
+    .. grid-item-card:: Dimensioning :fa:`ruler`
         :padding: 2 2 2 2
-        :link: terminology
+        :link: dimensioning
         :link-type: doc
 
-        Learn about this toolkit's terminology.
-
-    .. grid-item-card:: Examples :fa:`person-running`
-        :padding: 2 2 2 2
-        :link: ../examples/index
-        :link-type: doc
-
-        Basic Examples using the backend API and the User Interface.
-
-
+        PyETK's Transformer Build Reference.
 
 
 .. toctree::
@@ -40,4 +31,4 @@ of how to use its common methods.
    :maxdepth: 2
 
    installation
-   architecture
+   dimensioning

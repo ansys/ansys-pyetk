@@ -1,10 +1,10 @@
 .. _installation:
 
 Installation
-############
+=============
 
 Download links
-==============
+--------------
 
 The following installers are available for different operating systems:
 

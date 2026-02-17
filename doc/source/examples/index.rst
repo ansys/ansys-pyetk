@@ -1,3 +1,5 @@
+.. _examples:
+
 Examples
 ========
 Examples are available to demonstrate how to use pyETK in different ways.
@@ -6,7 +8,7 @@ Examples are available to demonstrate how to use pyETK in different ways.
 
     .. grid-item-card:: Using the Backend API.
         :padding: 2 2 2 2
-        :link: ETK_example
+        :link: api_example
         :link-type: doc
 
         Example of how to use the pyETK API to create an electronic transformer.
@@ -24,3 +26,12 @@ Examples are available to demonstrate how to use pyETK in different ways.
         :link-type: doc
 
         Using the User Interface to migrate ACT's json files to PyETK.
+
+
+.. toctree::
+   :hidden:
+   :maxdepth: 2
+
+   api_example
+   ui_example
+   act_to_pyetk_example
