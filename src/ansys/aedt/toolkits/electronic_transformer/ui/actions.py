@@ -45,9 +45,12 @@ class Frontend(FrontendGeneric):
     def create_model(self, project_selected=None, design_selected=None):
         """Create the transformer model.
 
-        Args:
-            project_selected (str, optional): The project to select. Defaults to None.
-            design_selected (str, optional): The design to select. Defaults to None.
+        Parameters
+        ----------
+        project_selected : str, optional
+            The project to select. Defaults to None.
+        design_selected : str, optional
+            The design to select. Defaults to None.
 
         Returns
         -------
@@ -57,7 +60,7 @@ class Frontend(FrontendGeneric):
         be_properties = self.get_properties()
         if project_selected and design_selected:
             if project_selected == "No Project":
-                project_selected = generate_unique_project_name(rootname=self.temp_folder)
+                project_selected = generate_unique_project_name(root_name=self.temp_folder)
                 be_properties["active_project"] = project_selected
 
             for project in be_properties["project_list"]:
