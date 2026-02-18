@@ -140,10 +140,9 @@ class Setup:
         """Assign an RL matrix to a winding group."""
         matrix_entry = []
 
-        counter = 1
-        for layer_name, layer in self.__winding_definitions.layers.items():
-            matrix_entry.append("Layer_" + str(counter))
-            counter = counter + 1
+        # Only the index is needed to generate the layer names for the matrix assignment
+        for idx in range(1, len(self.__winding_definitions.layers) + 1):
+            matrix_entry.append(f"Layer_{idx}")
 
         self.__matrix = self.__aedt.assign_matrix(matrix_name="Matrix1", assignment=matrix_entry)
         self.reduce_matrix()
@@ -185,7 +184,8 @@ class Setup:
             reduction_str = ",".join(reduction_list)
             return reduction_str
 
-        # TODO: Remove if not used
+        # FIXME: Decide if there is a need to remove this method or not
+        # Note that this decision impacts another method deletion
         # def rename(side_num, side_definition):
         #     """
         #     rename winding and circuit element to be Side_XXX for better UX
@@ -244,11 +244,7 @@ class Setup:
 
         connections = copy.deepcopy(self.__circuit_properties.connections)
         for side_num, side_def in connections.items():
-            # if not any(isinstance(val, dict) for val in side_def.values()):
-            #     # rename(side_num, side_def) it does not seem to be used. In fact, it breaks some cases
-            #     pass
-            # else:
-            # replace key and append name of the side for main key, for better UX
+            # Replace key and append name of the side for main key, for better UX
             main_connection = list(side_def.keys())[0]
             side_def[main_connection + "_Side_" + side_num] = side_def.pop(main_connection)
 
@@ -297,7 +293,7 @@ class Setup:
             Winding object.
         """
         dimension_list = []
-        for each_dim_key, each_dim_val in core.properties.dimensions.items():
+        for each_dim_val in core.properties.dimensions.values():
             dimension_list.append(float(each_dim_val))
         mesh_op_sz = max(dimension_list) / 20.0
 

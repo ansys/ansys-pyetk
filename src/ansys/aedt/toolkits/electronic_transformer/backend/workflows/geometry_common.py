@@ -21,6 +21,41 @@ from enum import Enum
 from enum import auto
 
 from ansys.aedt.toolkits.electronic_transformer.backend.workflows.material import Material
+from abc import ABC, abstractmethod
+
+
+ALL_CORES = {
+    "E": "ECore",
+    "EI": "EICore",
+    "U": "UCore",
+    "UI": "UICore",
+    "PQ": "PQCore",
+    "ETD": "ETDCore",
+    "EQ": "ETDCore",
+    "EC": "ETDCore",
+    "RM": "RMCore",
+    "EP": "EPCore",
+    "EFD": "EFDCore",
+    "ER": "ETDCore",
+    "P": "PCore",
+    "PT": "PCore",
+    "PH": "PCore",
+}
+"""Mapping of core types to their corresponding core names."""
+
+
+
+# Dedicated interface for geometry creation requirement
+class GeometryCreatable(ABC):
+    """Interface to enforce the presence of a create_geometry method.
+
+    Any class that inherits from GeometryCreatable must implement create_geometry.
+    """
+    @abstractmethod
+    def create_geometry(self):
+        """Create the geometry for the component."""
+        pass
+
 
 
 class CoreCrossSection(Enum):
@@ -30,10 +65,13 @@ class CoreCrossSection(Enum):
     circular = auto()
     rectangular = auto()
 
+class GeometryCommon(GeometryCreatable):
+    """Manages common geometry.
 
-class GeometryCommon:
-    """Manages common geometry."""
-
+    Any subclass that inherits from GeometryCommon must implement a
+    ``create_geometry`` method, which is responsible for creating the geometry
+    specific to that component.
+    """
     def __init__(
         self,
         name: str,
@@ -59,7 +97,6 @@ class GeometryCommon:
         self.__color = [0, 0, 0]
         self.__objects_list = []
         self.__material = Material
-        self.__segments_number = 0
 
     @property
     def core_cross_section(self):

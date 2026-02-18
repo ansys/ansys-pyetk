@@ -86,8 +86,8 @@ class ToolkitBackend(AEDTCommon):
         properties.state = ""
         properties.progress = 0
 
-    def __read_core_properties(self):
-        """Read core properties from the input data."""
+    def __update_core_properties(self):
+        """Update core properties from the input data."""
         core_props = self.__input_props["core"]
 
         self.properties.core.supplier = core_props["supplier"]
@@ -101,8 +101,8 @@ class ToolkitBackend(AEDTCommon):
             self.properties.core.airgap.airgap_on_leg = core_props["airgap"]["airgap_on_leg"]
             self.properties.core.airgap.airgap_value = core_props["airgap"]["airgap_value"]
 
-    def __read_material_properties(self):
-        """Read material properties from the input data."""
+    def __update_material_properties(self):
+        """Update material properties from the input data."""
         materials = self.__input_props["materials"]
 
         for key_material, value_material in materials.items():
@@ -137,8 +137,8 @@ class ToolkitBackend(AEDTCommon):
 
             self.properties.materials[key_material] = this_material
 
-    def __read_winding_properties(self):
-        """Read winding properties from the input data."""
+    def __update_winding_properties(self):
+        """Update winding properties from the input data."""
         winding_props = self.__input_props["winding"]
 
         self.properties.winding.layer_type = winding_props["layer_type"]
@@ -170,16 +170,16 @@ class ToolkitBackend(AEDTCommon):
 
             self.properties.winding.layers[key_layer] = this_layer
 
-    def __read_bobbin_properties(self):
-        """Read bobbin properties from the input data."""
+    def __update_bobbin_properties(self):
+        """Update bobbin properties from the input data."""
         bobbin_props = self.__input_props["bobbin"]
 
         self.properties.bobbin.draw_bobbin = bobbin_props["draw_bobbin"]
         self.properties.bobbin.material = bobbin_props["material"]
         self.properties.bobbin.board_thickness = bobbin_props["board_thickness"]
 
-    def __read_settings_properties(self):
-        """Read settings properties from the input data."""
+    def __update_settings_properties(self):
+        """Update settings properties from the input data."""
         setup_props = self.__input_props["settings"]
 
         self.properties.settings.full_model = setup_props["full_model"]
@@ -204,8 +204,8 @@ class ToolkitBackend(AEDTCommon):
             "frequency_sweep"
         ]["scale"]
 
-    def __read_circuit_properties(self):
-        """Read circuit properties from the input data."""
+    def __update_circuit_properties(self):
+        """Update circuit properties from the input data."""
         circuit_props = self.__input_props["circuit"]
 
         self.properties.circuit.connections = circuit_props["connections"]
@@ -218,12 +218,12 @@ class ToolkitBackend(AEDTCommon):
         elif circuit_props["excitation"]["type"].lower() == "current":
             self.properties.circuit.excitation.type = ExcitationType.current
 
-    def __read_json_version(self):
-        """Read circuit properties from the input data."""
+    def __update_json_version(self):
+        """Update circuit properties from the input data."""
         self.properties.json_version = self.__input_props["json_version"]
 
-    def read_props_from_json(self, file_path):
-        """Read properties from a JSON file.
+    def load_properties_from_json(self, file_path):
+        """Load properties from a JSON file.
 
         Parameters
         ----------
@@ -235,16 +235,16 @@ class ToolkitBackend(AEDTCommon):
             self.__input_props = json_read
 
         self.__validator.validate_json(self.__input_props)
-        self.__read_core_properties()
-        self.__read_winding_properties()
-        self.__read_bobbin_properties()
-        self.__read_settings_properties()
-        self.__read_material_properties()
-        self.__read_circuit_properties()
-        self.__read_json_version()
+        self.__update_core_properties()
+        self.__update_winding_properties()
+        self.__update_bobbin_properties()
+        self.__update_settings_properties()
+        self.__update_material_properties()
+        self.__update_circuit_properties()
+        self.__update_json_version()
 
-    def __read_props_from_frontend(self, frontend_properties):
-        """Read properties from a the frontend.
+    def __update_props_from_frontend(self, frontend_properties):
+        """Update properties from a the frontend.
 
         Parameters
         ----------
@@ -262,13 +262,13 @@ class ToolkitBackend(AEDTCommon):
         }
 
         self.__validator.validate_json(self.__input_props)
-        self.__read_core_properties()
-        self.__read_winding_properties()
-        self.__read_bobbin_properties()
-        self.__read_settings_properties()
-        self.__read_material_properties()
-        self.__read_circuit_properties()
-        self.__read_json_version()
+        self.__update_core_properties()
+        self.__update_winding_properties()
+        self.__update_bobbin_properties()
+        self.__update_settings_properties()
+        self.__update_material_properties()
+        self.__update_circuit_properties()
+        self.__update_json_version()
 
     def create_core_geometry(self, frontend_properties=None):
         """Create the core geometry.
@@ -284,7 +284,7 @@ class ToolkitBackend(AEDTCommon):
             Core object.
         """
         if frontend_properties:
-            self.__read_props_from_frontend(frontend_properties)
+            self.__update_props_from_frontend(frontend_properties)
 
         self.connect_design("Maxwell3D")
         if self.aedtapp is None:
@@ -315,7 +315,7 @@ class ToolkitBackend(AEDTCommon):
         """
         # Updates the backend data structure
         if frontend_properties:
-            self.__read_props_from_frontend(frontend_properties)
+            self.__update_props_from_frontend(frontend_properties)
 
         self.connect_design("Maxwell3D")
         if self.aedtapp is None:
@@ -329,7 +329,6 @@ class ToolkitBackend(AEDTCommon):
             properties.core,
             properties.settings,
             properties.bobbin,
-            properties.circuit,
         )
 
         owinding.create_geometry()
@@ -355,7 +354,7 @@ class ToolkitBackend(AEDTCommon):
         """
         # Updates the backend data structure
         if frontend_properties:
-            self.__read_props_from_frontend(frontend_properties)
+            self.__update_props_from_frontend(frontend_properties)
 
         self.connect_design("Maxwell3D")
         if self.aedtapp is None:
@@ -365,7 +364,6 @@ class ToolkitBackend(AEDTCommon):
         obobbin = Bobbin(
             "Bobbin", self.aedtapp, properties.bobbin, properties.core, properties.winding, properties.settings
         )
-
         obobbin.create_geometry()
         self.release_aedt()
 
@@ -389,7 +387,7 @@ class ToolkitBackend(AEDTCommon):
         """
         # Updates the backend data structure
         if frontend_properties:
-            self.__read_props_from_frontend(frontend_properties)
+            self.__update_props_from_frontend(frontend_properties)
 
         self.connect_design("Maxwell3D")
         if self.aedtapp is None:

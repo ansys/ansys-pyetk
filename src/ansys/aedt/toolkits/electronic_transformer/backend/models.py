@@ -124,7 +124,6 @@ class Excitation(BaseModel, validate_assignment=True):
     """Manages excitation properties."""
 
     model_config = ConfigDict(use_enum_values=True)
-
     value: float = 0
     type: ExcitationType = ExcitationType.none
 
@@ -189,6 +188,7 @@ class Material(BaseModel, validate_assignment=True):
 
 # All properties
 class BackendResetProperties:
+
     def __init__(self):
         self.winding: Winding = Winding()
         self.core: Core = Core()

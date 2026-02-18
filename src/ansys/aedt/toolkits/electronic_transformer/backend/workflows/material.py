@@ -16,37 +16,42 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from typing import Any
+
+from dataclasses import dataclass, field
 from typing import Dict
 
 
+
+@dataclass
 class MaterialPropsCoreLoss:
     """Manages material properties for core loss."""
+    cm: float = 0.0
+    x: float = 0.0
+    y: float = 0.0
 
-    cm: float = 0
-    x: float = 0
-    y: float = 0
 
 
+@dataclass
 class MaterialPropsMuvsFreq:
     """Manages material properties for magnetic permeability versus frequency."""
+    data: Dict[float, float] = field(default_factory=dict)
 
-    data: Dict[float, float] = {}
 
 
+@dataclass
 class MaterialPropsElectric:
     """Manages electric material properties."""
+    sigma: float = 0.0
+    rel_permittivity: float = 1.0
 
-    sigma: float = 0
-    rel_permittivity: float = 1
 
 
+@dataclass
 class MaterialPropsMagnetic:
     """Manages magnetic material properties."""
-
-    rel_permeability_vs_freq: Dict[str, Any] = MaterialPropsMuvsFreq()
-    rel_permeability: float = 1
-    core_loss: MaterialPropsCoreLoss = MaterialPropsCoreLoss()
+    rel_permeability_vs_freq: MaterialPropsMuvsFreq = field(default_factory=MaterialPropsMuvsFreq)
+    rel_permeability: float = 1.0
+    core_loss: MaterialPropsCoreLoss = field(default_factory=MaterialPropsCoreLoss)
 
 
 class Material:
@@ -82,7 +87,7 @@ class Material:
         return self.__magnetic_props
 
     @magnetic_props.setter
-    def magnetic_props(self, value: MaterialPropsMagnetic()):
+    def magnetic_props(self, value: MaterialPropsMagnetic):
         self.__magnetic_props = value
 
     @property
@@ -91,5 +96,5 @@ class Material:
         return self.__electric_props
 
     @electric_props.setter
-    def electric_props(self, value: MaterialPropsElectric()):
+    def electric_props(self, value: MaterialPropsElectric):
         self.__electric_props = value

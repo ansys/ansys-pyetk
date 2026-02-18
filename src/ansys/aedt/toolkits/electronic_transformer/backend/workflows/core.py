@@ -19,7 +19,7 @@
 import logging
 import math
 
-from ansys.aedt.toolkits.electronic_transformer.backend.workflows.geometry_common import GeometryCommon
+from ansys.aedt.toolkits.electronic_transformer.backend.workflows.geometry_common import ALL_CORES, GeometryCommon
 
 logger = logging.getLogger(__name__)
 
@@ -42,23 +42,6 @@ class Core(GeometryCommon):
             Settings properties.
         """
         super().__init__(name, aedtapp, core_properties)
-        self.all_cores = {
-            "E": "ECore",
-            "EI": "EICore",
-            "U": "UCore",
-            "UI": "UICore",
-            "PQ": "PQCore",
-            "ETD": "ETDCore",
-            "EQ": "ETDCore",
-            "EC": "ETDCore",
-            "RM": "RMCore",
-            "EP": "EPCore",
-            "EFD": "EFDCore",
-            "ER": "ETDCore",
-            "P": "PCore",
-            "PT": "PCore",
-            "PH": "PCore",
-        }
 
         self.__segments_number = self.segmentation_angle(settings_properties.segmentation_angle)
 
@@ -72,29 +55,31 @@ class Core(GeometryCommon):
         """
         list_objects_start = self.aedtapp.modeler.object_list
 
-        if self.all_cores[self.properties.type] == "ETDCore":
-            self.__create_etd_core()
-        elif self.all_cores[self.properties.type] == "ECore":
-            self.__create_e_core()
-        elif self.all_cores[self.properties.type] == "RMCore":
-            self.__create_rm_core()
-        elif self.all_cores[self.properties.type] == "UCore":
-            self.__create_u_core()
-        elif self.all_cores[self.properties.type] == "EICore":
-            self.__create_ei_core()
-        elif self.all_cores[self.properties.type] == "EFDCore":
-            self.__create_efd_core()
-        elif self.all_cores[self.properties.type] == "EPCore":
-            self.__create_ep_core()
-        elif self.all_cores[self.properties.type] == "PCore":
-            self.__create_p_core()
-        elif self.all_cores[self.properties.type] == "PQCore":
-            self.__create_pq_core()
-        elif self.all_cores[self.properties.type] == "UICore":
-            self.__create_ui_core()
-        else:
-            logger.info("Core type not implemented.")
-            return False
+        core_type = ALL_CORES[self.properties.type]
+        match core_type:
+            case "ETDCore":
+                self.__create_etd_core()
+            case "ECore":
+                self.__create_e_core()
+            case "RMCore":
+                self.__create_rm_core()
+            case "UCore":
+                self.__create_u_core()
+            case "EICore":
+                self.__create_ei_core()
+            case "EFDCore":
+                self.__create_efd_core()
+            case "EPCore":
+                self.__create_ep_core()
+            case "PCore":
+                self.__create_p_core()
+            case "PQCore":
+                self.__create_pq_core()
+            case "UICore":
+                self.__create_ui_core()
+            case _:
+                logger.info("Core type not implemented.")
+                return False
 
         list_objects_end = self.aedtapp.modeler.object_list
 

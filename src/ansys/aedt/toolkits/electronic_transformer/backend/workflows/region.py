@@ -17,7 +17,10 @@
 # limitations under the License.
 
 
-class Region:
+from ansys.aedt.toolkits.electronic_transformer.backend.workflows.geometry_common import GeometryCreatable
+
+
+class Region(GeometryCreatable):
     """Manages the air region."""
 
     def __init__(self, aedtapp, setup_def):
@@ -34,7 +37,7 @@ class Region:
         self.__aedt = aedtapp
         self.__offset = int(float(self.__setup_definitions.region_offset))
 
-    def crete_geometry(self):
+    def create_geometry(self):
         """Create the region geometry."""
         self.__aedt.modeler.create_region(
             [self.__offset, self.__offset, self.__offset, self.__offset, self.__offset, self.__offset]

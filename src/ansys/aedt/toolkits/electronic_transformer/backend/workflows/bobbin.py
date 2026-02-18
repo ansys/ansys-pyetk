@@ -18,7 +18,7 @@
 
 import logging
 
-from ansys.aedt.toolkits.electronic_transformer.backend.workflows.geometry_common import CoreCrossSection
+from ansys.aedt.toolkits.electronic_transformer.backend.workflows.geometry_common import ALL_CORES, CoreCrossSection
 from ansys.aedt.toolkits.electronic_transformer.backend.workflows.geometry_common import GeometryCommon
 
 logger = logging.getLogger(__name__)
@@ -49,24 +49,6 @@ class Bobbin(GeometryCommon):
         # Note that the Bobbin Properties are defined in the WindingProperties model
         super().__init__(name, aedtapp, bobbin_properties)
 
-        self.all_cores = {
-            "E": "ECore",
-            "EI": "EICore",
-            "U": "UCore",
-            "UI": "UICore",
-            "PQ": "PQCore",
-            "ETD": "ETDCore",
-            "EQ": "ETDCore",
-            "EC": "ETDCore",
-            "RM": "RMCore",
-            "EP": "EPCore",
-            "EFD": "EFDCore",
-            "ER": "ETDCore",
-            "P": "PCore",
-            "PT": "PCore",
-            "PH": "PCore",
-        }
-
         # If this class requires more properties, those should be private property
         self.__core_properties = core_properties
         self.__winding_properties = winding_properties
@@ -75,7 +57,7 @@ class Bobbin(GeometryCommon):
     def create_geometry(self):
         """Create the bobbin geometry."""
         # Initialize parameters
-        airgap_both, airgap_center, airgap_side = self.air_gap(self.__core_properties)
+        airgap_both, _, _ = self.air_gap(self.__core_properties)
         dim_d1 = self.__core_properties.dimensions["D_1"]
         dim_d2 = self.__core_properties.dimensions["D_2"]
         dim_d3 = self.__core_properties.dimensions["D_3"]
@@ -89,7 +71,7 @@ class Bobbin(GeometryCommon):
         self.__layer_spacing = self.__winding_properties.layer_spacing
 
         # Get core cross-section depending on core type: Circular or Rectangular
-        core_type = self.all_cores[self.__core_properties.type]
+        core_type = ALL_CORES[self.__core_properties.type]
         circular_cores = {"ETDCore", "RMCore", "EPCore", "PCore", "PQCore"}
         rectangular_cores = {"ECore", "UCore", "EICore", "EFDCore", "UICore"}
 
