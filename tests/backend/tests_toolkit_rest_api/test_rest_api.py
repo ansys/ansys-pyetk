@@ -121,4 +121,4 @@ class TestRestAPI:
         response = client.post("/create_model")
 
         assert response.status_code == 500
-        assert b"Model not created" in response.data
+        assert b"PyETK model not created" in response.data
