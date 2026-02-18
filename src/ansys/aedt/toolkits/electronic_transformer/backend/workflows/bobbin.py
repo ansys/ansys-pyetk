@@ -85,13 +85,7 @@ class Bobbin(GeometryCommon):
             return False
 
         # Rescale dimensions according to core shape
-        if (
-            self.__core_properties.type == "RM"
-            or self.__core_properties.type == "EP"
-            or self.__core_properties.type == "P"
-            or self.__core_properties.type == "PQ"
-            or self.__core_properties.type == "PT"
-        ):
+        if self.__core_properties.type in {"RM", "EP", "P", "PQ", "PT"}:
             dim_d6 = self.__core_properties.dimensions["D_5"] / 2
             dim_d5 = self.__core_properties.dimensions["D_5"] / 2 + airgap_both / 2
 

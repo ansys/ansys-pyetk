@@ -87,7 +87,7 @@ class Winding(GeometryCommon):
         bool
             ``True`` when successful, ``False`` when failed.
         """
-        core_type = ALL_CORES[self.properties.type]
+        core_type = ALL_CORES[self.__core_properties.type]
         match core_type:
             case "ETDCore" | "RMCore" | "EPCore" | "PCore" | "PQCore":
                 self.core_cross_section = CoreCrossSection.circular
@@ -105,8 +105,8 @@ class Winding(GeometryCommon):
         missing_obs = [obj for obj in list_objects_end if obj.name not in ids_in_start]
 
         # TODO: Is there an issue associated to this ? If yes, can you add it to be able to track it ?
-        "This is due a defect in pyAEDT. "
-        "self.aedtapp.modeler.object_list returns some Tool objects created during the geometry construction"
+        # This is due a defect in pyAEDT.
+        # self.aedtapp.modeler.object_list returns some Tool objects created during the geometry construction
         list_objs = list(filter(lambda obj: obj.name.find("Tool") == -1, missing_obs))
         list_objs = list(filter(lambda obj: obj.name.find("skin") == -1, list_objs))
         self.__list_skin_layers = list(filter(lambda obj: obj.name.find("skin") != -1, missing_obs))
