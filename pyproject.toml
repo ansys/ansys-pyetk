@@ -3,10 +3,9 @@ requires = ["flit_core >=3.2,<4"]
 build-backend = "flit_core.buildapi"
 
 [project]
-# Check https://flit.readthedocs.io/en/latest/pyproject_toml.html for all available sections
 name = "ansys-pyetk"
 dynamic = ["version"]
-description = "Advanced PyAEDT tool to set up electronic transformers in Ansys Electronic Desktop (AEDT)."
+description = "Advanced PyAEDT toolkit to set up electronic transformers in Ansys Electronic Desktop (AEDT)."
 readme = "README.rst"
 requires-python = ">=3.10"
 license = "Apache-2.0"
@@ -20,8 +19,16 @@ maintainers = [
 
 classifiers = [
     "Development Status :: 3 - Alpha",
-    "Programming Language :: Python :: 3",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
     "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Software Development :: Libraries :: Application Frameworks",
+    "Topic :: Scientific/Engineering",
 ]
 dependencies = [
     'ansys-aedt-toolkits-common[all]'
@@ -105,10 +112,6 @@ max-complexity = 10
 
 [tool.coverage.run]
 source = ["ansys.aedt.toolkits.electronic_transformer"]
-omit = [
-    # Omit UI testing
-    #"src/ansys/aedt/toolkits/electronic_transformer/ui/*",
-]
 
 [tool.coverage.report]
 show_missing = true
@@ -117,8 +120,8 @@ show_missing = true
 minversion = "7.1"
 xfail_strict = false
 markers = [
-    "rest_API: mark test as related to the REST API.",
-    "backend_API: mark test as related to the backend API.",
+    "rest: mark test as related to the REST API.",
+    "backend: mark test as related to the backend API.",
     "frontend: mark test as related to Frontend and UI code"
 ]
 
