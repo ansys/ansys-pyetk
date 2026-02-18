@@ -145,7 +145,7 @@ class Setup:
         """Assign an RL matrix to a winding group."""
         signal_sources = []
         for n, _ in enumerate(self.__winding_definitions.layers.keys()):
-            signal_sources.append(SourceACMagnetic(name=f"Layer_{n}"))
+            signal_sources.append(SourceACMagnetic(name=f"Layer_{n+1}"))
 
         matrix_args = MatrixACMagnetic(signal_sources=signal_sources, matrix_name="Matrix1")
         self.__matrix = self.__aedt.assign_matrix(matrix_args)
