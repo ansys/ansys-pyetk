@@ -18,6 +18,11 @@
 
 import copy
 
+from ansys.aedt.core.modules.boundary.maxwell_boundary import (
+    MatrixACMagnetic,
+    SourceACMagnetic,
+)
+
 from ansys.aedt.toolkits.electronic_transformer.backend.workflows.bobbin import Bobbin
 from ansys.aedt.toolkits.electronic_transformer.backend.workflows.core import Core
 from ansys.aedt.toolkits.electronic_transformer.backend.workflows.winding import Winding
@@ -138,14 +143,12 @@ class Setup:
 
     def assign_matrix_winding(self):
         """Assign an RL matrix to a winding group."""
-        matrix_entry = []
+        signal_sources = []
+        for n, _ in enumerate(self.__winding_definitions.layers.keys()):
+            signal_sources.append(SourceACMagnetic(name=f"Layer_{n}"))
 
-        counter = 1
-        for layer_name, layer in self.__winding_definitions.layers.items():
-            matrix_entry.append("Layer_" + str(counter))
-            counter = counter + 1
-
-        self.__matrix = self.__aedt.assign_matrix(matrix_name="Matrix1", assignment=matrix_entry)
+        matrix_args = MatrixACMagnetic(signal_sources=signal_sources, matrix_name="Matrix1")
+        self.__matrix = self.__aedt.assign_matrix(matrix_args)
         self.reduce_matrix()
 
     def reduce_matrix(self):
