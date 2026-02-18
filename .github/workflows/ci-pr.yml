@@ -249,13 +249,13 @@ jobs:
         timeout-minutes: 30
         run: |
           .\.venv\Scripts\Activate.ps1
-          pytest -v -m rest_API --cov=ansys.aedt.toolkits.electronic_transformer --cov-append
+          pytest -v -m rest --cov=ansys.aedt.toolkits.electronic_transformer --cov-append
 
       - name: Toolkit Backend API testing
         timeout-minutes: 30
         run: |
           .\.venv\Scripts\Activate.ps1
-          pytest -v -m backend_API --cov=ansys.aedt.toolkits.electronic_transformer --cov-append
+          pytest -v -m backend --cov=ansys.aedt.toolkits.electronic_transformer --cov-append
 
       - name: Toolkit Frontend testing
         timeout-minutes: 30
@@ -311,13 +311,13 @@ jobs:
         timeout-minutes: 30
         run: |
           source .venv/bin/activate
-          pytest -v -m rest_API
+          pytest -v -m rest
 
       - name: Toolkit backend API testing
         timeout-minutes: 30
         run: |
           source .venv/bin/activate
-          pytest -v -m backend_API
+          pytest -v -m backend
 
       - name: Toolkit frontend testing
         timeout-minutes: 30
