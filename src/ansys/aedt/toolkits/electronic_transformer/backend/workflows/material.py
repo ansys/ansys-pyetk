@@ -17,38 +17,39 @@
 # limitations under the License.
 
 
-from dataclasses import dataclass, field
+from dataclasses import dataclass
+from dataclasses import field
 from typing import Dict
-
 
 
 @dataclass
 class MaterialPropsCoreLoss:
     """Manages material properties for core loss."""
+
     cm: float = 0.0
     x: float = 0.0
     y: float = 0.0
 
 
-
 @dataclass
 class MaterialPropsMuvsFreq:
     """Manages material properties for magnetic permeability versus frequency."""
-    data: Dict[float, float] = field(default_factory=dict)
 
+    data: Dict[float, float] = field(default_factory=dict)
 
 
 @dataclass
 class MaterialPropsElectric:
     """Manages electric material properties."""
+
     sigma: float = 0.0
     rel_permittivity: float = 1.0
-
 
 
 @dataclass
 class MaterialPropsMagnetic:
     """Manages magnetic material properties."""
+
     rel_permeability_vs_freq: MaterialPropsMuvsFreq = field(default_factory=MaterialPropsMuvsFreq)
     rel_permeability: float = 1.0
     core_loss: MaterialPropsCoreLoss = field(default_factory=MaterialPropsCoreLoss)

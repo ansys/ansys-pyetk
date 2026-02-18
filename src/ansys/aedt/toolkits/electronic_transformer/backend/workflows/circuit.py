@@ -103,7 +103,7 @@ class Circuit:
                     target_dict["S99999"] = {key: "Layer"}
                     break
 
-    # FIXME: Commented as not used anywhere and no `self.editor` is ever defined.
+    # TODO: Commented as not used anywhere and no `self.editor` is ever defined.
     # To be removed if not needed.
     # def get_comp_by_name(self, name):  # TODO: Needed for renaming of sides
     #     """Search for a component by its name.

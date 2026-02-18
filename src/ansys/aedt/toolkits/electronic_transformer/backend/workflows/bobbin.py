@@ -18,7 +18,8 @@
 
 import logging
 
-from ansys.aedt.toolkits.electronic_transformer.backend.workflows.geometry_common import ALL_CORES, CoreCrossSection
+from ansys.aedt.toolkits.electronic_transformer.backend.workflows.geometry_common import ALL_CORES
+from ansys.aedt.toolkits.electronic_transformer.backend.workflows.geometry_common import CoreCrossSection
 from ansys.aedt.toolkits.electronic_transformer.backend.workflows.geometry_common import GeometryCommon
 
 logger = logging.getLogger(__name__)
@@ -85,11 +86,11 @@ class Bobbin(GeometryCommon):
 
         # Rescale dimensions according to core shape
         if (
-                self.__core_properties.type == "RM"
-                or self.__core_properties.type == "EP"
-                or self.__core_properties.type == "P"
-                or self.__core_properties.type == "PQ"
-                or self.__core_properties.type == "PT"
+            self.__core_properties.type == "RM"
+            or self.__core_properties.type == "EP"
+            or self.__core_properties.type == "P"
+            or self.__core_properties.type == "PQ"
+            or self.__core_properties.type == "PT"
         ):
             dim_d6 = self.__core_properties.dimensions["D_5"] / 2
             dim_d5 = self.__core_properties.dimensions["D_5"] / 2 + airgap_both / 2
@@ -145,7 +146,7 @@ class Bobbin(GeometryCommon):
                 return False
 
     def __draw_board_rectangular(
-            self, slot_height, dim_d2, dim_d3, dim_d5, dim_d6, margin, board_thickness, layers_definition
+        self, slot_height, dim_d2, dim_d3, dim_d5, dim_d6, margin, board_thickness, layers_definition
     ):
         """Draw a rectangular board.
 

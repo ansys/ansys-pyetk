@@ -19,7 +19,8 @@
 import logging
 import math
 
-from ansys.aedt.toolkits.electronic_transformer.backend.workflows.geometry_common import ALL_CORES, CoreCrossSection
+from ansys.aedt.toolkits.electronic_transformer.backend.workflows.geometry_common import ALL_CORES
+from ansys.aedt.toolkits.electronic_transformer.backend.workflows.geometry_common import CoreCrossSection
 from ansys.aedt.toolkits.electronic_transformer.backend.workflows.geometry_common import GeometryCommon
 
 logger = logging.getLogger(__name__)
@@ -103,7 +104,7 @@ class Winding(GeometryCommon):
         ids_in_start = {obj.name for obj in list_objects_start}
         missing_obs = [obj for obj in list_objects_end if obj.name not in ids_in_start]
 
-        # FIXME: Is there an issue associated to this ? If yes, can you add it to be able to track it ?
+        # TODO: Is there an issue associated to this ? If yes, can you add it to be able to track it ?
         "This is due a defect in pyAEDT. "
         "self.aedtapp.modeler.object_list returns some Tool objects created during the geometry construction"
         list_objs = list(filter(lambda obj: obj.name.find("Tool") == -1, missing_obs))
@@ -354,7 +355,7 @@ class Winding(GeometryCommon):
 
                 object_names.append(name)
 
-        # FIXME: Is this necessary ?
+        # TODO: Is this necessary ?
         # if skin_depth < 0.02 * dimension:
         #     self.add_warning_message(
         #         "Skin layer is too thin, it is recommended to use Impedance Boundary"

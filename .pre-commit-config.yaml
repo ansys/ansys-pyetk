@@ -1,12 +1,12 @@
 ci:
-    autofix_commit_msg: 'CHORE: Auto fixes from pre-commit hooks'
-    autoupdate_commit_msg: 'CHORE: Pre-commit automatic update'
-    autoupdate_schedule: weekly
+  autofix_commit_msg: 'CHORE: Auto fixes from pre-commit hooks'
+  autoupdate_commit_msg: 'CHORE: Pre-commit automatic update'
+  autoupdate_schedule: weekly
 
 exclude: |
-    (?x)(
-        src/ansys/aedt/toolkits/electronic_transformer/ui/windows/.* |
-    )
+  (?x)(
+      src/ansys/aedt/toolkits/electronic_transformer/ui/windows/.*
+  )
 
 repos:
 

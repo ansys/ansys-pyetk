@@ -19,7 +19,8 @@
 import logging
 import math
 
-from ansys.aedt.toolkits.electronic_transformer.backend.workflows.geometry_common import ALL_CORES, GeometryCommon
+from ansys.aedt.toolkits.electronic_transformer.backend.workflows.geometry_common import ALL_CORES
+from ansys.aedt.toolkits.electronic_transformer.backend.workflows.geometry_common import GeometryCommon
 
 logger = logging.getLogger(__name__)
 

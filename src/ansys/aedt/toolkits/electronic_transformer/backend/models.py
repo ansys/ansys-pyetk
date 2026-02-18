@@ -188,7 +188,6 @@ class Material(BaseModel, validate_assignment=True):
 
 # All properties
 class BackendResetProperties:
-
     def __init__(self):
         self.winding: Winding = Winding()
         self.core: Core = Core()
@@ -197,6 +196,9 @@ class BackendResetProperties:
         self.settings: Settings = Settings()
         self.circuit: Circuit = Circuit()
         self.json_version: str = ""
+
+
+test = 12
 
 
 # All properties

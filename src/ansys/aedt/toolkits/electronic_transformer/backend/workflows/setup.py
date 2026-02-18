@@ -184,7 +184,7 @@ class Setup:
             reduction_str = ",".join(reduction_list)
             return reduction_str
 
-        # FIXME: Decide if there is a need to remove this method or not
+        # TODO: Decide if there is a need to remove this method or not
         # Note that this decision impacts another method deletion
         # def rename(side_num, side_definition):
         #     """
