@@ -32,7 +32,7 @@ from ansys.aedt.core.generic.general_methods import is_linux
 json_files_path = Path(__file__).parents[1] / "json_files"
 vol_limit = 1e-5
 
-pytestmark = [pytest.mark.backend_API]
+pytestmark = [pytest.mark.backend]
 
 
 @pytest.mark.skipif(is_linux, reason="Crashing on Linux")
@@ -40,7 +40,7 @@ class TestBackendAPI:
     def test_01_create_model(self, aedt_common_fixture_class):
         json_file_name = "RM_wound_circular.json"
         json_path = Path(json_files_path) / json_file_name
-        aedt_common_fixture_class.read_props_from_json(json_path)
+        aedt_common_fixture_class.load_properties_from_json(json_path)
 
         model = aedt_common_fixture_class.create_model()
         assert model
