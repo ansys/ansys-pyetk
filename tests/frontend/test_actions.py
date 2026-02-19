@@ -273,25 +273,31 @@ class TestFrontend:
         mock_mkdtemp.return_value = "/tmp/test"
         mock_parent_init.return_value = None
 
-        frontend = Frontend()
-        frontend.url = "http://localhost:5000"
-        frontend.set_properties = Mock()
-        frontend.data_manager = Mock()
-        frontend.data_manager.create_backend_data.return_value = {
+        # Create mocks with proper configuration
+        mock_set_properties = Mock()
+        mock_data_manager = Mock()
+        mock_data_manager.create_backend_data.return_value = {
             "core": {"supplier": "TDK"},
             "winding": {"layer_type": "Wound"},
         }
+
+        frontend = Frontend()
+        frontend.url = "http://localhost:5000"
+        frontend.set_properties = mock_set_properties
+        frontend.data_manager = mock_data_manager
 
         be_props = {"active_project": "Test"}
         frontend._update_backend_properties(be_props)
 
         # Verify backend data was created and merged
-        frontend.data_manager.create_backend_data.assert_called_once()
-        frontend.set_properties.assert_called_once()
-        call_args = frontend.set_properties.call_args[0][0]
-        assert "active_project" in call_args
-        assert "core" in call_args
-        assert "winding" in call_args
+        mock_data_manager.create_backend_data.assert_called_once()
+        # set_properties is called once per key in etk_model (2 times: core and winding)
+        assert mock_set_properties.call_count == 2
+        # Verify the calls were made with the correct keys
+        calls = mock_set_properties.call_args_list
+        call_dicts = [call[0][0] for call in calls]
+        assert {"core": {"supplier": "TDK"}} in call_dicts
+        assert {"winding": {"layer_type": "Wound"}} in call_dicts
 
     @patch("ansys.aedt.toolkits.electronic_transformer.ui.actions.requests.post")
     @patch("ansys.aedt.toolkits.electronic_transformer.ui.actions.FrontendGeneric.__init__")

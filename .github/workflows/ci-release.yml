@@ -51,6 +51,9 @@ jobs:
     permissions:
       contents: read
     steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
       - uses: ./.github/actions/build-windows-app
         with:
           artifact-name: 'PyETK-Installer-Windows'
@@ -67,6 +70,9 @@ jobs:
     permissions:
       contents: read
     steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
       - uses: ./.github/actions/build-linux-app
         with:
           artifact-name: 'PyETK-Installer-ubuntu_${{ matrix.os }}'
@@ -84,6 +90,27 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           fail-level: 'warning'
+
+  smoke-tests:
+    name: Build and smoke tests
+    needs: code-style
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os : [windows-latest, ubuntu-latest]
+        python-version: ['3.10', '3.11', '3.12', '3.13']
+    permissions:
+      attestations: write   # Required to create and publish build attestations (SLSA provenance)
+      contents: read        # Required to read repository content for building
+      id-token: write       # Required for OIDC token generation (for provenance signing)
+    steps:
+      - uses: ansys/actions/build-wheelhouse@41f86da4c9ead510db9135e428e33df9cc6f92e1 # v10.2.3
+        with:
+          library-name: ${{ env.LIBRARY_NAME }}
+          operating-system: ${{ matrix.os }}
+          python-version: ${{ matrix.python-version }}
+          whitelist-license-check: 'fpdf2 PySide6 PySide6_Addons PySide6_Essentials shiboken6'
 
   doc-build:
     name: Documentation build
@@ -120,7 +147,7 @@ jobs:
   release:
     name: Release
     runs-on: ubuntu-latest
-    needs: build-library
+    needs: [build-library, build-application-windows, build-application-linux-debian]
     permissions:
       id-token: write # Needed for trusted publishing OIDC
       contents: write # Needed for releasing to GitHub

@@ -105,9 +105,9 @@ class Conductor(BaseModel, validate_assignment=True):
 class Layer(BaseModel, validate_assignment=True):
     """Manages layer properties."""
 
-    conductor: Dict[str, Any] = Conductor()
-    insulation: Dict[str, Any] = Insulation()
-    turns: Dict[str, Any] = Turns()
+    conductor: Conductor = Conductor()
+    insulation: Insulation = Insulation()
+    turns: Turns = Turns()
 
 
 class Winding(BaseModel, validate_assignment=True):
@@ -179,18 +179,12 @@ class Material(BaseModel, validate_assignment=True):
     """Manages material properties."""
 
     conductivity: float = 0.0
-    power_ferrite_loss_params: Dict[str, Any] = PowerFerriteLossParams()
+    power_ferrite_loss_params: PowerFerriteLossParams = PowerFerriteLossParams()
     density: float = 0.0
     mur: float = 0.0
     epsr: float = 0.0
     mu_vs_freq_list: List[Any] = []
     name: str = ""
-
-
-class JsonVersion(BaseModel, validate_assignment=True):
-    """Json."""
-
-    json_version: str = ""
 
 
 # All properties
@@ -202,7 +196,7 @@ class BackendResetProperties:
         self.materials: Dict[str, Material] = {}
         self.settings: Settings = Settings()
         self.circuit: Circuit = Circuit()
-        self.json_version: str = JsonVersion()
+        self.json_version: str = ""
 
 
 # All properties
@@ -215,7 +209,7 @@ class Properties(CommonProperties, validate_assignment=True):
     materials: Dict[str, Material] = {}
     settings: Settings = Settings()
     circuit: Circuit = Circuit()
-    json_version: str = JsonVersion()
+    json_version: str = ""
 
 
 properties = Properties()
