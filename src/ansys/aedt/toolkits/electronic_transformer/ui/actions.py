@@ -45,9 +45,12 @@ class Frontend(FrontendGeneric):
     def create_model(self, project_selected=None, design_selected=None):
         """Create the transformer model.
 
-        Args:
-            project_selected (str, optional): The project to select. Defaults to None.
-            design_selected (str, optional): The design to select. Defaults to None.
+        Parameters
+        ----------
+        project_selected : str, optional
+            The project to select. Defaults to None.
+        design_selected : str, optional
+            The design to select. Defaults to None.
 
         Returns
         -------

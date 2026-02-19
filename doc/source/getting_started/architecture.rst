@@ -3,7 +3,7 @@
 Architecture
 ============
 
-The Electronic Transformer Toolkit (PyETK) main dependency is the `PyAEDT Common Toolkit <https://aedt.common.toolkit.docs.pyansys.com/version/stable/index.html>`_, a package that provides common methods and best practices for creating Ansys Electronics Desktop toolkits.
+The Electronic Transformer toolKit (PyETK) main dependency is the `PyAEDT Common Toolkit <https://aedt.common.toolkit.docs.pyansys.com/version/stable/index.html>`_, a package that provides common methods and best practices for creating Ansys Electronics Desktop toolkits.
 To better understand the toolkit template architecture (backend and user interface) you can refer to the `PyAEDT Common Toolkit Architecture <https://aedt.common.toolkit.docs.pyansys.com/version/stable/getting_started/architecture.html>`_.
 To understand how the Backend API is structured and see an example refer to `Backend API reference <https://aedt.common.toolkit.docs.pyansys.com/version/stable/toolkit/api.html>`_.
 The `UI API reference <https://aedt.common.toolkit.docs.pyansys.com/version/stable/toolkit/ui.html>`_ explains how the UI is built and its modules.
