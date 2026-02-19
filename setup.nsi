@@ -2,7 +2,7 @@
 
 ; Set the name, version, and output path of the installer
 !define LICENSE_FILE "LICENSE"
-!define PRODUCT_NAME "Electronic Transformer Toolkit"
+!define PRODUCT_NAME "Electronic Transformer toolKit"
 !define APP_OUT_PATH "ansys_pyetk"
 !define /file PRODUCT_VERSION "installer\VERSION"
 !define OUTFILE_NAME "PyETK-Installer-Windows.exe"

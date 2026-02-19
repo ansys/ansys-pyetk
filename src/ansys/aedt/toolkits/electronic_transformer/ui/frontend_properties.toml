@@ -1,10 +1,10 @@
 [defaults]
-"toolkit_name" = "Electronic Transformer Toolkit"
+"toolkit_name" = "Electronic Transformer toolKit"
 "backend_url" = "127.0.0.1"
 "backend_port" = 5001
 "debug" = false
-"app_name" = "Electronic Transformer ToolKit, PyETK"
-"main_title" = "Electronic Transformer ToolKit"
+"app_name" = "Electronic Transformer toolKit, PyETK"
+"main_title" = "Electronic Transformer toolKit"
 "welcome_message" = "Welcome to the Electronic Transformer toolKit (PyETK)"
 "version" = "0.2.dev0"
 "copyright" = ""

@@ -11,10 +11,10 @@ if [ "$user_selection" = "Y" ]; then
     sudo -v >/dev/null 2>&1
     root_check=$?
     if [ $root_check -eq 0 ]; then
-        echo "Uninstalling Electronic Transformer Toolkit ......."
+        echo "Uninstalling Electronic Transformer toolKit ......."
         sleep 2
         sudo yum remove -y ansys_pyetk.x86_64
-        sudo sed -i '/# Add alias for Electronic Transformer Toolkit/d' ~/.bashrc
+        sudo sed -i '/# Add alias for Electronic Transformer toolKit/d' ~/.bashrc
         sudo sed -i  '/alias  ansys-pyetk/d' ~/.bashrc
         printf "\nUninstalled successfully...\n"
     else
@@ -23,5 +23,5 @@ if [ "$user_selection" = "Y" ]; then
 else
     # Script aborted by user
     printf "Aborting....\nUser permission denied.... \n\n"
-    echo "Electronic Transformer Toolkit package requires sudo access to uninstall."
+    echo "Electronic Transformer toolKit package requires sudo access to uninstall."
 fi
