@@ -1,4 +1,4 @@
 [defaults]
-toolkit_name = "Electronic Transformer Toolkit"
+toolkit_name = "Electronic Transformer toolKit"
 log_file = "etk.log"
 debug = false
