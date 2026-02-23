@@ -12,8 +12,8 @@ The design is that of a planar transformer, which is commonly used in power elec
          :width: 400
          :alt: Planar transformer
 
-For simplicity the example focuses on one sub-menu at a time, starting with the core model, dimensions and materials,
-then moving to the bobbin, winding and excitation information, and finally the Maxwell settings.
+For simplicity, the example focuses on one sub-menu at a time, starting with the core model, dimensions, and materials.
+Then, moving to the bobbin, winding, and excitation information, and finally, the Maxwell settings.
 
 #. First, launch the PyETK, and connect to AEDT by clicking the **Connect to AEDT** button under the settings tab.
    For installation instructions, see :ref:`installation`.
@@ -71,8 +71,8 @@ then moving to the bobbin, winding and excitation information, and finally the M
         The Transformer cannot be created without at least a single winding layer. Hence, the initialization of the winding section contains one layer with default values.
         The user can modify the default values or add more layers as needed. In addition, layer connection must be specified. By default, every layer in a winding side is connected in **Series**
 
-        To modify the circuit connections between layers, the user must click on the layers of interest, click on the **Disconnect** button and then specify either **Series** or **Parallel** connection.
-        The user can also specify the connection between the primary and secondary sides by clicking on the **Primary-Secondary Connection** button and selecting either **Series** or **Parallel** connection between them.
+        To modify the circuit connections between layers, the user must select the layers of interest, click the **Disconnect** button and then specify either **Series** or **Parallel** connection.
+        The user can also specify the connection between the primary and secondary sides by selecting the **Primary-Secondary Connection** button and selecting either **Series** or **Parallel** connection between them.
         See image below for more details.
 
         .. image:: ../_static/menu-winding-2.png
@@ -116,7 +116,7 @@ then moving to the bobbin, winding and excitation information, and finally the M
         The Maxwell settings are used to specify the settings for the Maxwell analysis that is performed after creating the transformer geometry in AEDT. These settings are used to control the accuracy and convergence of the Maxwell analysis.
 
 
-#. Finally, click on the **Create Transformer** button to create the transformer geometry in AEDT. The log window will provide information about the creation process, including any errors or warnings that may occur during the process.
+#. Finally, click **Create Transformer** to create the transformer geometry in AEDT. The log window will provide information about the creation process, including any errors or warnings that may occur during the process.
 
 .. image:: ../_static/menu-save-create.png
     :align: center
@@ -130,13 +130,13 @@ then moving to the bobbin, winding and excitation information, and finally the M
 Pre-packaged Examples - Loading a Transformer Model from a .json File
 ---------------------------------------------------------------------
 
-To enable third party integration, we have set up a transformer definition that can be stored as a versioned .json file.
-This .json contains all the information including sources, dimensions, materials and other advanced settings.
+To enable third party integration, PyETK consumes a transformer definition defined in a versioned .json file.
+This .json contains all the information including sources, dimensions, materials, and other advanced settings.
 The .json configuration file can be used with PyETK's API, bypassing the need for the UI.
 
 The .json file can be created by saving the current transformer model in the UI using the **Save As...** button, or it can be created manually by following the structure of the .json file.
 
-To browse through the pre-packaged examples, you have two options either click on the **Open** button, or navigate using the forward and backward buttons as shown in the image below.
+To browse through the pre-packaged examples, you have two options either click the **Open** button, or navigate using the forward and backward buttons as shown in the image below.
 
 .. image:: ../_static/menu-examples.png
     :align: center
@@ -146,5 +146,5 @@ To browse through the pre-packaged examples, you have two options either click o
 .. note::
     If you were an ACT ETK user, you can load your ACT .json file in the PyETK UI by clicking on the **Open** button and selecting your ACT .json file.
     The PyETK will automatically parse the ACT .json file and populate the fields in the UI with the corresponding values from the ACT .json file. After loading the ACT .json file, you can review the populated fields in the UI to ensure that all the information has been correctly transferred.
-    If you're planning on reusing the configuration file, click on *Save As...*.
+    If you're planning on reusing the configuration file, click *Save As...*.
     This way the ACT .json file is saved in the latest working .json format. See :ref:`act_to_pyetk_example` for more details on migrating from ACT to PyETK.
