@@ -3,21 +3,21 @@
 Dimensioning
 ============
 
-To help you get the most out of PyETK, we display a few key dimensions we use throughout the platform.
-Understanding these will help you navigate your workflow more efficiently and ensure you're using every feature to its full potential.
+To get the most out of PyETK, the key dimensions used throughout the platform are displayed in this document.
+Understanding these streamlines the workflow and ensure the use of every feature to its full potential.
 
 The transformer dimensions - from core to turn distances can be observed in two main build topologies - the planar and wound transformer.
 The main difference between the two is that the planar transformer's winding is embedded in the PCB as traces,
 while the wound winding revolves around a leg of the magnetic core.
 
-Wound Build Type
+Wound build type
 ----------------
     .. image:: ../_static/topology-wound.jpg
         :align: center
         :width: 600
         :alt: Wound transformer
 
-Planar Build Type
+Planar build type
 -----------------
 
     .. image:: ../_static/topology-planar.jpg
