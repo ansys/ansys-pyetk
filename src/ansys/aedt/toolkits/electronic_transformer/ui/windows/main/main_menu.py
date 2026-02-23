@@ -203,6 +203,7 @@ class GeometryMenu(object):
         self.winding_tree_widget = self.geometry_menu_widget.findChild(QTreeWidget, "winding_tree_widget")
         self.add_winding = self.geometry_menu_widget.findChild(QPushButton, "add_winding")
         self.add_layer = self.geometry_menu_widget.findChild(QPushButton, "add_layer")
+        self.delete_row = self.geometry_menu_widget.findChild(QPushButton, "delete_row")
         self.cond_type = self.geometry_menu_widget.findChild(QComboBox, "cond_type")
         self.cond_material = self.geometry_menu_widget.findChild(QComboBox, "cond_material")
         self.build_combo = self.geometry_menu_widget.findChild(QComboBox, "build_combo")
@@ -230,6 +231,7 @@ class GeometryMenu(object):
         # Connect UI event signals (callbacks) to their corresponding slots (methods)
         self.add_winding.clicked.connect(self._add_winding)
         self.add_layer.clicked.connect(self._add_layer)
+        self.delete_row.clicked.connect(self._delete_row)
         self.cond_type.currentIndexChanged.connect(self._conductor_type_changed)
         self.winding_tree_widget.itemChanged.connect(self._winding_item_changed)
         self.build_combo.currentIndexChanged.connect(self._update_build)
@@ -1031,6 +1033,200 @@ class GeometryMenu(object):
             root_item.setText(0, self._connection_to_label(payload))
             self.update_connections_def()
             self._display_connection_scheme()
+
+    def _delete_row(self):
+        """Deletes a row of type either side or layer from the winding group."""
+        item = self.winding_tree_widget.currentItem()
+        payload = item.data(0, Qt.UserRole)
+
+        if payload.get("type") == "Layer":
+            self._delete_layer()
+
+        elif payload.get("type") == "Winding":
+            self._delete_side()
+
+    def _delete_layer(self):
+        """Deletes a layer from winding group then updates stored connections and properties"""
+        winding_tree = self.winding_tree_widget
+        layer_item = winding_tree.currentItem()
+
+        layer_payload = layer_item.data(0, Qt.UserRole)
+
+        # Delete the layer
+        winding_tree.blockSignals(True)
+        removed_layer_id = int(layer_payload["id"])
+        layer_item.parent().removeChild(layer_item)
+
+        # Reduce layer number by 1 for layers above removed layer and return id_map old->new
+        layer_id_remap = self._reduce_layer_id(removed_layer_id)
+        winding_tree.blockSignals(False)
+
+        # Update layer number in stashed connection payloads (conn_saved or conn_wip).
+        for side_index in range(winding_tree.topLevelItemCount()):
+            side_item = winding_tree.topLevelItem(side_index)
+            side_payload = side_item.data(0, Qt.UserRole)
+
+            # Valid single line connection exists so delete layer from conn_saved
+            if side_payload.get("conn_saved"):
+                new_saved = self._update_connection_tree_after_layer_change(side_payload["conn_saved"], layer_id_remap)
+
+                # Catch creation of invalid connections (multi line or no Layer in connection) so switch to conn_wip
+                if new_saved is None:
+                    side_payload.pop("conn_saved", None)
+                    side_payload["conn_wip"] = self._default_conn_wip_rows_for_side(side_item)
+
+                # Keep valid single layer connection alone in conn_saved
+                else:
+                    side_payload["conn_saved"] = new_saved
+                    side_payload.pop("conn_wip", None)
+
+            conn_wip = side_payload.get("conn_wip")
+            if conn_wip:
+                updated_wip_rows = []
+                for row_payload in side_payload["conn_wip"]:
+                    updated_row_payload = self._update_connection_tree_after_layer_change(row_payload, layer_id_remap)
+                    if updated_row_payload is not None:
+                        updated_wip_rows.append(updated_row_payload)
+                if not updated_wip_rows:
+                    updated_wip_rows = self._default_conn_wip_rows_for_side(side_item)
+                side_payload["conn_wip"] = updated_wip_rows
+                # WIP implies not exported
+                side_payload.pop("conn_saved", None)
+
+            side_item.setData(0, Qt.UserRole, side_payload)
+
+        # Update connections_definition from scratch and show selected side
+        self.update_connections_def(merge=False)
+        self._display_connection_scheme()
+
+        # Update Properties
+        self.gui_properties.winding.layers_definition = self._update_layers_definition()
+        self.gui_properties.winding.layer_side_definition = self._update_layer_side_definition()
+        self.gui_properties.winding.side_loads = self._update_loads_definition()
+
+    def _delete_side(self):
+        """Deletes a side and any containing layers from winding group then updates stored connections and properties"""
+
+        winding_tree = self.winding_tree_widget
+        side_item = winding_tree.currentItem()
+
+        # Disable stash_connections while deleting sides
+        prev_importing = getattr(self, "_importing_connections", False)
+        self._importing_connections = True
+
+        # Delete all layers from selected side
+        while side_item.childCount() > 0:
+            last_layer_item = side_item.child(side_item.childCount() - 1)
+            winding_tree.setCurrentItem(last_layer_item)
+            self._delete_layer()
+
+        # Then delete the empty side
+        winding_tree.takeTopLevelItem(winding_tree.indexOfTopLevelItem(side_item))
+
+        # Enable stash_connections
+        self._importing_connections = prev_importing
+
+        # Renumber above deleted sides and update UserRole and displayed UI name
+        for side_index in range(winding_tree.topLevelItemCount()):
+            remaining_side_item = winding_tree.topLevelItem(side_index)
+            side_payload = remaining_side_item.data(0, Qt.UserRole)
+            new_side_number = side_index + 1
+            side_payload["side"] = new_side_number
+            remaining_side_item.setData(0, Qt.UserRole, side_payload)
+            remaining_side_item.setText(0, "Side" + str(new_side_number))
+
+        # Export using conn_saved and new side number
+        self.update_connections_def(merge=False)
+
+        # Update winding tree after side is deleted
+        if winding_tree.topLevelItemCount():
+            winding_tree.setCurrentItem(winding_tree.topLevelItem(0))
+            self.winding_label.setText(winding_tree.topLevelItem(0).text(0))
+            self._display_connection_scheme()
+        else:
+            self.winding_label.setText("")
+            self.connections_tree_widget.clear()
+
+        # And update the various properties needed
+        self.gui_properties.winding.layers_definition = self._update_layers_definition()
+        self.gui_properties.winding.layer_side_definition = self._update_layer_side_definition()
+        self.gui_properties.winding.side_loads = self._update_loads_definition()
+
+    def _default_conn_wip_rows_for_side(self, side_item):
+        """Return WIP connections rows for a side."""
+        wip_rows = []
+        for child_index in range(side_item.childCount()):
+            layer_item = side_item.child(child_index)
+            layer_payload = layer_item.data(0, Qt.UserRole)
+            wip_rows.append({"type":"Layer", "id":str(layer_payload.get("id"))})
+        return wip_rows
+
+    def _reduce_layer_id(self, removed_layer_id: int):
+        """Reduce layer id by 1 for all layers above removed layer.
+         Return old to new id_map."""
+        tree = self.winding_tree_widget
+        id_map = {str(removed_layer_id):None}
+
+        for side_index in range(tree.topLevelItemCount()):
+            side_item = tree.topLevelItem(side_index)
+
+            for layer_index in range(side_item.childCount()):
+                layer_item = side_item.child(layer_index)
+                data = layer_item.data(0, Qt.UserRole)
+
+                old_id = int(data["id"])
+                if old_id <= removed_layer_id:
+                    continue
+
+                new_id = old_id - 1
+                id_map[str(old_id)] = str(new_id)
+
+                data["id"] = str(new_id)
+                layer_item.setData(0, Qt.UserRole, data)
+                layer_item.setText(0, "Layer " + str(new_id))
+        return id_map
+
+    def _update_connection_tree_after_layer_change(self, payload, layer_id_remap):
+        """Update layer id in the connection payload after renumbering.
+        Handles cases where S/P connections collapse/are empty or have just one layer
+        """
+        payload_type = payload["type"]
+
+        if payload_type == "Layer":
+            old_layer_id = str(payload["id"])
+
+            # Layer wasn't deleted or renumbered
+            if old_layer_id not in layer_id_remap:
+                return dict(payload)
+
+            # Layer was deleted
+            new_layer_id = layer_id_remap[old_layer_id]
+            if new_layer_id is None:
+                return None
+
+            out = dict(payload)
+            out["id"] = new_layer_id
+            return out
+
+        # Payload_type is S/P so recursively iterate until Layers are reached within S/P connections
+        new_children = []
+        for child_payload in payload["children"]:
+            remapped_child = self._update_connection_tree_after_layer_change(child_payload, layer_id_remap)
+            if remapped_child is not None:
+                new_children.append(remapped_child)
+
+        if not new_children:
+            return None
+
+        # Catches case where only one layer remains in a group, delete connection type and return just the layer
+        if len(new_children) == 1:
+            only_child = dict(new_children[0])
+            only_child.pop("key", None)
+            return only_child
+
+        out = dict(payload)
+        out["children"] = new_children
+        return out
 
     def _update_loads_definition(self):
         """Retrieve loads from ``UserRole`` and construct the side loads definition.
