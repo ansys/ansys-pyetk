@@ -17,7 +17,7 @@ It provides a step-by-step guide on how to transition your existing ACT .json fi
    The PyETK automatically parses the ACT .json file and populate the fields in the UI with the corresponding values from the ACT .json file.
 
 #. After loading the ACT .json file, you can review the populated fields in the UI to ensure that all the information has been correctly transferred.
-   If you're planning on reusing the configuration file, click *Save As...*. This way the ACT .json file is saved in the latest working .json format.
+   If you're planning on reusing the configuration file, click *Save As*. This way the ACT .json file is saved in the latest working .json format.
 
    .. image:: ../_static/load-act-json.png
       :align: center

@@ -7,7 +7,7 @@ toolkit. For toolkit installation, see :ref:`installation`
 The first section focuses on the general tools available in the UI, coming from the common toolkit framework.
 The second section focuses on the application specific fields and tools to design and model electronic transformers.
 
-Toolkit Common Framework
+Toolkit common framework
 =========================
 
 This section describes the use of the common framework of the PyETK, which is shared across all toolkits.

@@ -1,4 +1,4 @@
-Create Transformer using the User Interface
+Create transformer using the user interface
 ============================================
 
 This example demonstrates how to use the PyETK's User Interface (UI) to create an electronic transformer.
@@ -116,7 +116,7 @@ Then, moving to the bobbin, winding, and excitation information, and finally, th
         The Maxwell settings are used to specify the settings for the Maxwell analysis that is performed after creating the transformer geometry in AEDT. These settings are used to control the accuracy and convergence of the Maxwell analysis.
 
 
-#. Finally, click **Create Transformer** to create the transformer geometry in AEDT. The log window will provide information about the creation process, including any errors or warnings that may occur during the process.
+#. Finally, click **Create Transformer** to create the transformer geometry in AEDT. The log window provides information about the creation process, including any errors or warnings that may occur during the process.
 
 .. image:: ../_static/menu-save-create.png
     :align: center
@@ -124,17 +124,17 @@ Then, moving to the bobbin, winding, and excitation information, and finally, th
     :alt: Create and Save Transformer Button
 
     .. note::
-        The current transformer model can be saved as a .json file by clicking on the **Save As...** button. This allows the user to save the current configuration of the transformer and load it later for further modifications or analysis. The saved .json file contains all the information about the core, bobbin, winding, excitation, and Maxwell settings that were specified in the UI.
+        The current transformer model can be saved as a .json file by clicking on the **Save As** button. This allows the user to save the current configuration of the transformer and load it later for further modifications or analysis. The saved .json file contains all the information about the core, bobbin, winding, excitation, and Maxwell settings that were specified in the UI.
 
 
-Pre-packaged Examples - Loading a Transformer Model from a .json File
+Pre-packaged examples - Loading a transformer model from a .json file
 ---------------------------------------------------------------------
 
 To enable third party integration, PyETK consumes a transformer definition defined in a versioned .json file.
 This .json contains all the information including sources, dimensions, materials, and other advanced settings.
 The .json configuration file can be used with PyETK's API, bypassing the need for the UI.
 
-The .json file can be created by saving the current transformer model in the UI using the **Save As...** button, or it can be created manually by following the structure of the .json file.
+The .json file can be created by saving the current transformer model in the UI using the **Save As** button, or it can be created manually by following the structure of the .json file.
 
 To browse through the pre-packaged examples, you have two options either click the **Open** button, or navigate using the forward and backward buttons as shown in the image below.
 
@@ -145,6 +145,6 @@ To browse through the pre-packaged examples, you have two options either click t
 
 .. note::
     If you were an ACT ETK user, you can load your ACT .json file in the PyETK UI by clicking on the **Open** button and selecting your ACT .json file.
-    The PyETK will automatically parse the ACT .json file and populate the fields in the UI with the corresponding values from the ACT .json file. After loading the ACT .json file, you can review the populated fields in the UI to ensure that all the information has been correctly transferred.
-    If you're planning on reusing the configuration file, click *Save As...*.
+    The PyETK automatically parses the ACT .json file and populate the fields in the UI with the corresponding values from the ACT .json file. After loading the ACT .json file, you can review the populated fields in the UI to ensure that all the information has been correctly transferred.
+    If you're planning on reusing the configuration file, click *Save As*.
     This way the ACT .json file is saved in the latest working .json format. See :ref:`act_to_pyetk_example` for more details on migrating from ACT to PyETK.
