@@ -31,7 +31,7 @@ classifiers = [
     "Topic :: Scientific/Engineering",
 ]
 dependencies = [
-    'ansys-aedt-toolkits-common[all]'
+    'ansys-aedt-toolkits-common[all]',
 ]
 
 [project.optional-dependencies]
