@@ -77,7 +77,6 @@ class ETK:
         # ------------------------------------------------------------
         # Core
         # ------------------------------------------------------------
-
         ocore = Core("Core", self.__aedt, self.__core_properties, self.__setup_definitions)
         ocore.create_geometry()
 
@@ -98,7 +97,6 @@ class ETK:
             self.__core_properties,
             self.__setup_definitions,
             self.__bobbin_properties,
-            self.__circuit_properties,
         )
 
         owinding.create_geometry()
@@ -141,7 +139,7 @@ class ETK:
             self.__setup_definitions,
         )
 
-        oregion.crete_geometry()
+        oregion.create_geometry()
 
         if not oregion:
             logger.error("Region not created")

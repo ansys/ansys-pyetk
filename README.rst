@@ -72,9 +72,8 @@ free to distribute it internally, but direct users to visit the
 
 Security
 ~~~~~~~~
-The versions that are still supported for security updates can be found at
-the `Security guidelines <https://github.com/ansys/python-installer-qt-gui/blob/main/SECURITY.md>`_
-site. Information on how to report vulenrabilities is also found.
+Information on how to report vulnerabilities can be found in the
+`Security Policy <https://github.com/ansys/ansys-pyetk/blob/main/SECURITY.md>`__.
 
 License
 ~~~~~~~
