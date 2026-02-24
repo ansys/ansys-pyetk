@@ -10,7 +10,7 @@ The common methods for creating an AEDT session or connecting to an existing AED
 `Common toolkit library <https://aedt.common.toolkit.docs.pyansys.com/>`_.
 
 You can use the Toolkit API as shown in this example:
-`ETK API example <../examples/ETK_example.py>`_
+`ETK API example <../examples/api_example.py>`_
 
 .. automodule:: ansys.aedt.toolkits.electronic_transformer.backend.api
     :members:
