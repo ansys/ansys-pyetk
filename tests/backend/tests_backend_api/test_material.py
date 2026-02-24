@@ -23,14 +23,14 @@ import pytest
 json_files_path = Path(__file__).parents[1] / "json_files"
 vol_limit = 1e-5
 
-pytestmark = [pytest.mark.backend_API]
+pytestmark = [pytest.mark.backend]
 
 
 class TestBackendAPI:
     def test_material_class(self, aedt_common_fixture_function):
         json_file_name = "EI_planar_rectangular.json"
         json_path = Path(json_files_path) / json_file_name
-        aedt_common_fixture_function.read_props_from_json(json_path)
+        aedt_common_fixture_function.load_properties_from_json(json_path)
 
         assert aedt_common_fixture_function.properties.materials["3F3"].conductivity == 0.5
         assert aedt_common_fixture_function.properties.materials["3F3"].density == 4750.0
