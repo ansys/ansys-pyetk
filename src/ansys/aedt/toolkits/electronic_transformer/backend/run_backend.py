@@ -54,7 +54,7 @@ def create_core_geometry():
     core_name = toolkit_api.create_core_geometry(properties_frontend)
     if core_name:
         return jsonify("Core created"), 200
-    else:  # pragma: no cover
+    else:
         return jsonify("Core not created"), 500
 
 
@@ -75,7 +75,7 @@ def create_winding_geometry():
     winding_name = toolkit_api.create_winding_geometry(properties_frontend)
     if winding_name:
         return jsonify("Winding created"), 200
-    else:  # pragma: no cover
+    else:
         return jsonify("Winding not created"), 500
 
 
@@ -96,7 +96,7 @@ def create_bobbin_geometry():
     bobbin_name = toolkit_api.create_bobbin_geometry(properties_frontend)
     if bobbin_name:
         return jsonify("Bobbin created"), 200
-    else:  # pragma: no cover
+    else:
         return jsonify("Bobbin not created"), 500
 
 
@@ -117,7 +117,7 @@ def create_model():
     region = toolkit_api.create_model(properties_frontend)
     if region:
         return jsonify("PyETK model created"), 200
-    else:  # pragma: no cover
+    else:
         return jsonify("PyETK model not created"), 500
 
 
@@ -132,7 +132,7 @@ def validate_json():
     answer = toolkit_api.validate_json(properties_frontend)
     if answer:
         return jsonify("JSON file is valid"), 200
-    else:  # pragma: no cover
+    else:
         return jsonify("JSON file is not valid"), 500
 
 @app.route("/validate_model", methods=["POST"])

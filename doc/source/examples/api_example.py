@@ -30,10 +30,11 @@
 # ## Perform required imports
 from pathlib import Path
 import sys
-from ansys.aedt.toolkits.electronic_transformer.backend.api import ToolkitBackend
 import tempfile
 
 from ansys.aedt.core import generate_unique_project_name
+from ansys.aedt.toolkits.electronic_transformer.backend.api import ToolkitBackend
+
 # ## Create backend instance
 toolkit_api = ToolkitBackend()
 
@@ -55,7 +56,7 @@ json_path = Path(json_path) / "tests" / "backend" / "json_files" / json_file_nam
 
 
 # ## Set JSON reading properties
-toolkit_api.read_props_from_json(json_path)
+toolkit_api.load_properties_from_json(json_path)
 
 # ## Launch AEDT
 thread_msg = toolkit_api.launch_thread(toolkit_api.launch_aedt)

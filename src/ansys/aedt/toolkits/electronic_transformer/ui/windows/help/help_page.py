@@ -67,6 +67,6 @@ class Ui_help(object):
 
     def retranslateUi(self, help):
         help.setWindowTitle(QCoreApplication.translate("help", "Form", None))
-        self.help_label.setText(QCoreApplication.translate("help", "AEDT Design", None))
+        self.help_label.setText(QCoreApplication.translate("help", "", None))
 
     # retranslateUi

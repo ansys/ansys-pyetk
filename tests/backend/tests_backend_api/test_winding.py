@@ -23,14 +23,14 @@ import pytest
 json_files_path = Path(__file__).parents[1] / "json_files"
 vol_limit = 1e-5
 
-pytestmark = [pytest.mark.backend_API]
+pytestmark = [pytest.mark.backend]
 
 
 class TestBackendAPI:
     def test_create_winding_geometry_layer_type_planar_cross_section_rec(self, aedt_common_fixture_function):
         json_file_name = "EI_planar_rectangular.json"
         json_path = Path(json_files_path) / json_file_name
-        aedt_common_fixture_function.read_props_from_json(json_path)
+        aedt_common_fixture_function.load_properties_from_json(json_path)
 
         winding = aedt_common_fixture_function.create_winding_geometry()
 
@@ -39,7 +39,7 @@ class TestBackendAPI:
     def test_create_winding_geometry_layer_type_wound_cross_section_rec(self, aedt_common_fixture_function):
         json_file_name = "EC_wound_rectangular.json"
         json_path = Path(json_files_path) / json_file_name
-        aedt_common_fixture_function.read_props_from_json(json_path)
+        aedt_common_fixture_function.load_properties_from_json(json_path)
 
         winding = aedt_common_fixture_function.create_winding_geometry()
 
@@ -48,7 +48,7 @@ class TestBackendAPI:
     def test_create_winding_geometry_layer_type_wound_cross_section_circ(self, aedt_common_fixture_function):
         json_file_name = "RM_wound_circular.json"
         json_path = Path(json_files_path) / json_file_name
-        aedt_common_fixture_function.read_props_from_json(json_path)
+        aedt_common_fixture_function.load_properties_from_json(json_path)
 
         winding = aedt_common_fixture_function.create_winding_geometry()
 

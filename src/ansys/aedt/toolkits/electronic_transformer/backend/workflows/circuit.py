@@ -103,36 +103,38 @@ class Circuit:
                     target_dict["S99999"] = {key: "Layer"}
                     break
 
-    def get_comp_by_name(self, name):  # TODO: Needed for renaming of sides
-        """Search for a component by its name.
+    # TODO: Commented as not used anywhere and no `self.editor` is ever defined.
+    # To be removed if not needed.
+    # def get_comp_by_name(self, name):  # TODO: Needed for renaming of sides
+    #     """Search for a component by its name.
 
-        Parameters
-        ----------
-        name : str
-            Name of the component.
+    #     Parameters
+    #     ----------
+    #     name : str
+    #         Name of the component.
 
-        Returns
-        -------
-        list
-            List of instance IDs.
-        """
-        result = self.editor.FindElements(
-            ["NAME:SearchProps", "Prop:=", ["name", name, 2]],
-            [
-                "NAME:Parameters",
-                "Filter:=",
-                2,
-                "MatchAll:=",
-                False,
-                "MatchCase:=",
-                False,
-                "SearchSubCkt:=",
-                True,
-                "SearchSelectionOnly:=",
-                False,
-            ],
-        )
-        return result
+    #     Returns
+    #     -------
+    #     list
+    #         List of instance IDs.
+    #     """
+    #     result = self.editor.FindElements(
+    #         ["NAME:SearchProps", "Prop:=", ["name", name, 2]],
+    #         [
+    #             "NAME:Parameters",
+    #             "Filter:=",
+    #             2,
+    #             "MatchAll:=",
+    #             False,
+    #             "MatchCase:=",
+    #             False,
+    #             "SearchSubCkt:=",
+    #             True,
+    #             "SearchSelectionOnly:=",
+    #             False,
+    #         ],
+    #     )
+    #     return result
 
     def create_winding(self, winding_number, x, y):
         """Create a winding component and assign it a name.
@@ -155,8 +157,6 @@ class Circuit:
         """
         x *= self.__grid_cell_size * 4
         y *= self.__grid_cell_size * 3
-        # component_name = schematic.create_winding(name="Layer_" + str(winding_number),
-        # location=[x,y], angle=0, use_instance_id_netlist=False)
 
         component_name = self.__schematic.create_component(
             component_library="Dedicated Elements",

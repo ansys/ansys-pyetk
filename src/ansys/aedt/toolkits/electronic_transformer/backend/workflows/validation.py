@@ -496,6 +496,5 @@ class Validation:
 
         try:
             validate(instance=data, schema=schema)
-
         except Exception as e:
             raise Exception("Invalid input data:", e)

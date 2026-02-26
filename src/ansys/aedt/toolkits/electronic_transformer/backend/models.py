@@ -124,7 +124,6 @@ class Excitation(BaseModel, validate_assignment=True):
     """Manages excitation properties."""
 
     model_config = ConfigDict(use_enum_values=True)
-
     value: float = 0
     type: ExcitationType = ExcitationType.none
 
@@ -197,6 +196,9 @@ class BackendResetProperties:
         self.settings: Settings = Settings()
         self.circuit: Circuit = Circuit()
         self.json_version: str = ""
+
+
+test = 12
 
 
 # All properties

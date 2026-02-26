@@ -23,14 +23,14 @@ import pytest
 json_files_path = Path(__file__).parents[1] / "json_files"
 vol_limit = 1e-5
 
-pytestmark = [pytest.mark.backend_API]
+pytestmark = [pytest.mark.backend]
 
 
 class TestBackendAPI:
     def test_create_core_geometry_e(self, aedt_common_fixture_function):
         json_file_name = "E_wound_rectangular.json"
         json_path = Path(json_files_path) / json_file_name
-        aedt_common_fixture_function.read_props_from_json(json_path)
+        aedt_common_fixture_function.load_properties_from_json(json_path)
 
         core = aedt_common_fixture_function.create_core_geometry()
 
@@ -39,7 +39,7 @@ class TestBackendAPI:
     def test_create_core_geometry_ec(self, aedt_common_fixture_function):
         json_file_name = "EC_wound_rectangular.json"
         json_path = Path(json_files_path) / json_file_name
-        aedt_common_fixture_function.read_props_from_json(json_path)
+        aedt_common_fixture_function.load_properties_from_json(json_path)
 
         core = aedt_common_fixture_function.create_core_geometry()
 
@@ -48,7 +48,7 @@ class TestBackendAPI:
     def test_create_core_geometry_ei(self, aedt_common_fixture_function):
         json_file_name = "EI_planar_rectangular.json"
         json_path = Path(json_files_path) / json_file_name
-        aedt_common_fixture_function.read_props_from_json(json_path)
+        aedt_common_fixture_function.load_properties_from_json(json_path)
 
         core = aedt_common_fixture_function.create_core_geometry()
 
@@ -57,7 +57,7 @@ class TestBackendAPI:
     def test_create_core_geometry_eq(self, aedt_common_fixture_function):
         json_file_name = "EQ_wound_rectangular.json"
         json_path = Path(json_files_path) / json_file_name
-        aedt_common_fixture_function.read_props_from_json(json_path)
+        aedt_common_fixture_function.load_properties_from_json(json_path)
 
         core = aedt_common_fixture_function.create_core_geometry()
 
@@ -66,7 +66,7 @@ class TestBackendAPI:
     def test_create_core_geometry_rm(self, aedt_common_fixture_function):
         json_file_name = "RM_planar_rectangular.json"
         json_path = Path(json_files_path) / json_file_name
-        aedt_common_fixture_function.read_props_from_json(json_path)
+        aedt_common_fixture_function.load_properties_from_json(json_path)
 
         core = aedt_common_fixture_function.create_core_geometry()
 
@@ -75,7 +75,7 @@ class TestBackendAPI:
     def test_create_core_geometry_u(self, aedt_common_fixture_function):
         json_file_name = "U_wound_rectangular.json"
         json_path = Path(json_files_path) / json_file_name
-        aedt_common_fixture_function.read_props_from_json(json_path)
+        aedt_common_fixture_function.load_properties_from_json(json_path)
 
         core = aedt_common_fixture_function.create_core_geometry()
 
@@ -84,7 +84,7 @@ class TestBackendAPI:
     def test_create_core_geometry_efd(self, aedt_common_fixture_function):
         json_file_name = "EFD_wound_rectangular.json"
         json_path = Path(json_files_path) / json_file_name
-        aedt_common_fixture_function.read_props_from_json(json_path)
+        aedt_common_fixture_function.load_properties_from_json(json_path)
 
         core = aedt_common_fixture_function.create_core_geometry()
 
@@ -93,7 +93,7 @@ class TestBackendAPI:
     def test_create_core_geometry_ep(self, aedt_common_fixture_function):
         json_file_name = "EP_planar_rectangular.json"
         json_path = Path(json_files_path) / json_file_name
-        aedt_common_fixture_function.read_props_from_json(json_path)
+        aedt_common_fixture_function.load_properties_from_json(json_path)
 
         core = aedt_common_fixture_function.create_core_geometry()
 
@@ -102,7 +102,7 @@ class TestBackendAPI:
     def test_create_core_geometry_er(self, aedt_common_fixture_function):
         json_file_name = "ER_wound_rectangular.json"
         json_path = Path(json_files_path) / json_file_name
-        aedt_common_fixture_function.read_props_from_json(json_path)
+        aedt_common_fixture_function.load_properties_from_json(json_path)
 
         core = aedt_common_fixture_function.create_core_geometry()
 
@@ -111,7 +111,7 @@ class TestBackendAPI:
     def test_create_core_geometry_ph(self, aedt_common_fixture_function):
         json_file_name = "PH_wound_rectangular.json"
         json_path = Path(json_files_path) / json_file_name
-        aedt_common_fixture_function.read_props_from_json(json_path)
+        aedt_common_fixture_function.load_properties_from_json(json_path)
 
         core = aedt_common_fixture_function.create_core_geometry()
 
@@ -120,7 +120,7 @@ class TestBackendAPI:
     def test_create_core_geometry_pq(self, aedt_common_fixture_function):
         json_file_name = "PQ_wound_rectangular.json"
         json_path = Path(json_files_path) / json_file_name
-        aedt_common_fixture_function.read_props_from_json(json_path)
+        aedt_common_fixture_function.load_properties_from_json(json_path)
 
         core = aedt_common_fixture_function.create_core_geometry()
 
@@ -129,7 +129,7 @@ class TestBackendAPI:
     def test_create_core_geometry_pt(self, aedt_common_fixture_function):
         json_file_name = "PT_wound_rectangular.json"
         json_path = Path(json_files_path) / json_file_name
-        aedt_common_fixture_function.read_props_from_json(json_path)
+        aedt_common_fixture_function.load_properties_from_json(json_path)
 
         core = aedt_common_fixture_function.create_core_geometry()
 
@@ -138,7 +138,7 @@ class TestBackendAPI:
     def test_create_core_geometry_ui(self, aedt_common_fixture_function):
         json_file_name = "UI_wound_rectangular.json"
         json_path = Path(json_files_path) / json_file_name
-        aedt_common_fixture_function.read_props_from_json(json_path)
+        aedt_common_fixture_function.load_properties_from_json(json_path)
 
         core = aedt_common_fixture_function.create_core_geometry()
 
@@ -147,7 +147,7 @@ class TestBackendAPI:
     def test_create_core_geometry_ui_airgap(self, aedt_common_fixture_function):
         json_file_name = "UI_wound_rectangular.json"
         json_path = Path(json_files_path) / json_file_name
-        aedt_common_fixture_function.read_props_from_json(json_path)
+        aedt_common_fixture_function.load_properties_from_json(json_path)
         aedt_common_fixture_function.properties.core.airgap.define_airgap = True
         aedt_common_fixture_function.properties.core.airgap.airgap_on_leg = "Both"
         aedt_common_fixture_function.properties.core.airgap.airgap_value = 1.23

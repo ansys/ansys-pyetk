@@ -19,6 +19,7 @@
 import logging
 import math
 
+from ansys.aedt.toolkits.electronic_transformer.backend.workflows.geometry_common import ALL_CORES
 from ansys.aedt.toolkits.electronic_transformer.backend.workflows.geometry_common import CoreCrossSection
 from ansys.aedt.toolkits.electronic_transformer.backend.workflows.geometry_common import GeometryCommon
 
@@ -36,7 +37,6 @@ class Winding(GeometryCommon):
         core_properties,
         settings_properties,
         bobbin_properties,
-        circuit_properties,
     ):
         """Initialize and launch the winding component.
 
@@ -59,26 +59,8 @@ class Winding(GeometryCommon):
         """
         # The super class contains the Windings properties
         super().__init__(name, aedtapp, winding_properties)
-        self.all_cores = {
-            "E": "ECore",
-            "EI": "EICore",
-            "U": "UCore",
-            "UI": "UICore",
-            "PQ": "PQCore",
-            "ETD": "ETDCore",
-            "EQ": "ETDCore",
-            "EC": "ETDCore",
-            "RM": "RMCore",
-            "EP": "EPCore",
-            "EFD": "EFDCore",
-            "ER": "ETDCore",
-            "P": "PCore",
-            "PT": "PCore",
-            "PH": "PCore",
-        }
 
         # If this class requires more properties, those should be private property
-        self.__circuit_properties = circuit_properties
         self.__core_properties = core_properties
         self.__settings_properties = settings_properties
         self.__bobbin_properties = bobbin_properties
@@ -105,29 +87,15 @@ class Winding(GeometryCommon):
         bool
             ``True`` when successful, ``False`` when failed.
         """
-        if self.all_cores[self.__core_properties.type] == "ETDCore":
-            self.core_cross_section = CoreCrossSection.circular
-        elif self.all_cores[self.__core_properties.type] == "ECore":
-            self.core_cross_section = CoreCrossSection.rectangular
-        elif self.all_cores[self.__core_properties.type] == "RMCore":
-            self.core_cross_section = CoreCrossSection.circular
-        elif self.all_cores[self.__core_properties.type] == "UCore":
-            self.core_cross_section = CoreCrossSection.rectangular
-        elif self.all_cores[self.__core_properties.type] == "EICore":
-            self.core_cross_section = CoreCrossSection.rectangular
-        elif self.all_cores[self.__core_properties.type] == "EFDCore":
-            self.core_cross_section = CoreCrossSection.rectangular
-        elif self.all_cores[self.__core_properties.type] == "EPCore":
-            self.core_cross_section = CoreCrossSection.circular
-        elif self.all_cores[self.__core_properties.type] == "PCore":
-            self.core_cross_section = CoreCrossSection.circular
-        elif self.all_cores[self.__core_properties.type] == "PQCore":
-            self.core_cross_section = CoreCrossSection.circular
-        elif self.all_cores[self.__core_properties.type] == "UICore":
-            self.core_cross_section = CoreCrossSection.rectangular
-        else:
-            logger.info("Core type not implemented.")
-            return False
+        core_type = ALL_CORES[self.__core_properties.type]
+        match core_type:
+            case "ETDCore" | "RMCore" | "EPCore" | "PCore" | "PQCore":
+                self.core_cross_section = CoreCrossSection.circular
+            case "ECore" | "UCore" | "EICore" | "EFDCore" | "UICore":
+                self.core_cross_section = CoreCrossSection.rectangular
+            case _:
+                logger.info("Core type not implemented.")
+                return False
 
         list_objects_start = self.aedtapp.modeler.object_list
         self.__create_winding()
@@ -136,8 +104,9 @@ class Winding(GeometryCommon):
         ids_in_start = {obj.name for obj in list_objects_start}
         missing_obs = [obj for obj in list_objects_end if obj.name not in ids_in_start]
 
-        "This is due a defect in pyAEDT. "
-        "self.aedtapp.modeler.object_list returns some Tool objects created during the geometry construction"
+        # TODO: Is there an issue associated to this ? If yes, can you add it to be able to track it ?
+        # This is due a defect in pyAEDT.
+        # self.aedtapp.modeler.object_list returns some Tool objects created during the geometry construction
         list_objs = list(filter(lambda obj: obj.name.find("Tool") == -1, missing_obs))
         list_objs = list(filter(lambda obj: obj.name.find("skin") == -1, list_objs))
         self.__list_skin_layers = list(filter(lambda obj: obj.name.find("skin") != -1, missing_obs))
@@ -386,6 +355,7 @@ class Winding(GeometryCommon):
 
                 object_names.append(name)
 
+        # TODO: Is this necessary ?
         # if skin_depth < 0.02 * dimension:
         #     self.add_warning_message(
         #         "Skin layer is too thin, it is recommended to use Impedance Boundary"
@@ -674,7 +644,7 @@ class Winding(GeometryCommon):
     def create_excitations(self):
         """Create excitations for the winding."""
         counter = 1
-        for layer_name, layer in self.properties.layers.items():
+        for _, layer in self.properties.layers.items():
             self.aedtapp.assign_winding(
                 assignment=None,
                 winding_type="External",
@@ -688,7 +658,7 @@ class Winding(GeometryCommon):
                 name="Layer_" + str(counter),
             )
             counter = counter + 1
-        for section, value in enumerate(self.__list_terminal_sections):
+        for _, value in enumerate(self.__list_terminal_sections):
             layer = value.split("_")[0]
             layer_num = layer[5:]
 

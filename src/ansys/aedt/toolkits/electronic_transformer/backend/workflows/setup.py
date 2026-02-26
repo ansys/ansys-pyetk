@@ -18,6 +18,8 @@
 
 import copy
 
+from ansys.aedt.core.modules.boundary.maxwell_boundary import MatrixACMagnetic
+from ansys.aedt.core.modules.boundary.maxwell_boundary import SourceACMagnetic
 from ansys.aedt.toolkits.electronic_transformer.backend.workflows.bobbin import Bobbin
 from ansys.aedt.toolkits.electronic_transformer.backend.workflows.core import Core
 from ansys.aedt.toolkits.electronic_transformer.backend.workflows.winding import Winding
@@ -138,14 +140,12 @@ class Setup:
 
     def assign_matrix_winding(self):
         """Assign an RL matrix to a winding group."""
-        matrix_entry = []
+        signal_sources = []
+        for n, _ in enumerate(self.__winding_definitions.layers.keys()):
+            signal_sources.append(SourceACMagnetic(name=f"Layer_{n + 1}"))
 
-        counter = 1
-        for layer_name, layer in self.__winding_definitions.layers.items():
-            matrix_entry.append("Layer_" + str(counter))
-            counter = counter + 1
-
-        self.__matrix = self.__aedt.assign_matrix(matrix_name="Matrix1", assignment=matrix_entry)
+        matrix_args = MatrixACMagnetic(signal_sources=signal_sources, matrix_name="Matrix1")
+        self.__matrix = self.__aedt.assign_matrix(matrix_args)
         self.reduce_matrix()
 
     def reduce_matrix(self):
@@ -185,7 +185,8 @@ class Setup:
             reduction_str = ",".join(reduction_list)
             return reduction_str
 
-        # TODO: Remove if not used
+        # TODO: Decide if there is a need to remove this method or not
+        # Note that this decision impacts another method deletion
         # def rename(side_num, side_definition):
         #     """
         #     rename winding and circuit element to be Side_XXX for better UX
@@ -244,11 +245,7 @@ class Setup:
 
         connections = copy.deepcopy(self.__circuit_properties.connections)
         for side_num, side_def in connections.items():
-            # if not any(isinstance(val, dict) for val in side_def.values()):
-            #     # rename(side_num, side_def) it does not seem to be used. In fact, it breaks some cases
-            #     pass
-            # else:
-            # replace key and append name of the side for main key, for better UX
+            # Replace key and append name of the side for main key, for better UX
             main_connection = list(side_def.keys())[0]
             side_def[main_connection + "_Side_" + side_num] = side_def.pop(main_connection)
 
@@ -297,7 +294,7 @@ class Setup:
             Winding object.
         """
         dimension_list = []
-        for each_dim_key, each_dim_val in core.properties.dimensions.items():
+        for each_dim_val in core.properties.dimensions.values():
             dimension_list.append(float(each_dim_val))
         mesh_op_sz = max(dimension_list) / 20.0
 

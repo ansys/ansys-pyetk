@@ -10,6 +10,12 @@
     <height>788</height>
    </rect>
   </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
@@ -63,16 +69,22 @@
        <item>
         <layout class="QVBoxLayout" name="geometry_vertical_layout">
          <item>
-          <widget class="QGroupBox" name="groupBox">
+          <widget class="QGroupBox" name="File_2">
            <property name="sizePolicy">
-            <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+            <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
            </property>
+           <property name="minimumSize">
+            <size>
+             <width>220</width>
+             <height>0</height>
+            </size>
+           </property>
            <property name="maximumSize">
             <size>
-             <width>250</width>
+             <width>220</width>
              <height>16777215</height>
             </size>
            </property>
@@ -331,7 +343,7 @@
                 </property>
                 <property name="maximumSize">
                  <size>
-                  <width>80</width>
+                  <width>50</width>
                   <height>16777215</height>
                  </size>
                 </property>
@@ -347,7 +359,7 @@
                 </property>
                 <property name="maximumSize">
                  <size>
-                  <width>80</width>
+                  <width>50</width>
                   <height>16777215</height>
                  </size>
                 </property>
@@ -370,7 +382,7 @@
                 </property>
                 <property name="maximumSize">
                  <size>
-                  <width>80</width>
+                  <width>50</width>
                   <height>16777215</height>
                  </size>
                 </property>
@@ -384,7 +396,20 @@
                </widget>
               </item>
               <item row="4" column="1" colspan="2">
-               <widget class="QComboBox" name="scale_combo"/>
+               <widget class="QComboBox" name="scale_combo">
+                <property name="minimumSize">
+                 <size>
+                  <width>100</width>
+                  <height>0</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>120</width>
+                  <height>16777215</height>
+                 </size>
+                </property>
+               </widget>
               </item>
              </layout>
             </item>

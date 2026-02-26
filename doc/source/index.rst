@@ -1,3 +1,5 @@
+.. _home:
+
 Electronic transformer toolkit documentation |version|
 ======================================================
 
