@@ -18,56 +18,72 @@
 
 
 import atexit
-import importlib
 import multiprocessing
 import os
 import sys
-import time
+
+from PySide6.QtCore import QTimer
+from PySide6.QtWidgets import QApplication
 
 from ansys.aedt.toolkits.common.utils import check_backend_communication
 from ansys.aedt.toolkits.common.utils import clean_python_processes
 from ansys.aedt.toolkits.common.utils import find_free_port
 from ansys.aedt.toolkits.common.utils import is_server_running
 from ansys.aedt.toolkits.common.utils import process_desktop_properties
-from ansys.aedt.toolkits.common.utils import wait_for_server
 from ansys.aedt.toolkits.electronic_transformer.backend.models import properties as backend_properties
 from ansys.aedt.toolkits.electronic_transformer.ui.models import fe_properties as frontend_properties
 from ansys.aedt.toolkits.electronic_transformer.ui.splash import show_splash_screen
 
-backend = None
-ui = None
 
+def start_backend(pp: int) -> None:
+    """Start the backend process.
 
-def get_backend():
-    global backend
-    if backend is None:
-        backend = importlib.import_module("ansys.aedt.toolkits.electronic_transformer.backend.run_backend")
-    return backend
-
-
-def get_ui():
-    global ui
-    if ui is None:
-        ui = importlib.import_module("ansys.aedt.toolkits.electronic_transformer.ui.run_frontend")
-    return ui
-
-
-def start_backend(pp):
-    """Start the backend process."""
-    backend_imported = get_backend()
+    Parameters
+    ----------
+    pp : int
+        Port to run the backend on.
+    """
+    from ansys.aedt.toolkits.electronic_transformer.backend.run_backend import run_backend
 
     print(f"Starting backend on port {pp}...")
-    backend_imported.run_backend(pp)
+    run_backend(pp)
 
 
-def start_frontend(backend_url, backend_port):
-    """Start the frontend process."""
-    ui_imported = get_ui()
-    print("Starting frontend...")
-    ui_imported.run_frontend(backend_url, backend_port)
+def show_splash_and_start_frontend(qt_app: QApplication, url_backend: str) -> None:
+    """Show the splash screen and start the frontend process.
+
+    Parameters
+    ----------
+    qt_app : QApplication
+        The Qt application instance.
+    url_backend : str
+        The URL of the backend server.
+    """
+    splash = show_splash_screen(qt_app)
+
+    def check_backend():
+        """Loop until the backend is running, then close the splash screen and start the frontend."""
+        if check_backend_communication(url_backend):
+            # Import here to avoid circular imports and speed up initial loading
+            from ansys.aedt.toolkits.electronic_transformer.ui.run_frontend import run_frontend
+
+            splash.close()
+            run_frontend(url, port, qt_app)
+        else:  # pragma: no cover
+            # Check again in 0.5s
+            QTimer.singleShot(500, check_backend)
+
+    check_backend()
 
 
 if __name__ == "__main__":
+
+    def terminate_backend_process():
+        print("Terminating backend process...")
+        backend_process.terminate()
+        backend_process.join()
+        print("Backend process is terminated.")
+
     multiprocessing.freeze_support()
 
     is_linux = os.name == "posix"
@@ -82,54 +98,21 @@ if __name__ == "__main__":
     url_call = f"http://{url}:{port}"
     python_path = sys.executable
 
-    def terminate_processes():
-        print("Terminating backend and frontend processes...")
-        backend_process.terminate()
-        frontend_process.terminate()
-        backend_process.join()
-        frontend_process.join()
-        print("Processes terminated.")
-
-    # Clean python processes when script ends
+    # Clean Python processes when script ends
     atexit.register(clean_python_processes, url, port)
 
     # Check if backend is already running
     if is_server_running(server=url, port=port):
         raise Exception(f"A process is already running at: {url_call}")
 
-    if not is_linux:
-        # Launch splash
-        splash_process = multiprocessing.Process(target=show_splash_screen)
-        splash_process.start()
-
     # Launch backend process
     backend_process = multiprocessing.Process(target=start_backend, args=(new_port,))
     backend_process.start()
 
-    # Wait for backend to start
-    count = 0
-    while not check_backend_communication(url_call) and count < 10:
-        time.sleep(1)
-        count += 1
-
-    if not check_backend_communication(url_call):
-        raise Exception("Backend communication is not working.")
-
     # Connect to AEDT session if necessary
     process_desktop_properties(is_linux, url_call)
 
-    if not is_linux:
-        splash_process.join()
-
-    # Launch frontend process
-    frontend_process = multiprocessing.Process(target=start_frontend, args=(url, port))
-    frontend_process.start()
-
-    # Wait for backend confirmation
-    if not wait_for_server(server=url, port=port):
-        raise Exception(f"Backend did not start properly at {url_call}")
-
-    # Keep frontend running
-    frontend_process.join()
-
-    terminate_processes()
+    app = QApplication(sys.argv)
+    show_splash_and_start_frontend(app, url_call)
+    app.aboutToQuit.connect(terminate_backend_process)
+    sys.exit(app.exec())

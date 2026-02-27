@@ -22,6 +22,7 @@ from pathlib import Path
 import sys
 
 from pydantic import BaseModel
+from pydantic import Field
 
 if sys.version_info >= (3, 11):
     import tomllib
@@ -70,7 +71,7 @@ class WindingLayerProperties(BaseModel, validate_assignment=True):
     type: str = ""  # layer_type: Wound, Planar
     number_of_layers: int = 0  # number_of_layer
     spacing: float = 0.0  # layer_spacing
-    definition_per_layer: dict = {}  # layers_definition = {layer_1 : {conductor_* : "4", }}
+    definition_per_layer: dict = Field(default_factory=dict)  # layers_definition = {layer_1 : {conductor_* : "4", }}
 
 
 class WindingConductorProperties(BaseModel, validate_assignment=True):
@@ -113,13 +114,13 @@ class FrequencySweepProperties(BaseModel, validate_assignment=True):
 class LayerSideDefinitionProperties(BaseModel, validate_assignment=True):
     """Manages FE layer definition properties."""
 
-    RootModel: Dict[str, List[str]] = {}
+    RootModel: Dict[str, List[str]] = Field(default_factory=dict)
 
 
 class ConnectionDefinitionProperties(BaseModel, validate_assignment=True):
     """Manages FE connection definition properties."""
 
-    RootModel: Dict[str, Dict[str, Any]] = {}
+    RootModel: Dict[str, Dict[str, Any]] = Field(default_factory=dict)
 
 
 class SettingsProperties(BaseModel, validate_assignment=True):
@@ -147,7 +148,7 @@ class CircuitProperties(BaseModel, validate_assignment=True):
 
     connections_definition: Dict[str, Any] = ConnectionDefinitionProperties()
     layer_side_definition: Dict[str, Any] = LayerSideDefinitionProperties()
-    side_loads: list[float] = []
+    side_loads: list[float] = Field(default_factory=list)
     excitation: ExcitationProperties = ExcitationProperties()
     transformer_sides: int = 0
 
@@ -235,17 +236,17 @@ class WindingGUIProperties(BaseModel, validate_assignment=True):
     """Manages UI winding menu properties."""
 
     layer_type: str = ""
-    layers_definition: dict = {}
+    layers_definition: dict = Field(default_factory=dict)
     number_of_layers: int = 0
     layer_spacing: float = 0.0
-    layer_side_definition: dict = {}
-    side_loads: list = []
+    layer_side_definition: dict = Field(default_factory=dict)
+    side_loads: list = Field(default_factory=list)
 
     conductor_type: str = ""
     conductor_material: str = "Copper"
     insulation_material: str = "material_insulation"
     turn_spacing: float = 0.29
-    connections_definition: Dict[str, Any] = {}
+    connections_definition: Dict[str, Any] = Field(default_factory=dict)
     layer: Layer = Layer()
 
 
@@ -257,7 +258,7 @@ class GUIProperties(UIProperties, validate_assignment=True):
     electrical: ElectricalGUIProperties = ElectricalGUIProperties()
     winding: WindingGUIProperties = WindingGUIProperties()
     settings: SettingsGUIProperties = SettingsGUIProperties()
-    materials: Dict[str, Any] = {}
+    materials: Dict[str, Any] = Field(default_factory=dict)
 
 
 class Properties(UIProperties, validate_assignment=True):
@@ -268,7 +269,7 @@ class Properties(UIProperties, validate_assignment=True):
     bobbin: BobbinProperties = BobbinProperties()
     circuit: CircuitProperties = CircuitProperties()
     settings: SettingsProperties = SettingsProperties()
-    materials: Dict[str, Any] = {}
+    materials: Dict[str, Any] = Field(default_factory=dict)
 
 
 frontend_properties = {}

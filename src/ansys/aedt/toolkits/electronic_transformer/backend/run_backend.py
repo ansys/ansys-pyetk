@@ -136,7 +136,7 @@ def validate_json():
         return jsonify("JSON file is not valid"), 500
 
 
-def run_backend(port=0):
+def run_backend(port: int = 0) -> None:
     """Run the server.
 
     Parameters

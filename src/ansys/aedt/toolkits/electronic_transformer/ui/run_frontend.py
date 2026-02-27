@@ -32,6 +32,8 @@ from ansys.aedt.toolkits.electronic_transformer.ui.models import fe_properties a
 from PySide6.QtWidgets import QApplication
 from PySide6.QtWidgets import QMainWindow
 
+# Toolkit frontend API
+from ansys.aedt.toolkits.common.ui.actions_generic import FrontendGeneric
 from ansys.aedt.toolkits.common.ui.common_windows.home_menu import HomeMenu
 from ansys.aedt.toolkits.common.ui.common_windows.settings_column import SettingsMenu
 
@@ -40,9 +42,6 @@ from ansys.aedt.toolkits.common.ui.logger_handler import logger
 
 # Common windows
 from ansys.aedt.toolkits.common.ui.main_window.main_window_layout import MainWindowLayout
-
-# Toolkit frontend API
-from ansys.aedt.toolkits.electronic_transformer.ui.actions import Frontend
 from ansys.aedt.toolkits.electronic_transformer.ui.windows.help.help_menu import HelpMenu
 
 # New windows
@@ -69,7 +68,7 @@ if properties.high_resolution:
 properties.version = __version__
 
 
-class ApplicationWindow(QMainWindow, Frontend):
+class ApplicationWindow(QMainWindow, FrontendGeneric):
     def __init__(self):
         super().__init__()
 
@@ -256,15 +255,34 @@ class ApplicationWindow(QMainWindow, Frontend):
         event.accept()
 
 
-def run_frontend(backend_url="", backend_port=0):
+def run_frontend(backend_url: str = "", backend_port: int = 0, app: QApplication = None):  # pragma: no cover
+    """Run the frontend application.
+
+    Parameters
+    ----------
+    backend_url : str, optional
+        The URL of the backend server. Default is ``""``.
+    backend_port : int, optional
+        The port of the backend server. Default is ``0``.
+    app : QApplication, optional
+        The Qt application instance. If not provided, a new instance will be created.
+    """
     if backend_url:
         properties.backend_url = backend_url
     if backend_port:
         properties.backend_port = backend_port
-    app = QApplication(sys.argv)
+
+    run_separately = False
+
+    if not app:
+        run_separately = True
+        app = QApplication(sys.argv)
+
     window = ApplicationWindow()
     window.show()
-    sys.exit(app.exec())
+    app.processEvents()
+    if run_separately:
+        sys.exit(app.exec())
 
 
 if __name__ == "__main__":
