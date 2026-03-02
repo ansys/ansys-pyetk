@@ -33,7 +33,7 @@ from PySide6.QtWidgets import QApplication
 from PySide6.QtWidgets import QMainWindow
 
 # Toolkit frontend API
-from ansys.aedt.toolkits.common.ui.actions_generic import FrontendGeneric
+from ansys.aedt.toolkits.electronic_transformer.ui.actions import Frontend
 from ansys.aedt.toolkits.common.ui.common_windows.home_menu import HomeMenu
 from ansys.aedt.toolkits.common.ui.common_windows.settings_column import SettingsMenu
 
@@ -68,7 +68,7 @@ if properties.high_resolution:
 properties.version = __version__
 
 
-class ApplicationWindow(QMainWindow, FrontendGeneric):
+class ApplicationWindow(QMainWindow, Frontend):
     def __init__(self):
         super().__init__()
 
