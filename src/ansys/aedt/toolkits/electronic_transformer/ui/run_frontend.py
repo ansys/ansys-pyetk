@@ -32,8 +32,6 @@ from ansys.aedt.toolkits.electronic_transformer.ui.models import fe_properties a
 from PySide6.QtWidgets import QApplication
 from PySide6.QtWidgets import QMainWindow
 
-# Toolkit frontend API
-from ansys.aedt.toolkits.electronic_transformer.ui.actions import Frontend
 from ansys.aedt.toolkits.common.ui.common_windows.home_menu import HomeMenu
 from ansys.aedt.toolkits.common.ui.common_windows.settings_column import SettingsMenu
 
@@ -42,6 +40,9 @@ from ansys.aedt.toolkits.common.ui.logger_handler import logger
 
 # Common windows
 from ansys.aedt.toolkits.common.ui.main_window.main_window_layout import MainWindowLayout
+
+# Toolkit frontend API
+from ansys.aedt.toolkits.electronic_transformer.ui.actions import Frontend
 from ansys.aedt.toolkits.electronic_transformer.ui.windows.help.help_menu import HelpMenu
 
 # New windows
@@ -200,7 +201,6 @@ class ApplicationWindow(QMainWindow, Frontend):
 
             if not is_left_visible:
                 self.ui.toggle_left_column()
-
 
     def settings_menu_clicked(self):
         selected_menu = self.ui.get_selected_menu()
