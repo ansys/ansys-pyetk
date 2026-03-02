@@ -124,6 +124,9 @@ markers = [
     "backend: mark test as related to the backend API.",
     "frontend: mark test as related to Frontend and UI code"
 ]
+env = [
+    "PYAEDT_TOOLKIT_REQUESTS_TIMEOUT=60",
+]
 
 [tool.towncrier]
 package = "ansys-pyetk"
