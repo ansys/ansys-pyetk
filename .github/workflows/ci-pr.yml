@@ -255,6 +255,7 @@ jobs:
         timeout-minutes: 30
         run: |
           .\.venv\Scripts\Activate.ps1
+          set PYAEDT_TOOLKIT_REQUESTS_TIMEOUT=60
           pytest -v -m backend --cov=ansys.aedt.toolkits.electronic_transformer --cov-append
 
       - name: Toolkit Frontend testing
