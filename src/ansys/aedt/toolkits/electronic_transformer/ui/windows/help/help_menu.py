@@ -12,7 +12,7 @@ from ansys.aedt.toolkits.electronic_transformer import __version__
 from ansys.aedt.toolkits.electronic_transformer.ui.windows.help.help_column import Ui_LeftColumn
 from ansys.aedt.toolkits.electronic_transformer.ui.windows.help.help_page import Ui_help
 
-DOCUMENTATION_URL = "https://aedt.toolkit.electronic_transformer.docs.pyansys.com/"
+DOCUMENTATION_URL = "https://etk.docs.pyansys.com/"
 ISSUE_TRACKER_URL = "https://github.com/ansys/ansys-pyetk/issues"
 ABOUT_TEXT = f"""<h2>PyETK {__version__}</h2>
 <p>Project using <a href='https://wiki.qt.io/Qt_for_Python'> PySide6</a>, Copyright 2024 The Qt Company Ltd.</p>
@@ -25,7 +25,7 @@ In addition, this package allows you to access a software that is licensed under
 ("Separately Licensed Software"). If you choose to install such Separately Licensed Software,
 you acknowledge that you are responsible for complying with any associated terms and conditions.
 </p>
-<p>Copyright 2023 - 2024 ANSYS, Inc. All rights reserved.</p>
+<p>Copyright 2023 - 2026 ANSYS, Inc. All rights reserved.</p>
 <p>If you have any questions or issues, please open an issue in
 <a href='{ISSUE_TRACKER_URL}'>ansys-pyetk Issues</a> page.
 </p>
@@ -129,8 +129,7 @@ class HelpMenu(object):
 
     def about_button_clicked(self):
         """Display the PyAEDT Template Toolkit 'About' information."""
-
-        mbox = QtWidgets.QMessageBox.about(self.main_window, "About", ABOUT_TEXT)
+        QtWidgets.QMessageBox.about(self.main_window, "About", ABOUT_TEXT)
 
     def visit_website(self):
         """Access the PyAEDT Template Toolkit documentation."""
