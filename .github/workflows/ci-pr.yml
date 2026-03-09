@@ -179,7 +179,7 @@ jobs:
 
   doc-build:
     name: Documentation build
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, Linux, pyaedt-toolkit]
     needs: doc-style
     permissions:
       contents: read
