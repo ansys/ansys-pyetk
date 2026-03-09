@@ -34,6 +34,13 @@ The Electronic Transformer toolKit (PyETK) is a custom solution for electronic t
 
         Understand the APIs available for the PyETK.
 
+    .. grid-item-card:: Examples :fa:`scroll`
+        :padding: 2 2 2 2
+        :link: examples/index
+        :link-type: doc
+
+        Explore examples that show how to use the toolkit.
+
 .. toctree::
    :hidden:
 
