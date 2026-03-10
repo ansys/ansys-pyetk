@@ -9,6 +9,95 @@ This document contains the release notes for the project.
 
 .. towncrier release notes start
 
+`0.2.0 <https://github.com/ansys/ansys-pyetk/releases/tag/v0.2.0>`_ - March 03, 2026
+====================================================================================
+
+.. tab-set::
+
+
+  .. tab-item:: Dependencies
+
+    .. list-table::
+        :header-rows: 0
+        :widths: auto
+
+        * - Bump actions/checkout from 6.0.1 to 6.0.2
+          - `#51 <https://github.com/ansys/ansys-pyetk/pull/51>`_
+
+        * - Bump actions/setup-python from 6.1.0 to 6.2.0
+          - `#52 <https://github.com/ansys/ansys-pyetk/pull/52>`_
+
+        * - Bump ansys/actions from 10.1.4 to 10.2.5
+          - `#81 <https://github.com/ansys/ansys-pyetk/pull/81>`_
+
+
+  .. tab-item:: Documentation
+
+    .. list-table::
+        :header-rows: 0
+        :widths: auto
+
+        * - Website Documentation
+          - `#82 <https://github.com/ansys/ansys-pyetk/pull/82>`_
+
+
+  .. tab-item:: Fixed
+
+    .. list-table::
+        :header-rows: 0
+        :widths: auto
+
+        * - Edited the splash screen
+          - `#70 <https://github.com/ansys/ansys-pyetk/pull/70>`_
+
+        * - Remove Deletion of Top Level Parent Connection
+          - `#76 <https://github.com/ansys/ansys-pyetk/pull/76>`_
+
+        * - Remove AEDT Design title in toolkit Help Menu
+          - `#78 <https://github.com/ansys/ansys-pyetk/pull/78>`_
+
+        * - Deprecated arguments in generate_unique_project_name
+          - `#80 <https://github.com/ansys/ansys-pyetk/pull/80>`_
+
+        * - Delete Button added to delete row types Layers and Sides
+          - `#86 <https://github.com/ansys/ansys-pyetk/pull/86>`_
+
+
+  .. tab-item:: Maintenance
+
+    .. list-table::
+        :header-rows: 0
+        :widths: auto
+
+        * - Update CHANGELOG for v0.1.0
+          - `#65 <https://github.com/ansys/ansys-pyetk/pull/65>`_
+
+        * - Bump version 0.2.0dev and update to year 2026
+          - `#66 <https://github.com/ansys/ansys-pyetk/pull/66>`_
+
+        * - Add new review changes
+          - `#71 <https://github.com/ansys/ansys-pyetk/pull/71>`_
+
+        * - Review of the backend code base
+          - `#85 <https://github.com/ansys/ansys-pyetk/pull/85>`_
+
+
+  .. tab-item:: Miscellaneous
+
+    .. list-table::
+        :header-rows: 0
+        :widths: auto
+
+        * - Assign_matrix
+          - `#84 <https://github.com/ansys/ansys-pyetk/pull/84>`_
+
+        * - Changes related to UI / frontend logic
+          - `#88 <https://github.com/ansys/ansys-pyetk/pull/88>`_
+
+        * - Remove AEDT timeout
+          - `#93 <https://github.com/ansys/ansys-pyetk/pull/93>`_
+
+
 `0.1.0 <https://github.com/ansys/ansys-pyetk/releases/tag/v0.1.0>`_ - January 30, 2026
 ======================================================================================
 
