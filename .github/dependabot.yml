@@ -1,5 +1,4 @@
 version: 2
-enable-beta-ecosystems: true
 updates:
   - package-ecosystem: "pip" # See documentation for possible values
     directory: "/" # Location of package manifests
@@ -24,13 +23,19 @@ updates:
     commit-message:
       prefix: "BUILD(pip)"
 
-  - package-ecosystem: "github-actions" # zizmor: ignore[dependabot-cooldown] cooldown feature is not available for github actions yet.
+  - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
       interval: "weekly"
       day: "saturday"
       time: "06:00"
       timezone: "Europe/Paris"
+    cooldown:
+      default-days: 7
+      include:
+        - "*"
+      exclude:
+        - "ansys/actions"
     reviewers:
       - "DaveTwyman"
       - "jvela018"
