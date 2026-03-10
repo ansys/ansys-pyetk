@@ -88,9 +88,10 @@ class Frontend(FrontendGeneric):
             logger.error(msg)
             if hasattr(self, "ui"):
                 self.ui.update_logger(msg)
-            msg_list = validation.text.split("\n")
+            msg_list = validation.text.split("\\n")  # split string into a list of messages
             for msg in msg_list:
                 logger.error(msg)
+                msg.replace("\n", "")
                 if hasattr(self, "ui"):
                     self.ui.update_logger(msg)
             return False
