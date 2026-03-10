@@ -135,18 +135,19 @@ def validate_json():
     else:
         return jsonify("JSON file is not valid"), 500
 
-@app.route("/validate_model", methods=["POST"])
+
+@app.route("/validate_model", methods=["GET"])
 def validate_model():
     """Validate the model."""
-    logger.info("[POST] /validate_model (Validates the model).")
+    logger.info("[GET] /validate_model (Validates the model).")
 
     # Get properties from frontend
     properties_frontend = toolkit_api.get_properties()
 
-    validated,error_messages = toolkit_api.validate_model(properties_frontend)
-    error_msg=""
+    validated, error_messages = toolkit_api.validate_model(properties_frontend)
+    error_msg = ""
     for each_message in error_messages:
-        error_msg=error_msg + each_message + "\n"
+        error_msg = error_msg + each_message + "\n"
 
     if validated:
         return jsonify("Model valid."), 200

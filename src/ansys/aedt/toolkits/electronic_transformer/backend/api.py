@@ -20,7 +20,6 @@
 from pathlib import Path
 import sys
 
-
 sys.path.append(str(Path(__file__).parent))
 
 import json
@@ -391,8 +390,8 @@ class ToolkitBackend(AEDTCommon):
         if len(error_messages) > 0:
             for msg in error_messages:
                 logger.error(msg)
-            return False,error_messages
-        return True,error_messages
+            return False, error_messages
+        return True, error_messages
 
     def validate_model(self, frontend_properties=None):
         """Validate the transformer model configuration.
@@ -408,7 +407,7 @@ class ToolkitBackend(AEDTCommon):
             Tuple containing validation status (bool) and list of error messages.
         """
         if frontend_properties:
-            self.__read_props_from_frontend(frontend_properties)
+            self.__update_props_from_frontend(frontend_properties)
 
         return self.__validate_model()
 
@@ -430,7 +429,7 @@ class ToolkitBackend(AEDTCommon):
             self.__update_props_from_frontend(frontend_properties)
 
         # Validates the model
-        validated,error_messages=self.__validate_model()
+        validated, error_messages = self.__validate_model()
         if not validated:
             return False
 

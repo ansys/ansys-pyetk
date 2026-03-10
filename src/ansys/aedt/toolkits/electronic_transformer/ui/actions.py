@@ -81,16 +81,19 @@ class Frontend(FrontendGeneric):
         # update backend properties
         self._update_backend_properties(be_properties)
 
-        #Validates the model before creating it
-        validation = requests.post(self.url + "/validate_model")
+        # Validates the model before creating it
+        validation = requests.get(self.url + "/validate_model")
         if not validation.ok:
             msg = f"Model Validation Failed: {self.url}"
             logger.error(msg)
-            msg_list=validation.text.split("\n")
+            if hasattr(self, "ui"):
+                self.ui.update_logger(msg)
+            msg_list = validation.text.split("\n")
             for msg in msg_list:
                 logger.error(msg)
+                if hasattr(self, "ui"):
+                    self.ui.update_logger(msg)
             return False
-
 
         # Creates the model
         if validation.ok:
@@ -98,13 +101,16 @@ class Frontend(FrontendGeneric):
             if response.ok:
                 msg = "Model Created."
                 logger.info(msg)
+                if hasattr(self, "ui"):
+                    self.ui.update_logger(msg)
                 return True
             else:
                 msg = f"Failed backend call: {self.url}"
                 logger.error(msg)
+                if hasattr(self, "ui"):
+                    self.ui.update_logger(msg)
                 return False
 
-              
     def _update_backend_properties(self, be_props):
         """
         Update backend properties with current frontend properties entries.
