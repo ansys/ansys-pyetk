@@ -120,10 +120,10 @@ Then, moving to the bobbin, winding, and excitation information, and finally, th
 
 #. Finally, click **Create Transformer** to create the transformer geometry in AEDT. The log window provides information about the creation process, including any errors or warnings that may occur during the process.
 
-.. image:: ../_static/menu-save-create.png
-    :align: center
-    :width: 600
-    :alt: Create and Save Transformer Button
+    .. image:: ../_static/menu-save-create.png
+        :align: center
+        :width: 600
+        :alt: Create and Save Transformer Button
 
     .. note::
         The current transformer model can be saved as a .json file by clicking on the **Save As** button. This allows the user to save the current configuration of the transformer and load it later for further modifications or analysis. The saved .json file contains all the information about the core, bobbin, winding, excitation, and Maxwell settings that were specified in the UI.
