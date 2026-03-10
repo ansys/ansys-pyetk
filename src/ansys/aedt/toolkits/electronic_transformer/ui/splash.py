@@ -18,10 +18,8 @@
 
 
 from pathlib import Path
-import sys
 
 from PySide6.QtCore import Qt
-from PySide6.QtCore import QTimer
 from PySide6.QtGui import QPixmap
 from PySide6.QtWidgets import QApplication
 from PySide6.QtWidgets import QSplashScreen
@@ -29,21 +27,30 @@ from PySide6.QtWidgets import QSplashScreen
 from ansys.aedt.toolkits.electronic_transformer.ui.models import fe_properties as properties
 
 
-def show_splash_screen():
-    app = QApplication(sys.argv)
-    if properties.high_resolution:
-        splash_dim = 800
-    else:
-        splash_dim = 600
+def show_splash_screen(app: QApplication) -> QSplashScreen:
+    """Show the splash screen for the application.
+
+    Creates a splash screen with a specified image and dimensions,
+    displaying it for a certain duration before closing. The splash
+    screen appears on top of the main application window.
+
+    Parameters
+    ----------
+    app : QApplication
+        The Qt application instance.
+
+    Returns
+    -------
+    QSplashScreen
+        The splash screen instance.
+    """
+    splash_dim = 800 if properties.high_resolution else 600
     splash_pix = QPixmap(Path(__file__).parent / "splash.png")
     scaled_pix = splash_pix.scaled(splash_dim, splash_dim, Qt.KeepAspectRatio, Qt.SmoothTransformation)
     splash = QSplashScreen(scaled_pix, Qt.WindowStaysOnTopHint)
     splash.setWindowFlag(Qt.FramelessWindowHint)
     splash.show()
 
-    # Close the splash screen after a delay (for example, 3000 milliseconds)
-    QTimer.singleShot(8000, splash.close)
+    app.processEvents()
 
-    # Start the main application after the splash screen
-    QTimer.singleShot(8000, app.quit)
-    app.exec()
+    return splash

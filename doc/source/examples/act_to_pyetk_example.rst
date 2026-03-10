@@ -1,3 +1,5 @@
+.. _act_to_pyetk_example:
+
 From ACT to PyETK example
 ============================================
 

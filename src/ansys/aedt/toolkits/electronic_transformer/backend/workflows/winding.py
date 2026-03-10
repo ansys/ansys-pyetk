@@ -479,7 +479,7 @@ class Winding(GeometryCommon):
 
     def __create_winding(self):
         """Create the winding."""
-        airgap_both, airgap_center, airgap_side = self.air_gap(self.__core_properties)
+        airgap_both, _, _ = self.air_gap(self.__core_properties)
         dim_d2 = self.__core_properties.dimensions["D_2"]
         dim_d3 = self.__core_properties.dimensions["D_3"]
         dim_d5 = self.__core_properties.dimensions["D_5"]
