@@ -1,3 +1,5 @@
+.. _ui_example:
+
 Create transformer using the user interface
 ============================================
 
