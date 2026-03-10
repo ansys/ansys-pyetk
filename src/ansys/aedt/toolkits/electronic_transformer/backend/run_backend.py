@@ -154,7 +154,7 @@ def validate_model():
         return jsonify(error_msg), 500
 
 
-def run_backend(port=0):
+def run_backend(port: int = 0) -> None:
     """Run the server.
 
     Parameters
