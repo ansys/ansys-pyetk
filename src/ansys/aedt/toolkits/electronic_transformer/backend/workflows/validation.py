@@ -22,6 +22,7 @@ from pathlib import Path
 
 from jsonschema import validate
 
+
 class Validation:
     """Manages the validation of the input data."""
 
@@ -47,196 +48,196 @@ class Validation:
             List of error messages. Empty list if validation passes.
             Each error message describes a specific validation failure.
         """
-        D_1 = core_properties.dimensions["D_1"]
-        D_2 = core_properties.dimensions["D_2"]
-        D_3 = core_properties.dimensions["D_3"]
-        D_4 = core_properties.dimensions["D_4"]
-        D_5 = core_properties.dimensions["D_5"]
-        D_6 = core_properties.dimensions["D_6"]
-        D_7 = core_properties.dimensions["D_7"]
-        D_8 = core_properties.dimensions["D_8"]
+        d_1 = core_properties.dimensions["D_1"]
+        d_2 = core_properties.dimensions["D_2"]
+        d_3 = core_properties.dimensions["D_3"]
+        d_4 = core_properties.dimensions["D_4"]
+        d_5 = core_properties.dimensions["D_5"]
+        d_6 = core_properties.dimensions["D_6"]
+        d_7 = core_properties.dimensions["D_7"]
+        d_8 = core_properties.dimensions["D_8"]
 
         error_message = []
 
-        if D_1 == 0:
+        if d_1 == 0:
             error_message.append("Wrong core parameters: D_1 cannot be zero")
-        if D_2 == 0:
+        if d_2 == 0:
             error_message.append("Wrong core parameters: D_2 cannot be zero")
-        if D_3 == 0:
+        if d_3 == 0:
             error_message.append("Wrong core parameters: D_3 cannot be zero")
-        if D_4 == 0:
+        if d_4 == 0:
             error_message.append("Wrong core parameters: D_4 cannot be zero")
-        if D_5 == 0:
+        if d_5 == 0:
             error_message.append("Wrong core parameters: D_5 cannot be zero")
-        if D_1 <= D_2:
+        if d_1 <= d_2:
             error_message.append("Wrong core parameters: D_1 must be greater than D_2")
 
         core_type = core_properties.type
 
         if core_type == "E":
-            if D_2 <= D_3:
+            if d_2 <= d_3:
                 error_message.append("Wrong core parameters: D_2 must be greater than D_3")
-            if D_4 <= D_5:
+            if d_4 <= d_5:
                 error_message.append("Wrong core parameters: D_4 must be greater than D_5")
-            if D_6 == 0:
+            if d_6 == 0:
                 error_message.append("Wrong core parameters: D_6 cannot be zero")
 
         elif core_type == "EC":
-            if D_2 <= D_3:
+            if d_2 <= d_3:
                 error_message.append("Wrong core parameters: D_2 must be greater than D_3")
-            if D_4 <= D_5:
+            if d_4 <= d_5:
                 error_message.append("Wrong core parameters: D_4 must be greater than D_5")
-            if D_6 == 0:
+            if d_6 == 0:
                 error_message.append("Wrong core parameters: D_6 cannot be zero")
 
         elif core_type == "EFD":
-            if D_2 <= D_3:
+            if d_2 <= d_3:
                 error_message.append("Wrong core parameters: D_2 must be greater than D_3")
-            if D_4 <= D_5:
+            if d_4 <= d_5:
                 error_message.append("Wrong core parameters: D_4 must be greater than D_5")
-            if D_6 == 0:
+            if d_6 == 0:
                 error_message.append("Wrong core parameters: D_6 cannot be zero")
-            if D_7 == 0:
+            if d_7 == 0:
                 error_message.append("Wrong core parameters: D_7 cannot be zero")
 
         elif core_type == "EI":
-            if D_2 <= D_3:
+            if d_2 <= d_3:
                 error_message.append("Wrong core parameters: D_2 must be greater than D_3")
-            if D_4 <= D_5:
+            if d_4 <= d_5:
                 error_message.append("Wrong core parameters: D_4 must be greater than D_5")
-            if D_6 == 0:
+            if d_6 == 0:
                 error_message.append("Wrong core parameters: D_6 cannot be zero")
 
         elif core_type == "EP":
-            if D_2 <= D_3:
+            if d_2 <= d_3:
                 error_message.append("Wrong core parameters: D_2 must be greater than D_3")
-            if D_4 <= D_5:
+            if d_4 <= d_5:
                 error_message.append("Wrong core parameters: D_4 must be greater than D_5")
-            if D_6 <= D_7:
+            if d_6 <= d_7:
                 error_message.append("Wrong core parameters: D_6 must be greater than D_7")
-            if D_6 == 0:
+            if d_6 == 0:
                 error_message.append("Wrong core parameters: D_6 cannot be zero")
-            if D_7 == 0:
+            if d_7 == 0:
                 error_message.append("Wrong core parameters: D_7 cannot be zero")
 
         elif core_type == "EQ":
-            if D_2 <= D_3:
+            if d_2 <= d_3:
                 error_message.append("Wrong core parameters: D_2 must be greater than D_3")
-            if D_4 <= D_5:
+            if d_4 <= d_5:
                 error_message.append("Wrong core parameters: D_4 must be greater than D_5")
-            if D_6 < D_3:
+            if d_6 < d_3:
                 error_message.append("Wrong core parameters: D_6 must be greater than D_3")
-            if D_6 == 0:
+            if d_6 == 0:
                 error_message.append("Wrong core parameters: D_6 cannot be zero")
 
         elif core_type == "ER":
-            if D_2 <= D_7:
+            if d_2 <= d_7:
                 error_message.append("Wrong core parameters: D_2 must be greater than D_7")
-            if D_4 <= D_5:
+            if d_4 <= d_5:
                 error_message.append("Wrong core parameters: D_4 must be greater than D_5")
-            if D_7 < 2 * math.sqrt((D_2 / 2) ** 2 - (D_6 / 2) ** 2) and D_7 != 0:
+            if d_7 < 2 * math.sqrt((d_2 / 2) ** 2 - (d_6 / 2) ** 2) and d_7 != 0:
                 error_message.append("Wrong core parameters: Please check D_7")
-            if D_6 == 0:
+            if d_6 == 0:
                 error_message.append("Wrong core parameters: D_6 cannot be zero")
 
         elif core_type == "ETD":
-            if D_2 <= D_3:
+            if d_2 <= d_3:
                 error_message.append("Wrong core parameters: D_2 must be greater than D_3")
-            if D_4 <= D_5:
+            if d_4 <= d_5:
                 error_message.append("Wrong core parameters: D_4 must be greater than D_5")
-            if D_6 == 0:
+            if d_6 == 0:
                 error_message.append("Wrong core parameters: D_6 cannot be zero")
 
         elif core_type == "P":
-            if D_2 <= D_3:
+            if d_2 <= d_3:
                 error_message.append("Wrong core parameters: D_2 must be greater than D_3")
-            if D_4 <= D_5:
+            if d_4 <= d_5:
                 error_message.append("Wrong core parameters: D_4 must be greater than D_5")
-            if D_3 <= D_6:
+            if d_3 <= d_6:
                 error_message.append("Wrong core parameters: D_3 must be greater than D_6")
-            if D_8 >= D_2:
+            if d_8 >= d_2:
                 error_message.append("Wrong core parameters: D_8 must be less than D_2")
-            if D_8 <= D_3:
+            if d_8 <= d_3:
                 error_message.append("Wrong core parameters: D_8 must be greater than D_3")
-            if D_7 == 0:
+            if d_7 == 0:
                 error_message.append("Wrong core parameters: D_7 cannot be zero")
-            if D_8 == 0:
+            if d_8 == 0:
                 error_message.append("Wrong core parameters: D_8 cannot be zero")
 
         elif core_type == "PH":
-            if D_2 <= D_3:
+            if d_2 <= d_3:
                 error_message.append("Wrong core parameters: D_2 must be greater than D_3")
-            if D_4 <= D_5:
+            if d_4 <= d_5:
                 error_message.append("Wrong core parameters: D_4 must be greater than D_5")
-            if D_3 <= D_6:
+            if d_3 <= d_6:
                 error_message.append("Wrong core parameters: D_3 must be greater than D_6")
-            if D_8 >= D_2:
+            if d_8 >= d_2:
                 error_message.append("Wrong core parameters: D_8 must be less than D_2")
-            if D_8 <= D_3:
+            if d_8 <= d_3:
                 error_message.append("Wrong core parameters: D_8 must be greater than D_3")
-            if D_7 == 0:
+            if d_7 == 0:
                 error_message.append("Wrong core parameters: D_7 cannot be zero")
-            if D_8 == 0:
+            if d_8 == 0:
                 error_message.append("Wrong core parameters: D_8 cannot be zero")
 
         elif core_type == "PQ":
-            if D_2 <= D_3:
+            if d_2 <= d_3:
                 error_message.append("Wrong core parameters: D_2 must be greater than D_3")
-            if D_4 <= D_5:
+            if d_4 <= d_5:
                 error_message.append("Wrong core parameters: D_4 must be greater than D_5")
-            if D_3 <= D_7:
+            if d_3 <= d_7:
                 error_message.append("Wrong core parameters: D_3 must be greater than D_7")
-            if D_6 >= D_1:
+            if d_6 >= d_1:
                 error_message.append("Wrong core parameters: D_6 must be less than D_1")
-            if D_6 <= D_3:
+            if d_6 <= d_3:
                 error_message.append("Wrong core parameters: D_6 must be greater than D_3")
-            if D_6 == 0:
+            if d_6 == 0:
                 error_message.append("Wrong core parameters: D_6 cannot be zero")
-            if D_7 == 0:
+            if d_7 == 0:
                 error_message.append("Wrong core parameters: D_7 cannot be zero")
-            if D_8 == 0:
+            if d_8 == 0:
                 error_message.append("Wrong core parameters: D_8 cannot be zero")
 
         elif core_type == "PT":
-            if D_2 <= D_3:
+            if d_2 <= d_3:
                 error_message.append("Wrong core parameters: D_2 must be greater than D_3")
-            if D_4 <= D_5:
+            if d_4 <= d_5:
                 error_message.append("Wrong core parameters: D_4 must be greater than D_5")
-            if D_3 <= D_6:
+            if d_3 <= d_6:
                 error_message.append("Wrong core parameters: D_3 must be greater than D_6")
-            if D_8 >= D_2:
+            if d_8 >= d_2:
                 error_message.append("Wrong core parameters: D_8 must be less than D_2")
-            if D_8 <= D_3:
+            if d_8 <= d_3:
                 error_message.append("Wrong core parameters: D_8 must be greater than D_3")
-            if D_6 == 0:
+            if d_6 == 0:
                 error_message.append("Wrong core parameters: D_6 cannot be zero")
-            if D_8 == 0:
+            if d_8 == 0:
                 error_message.append("Wrong core parameters: D_8 cannot be zero")
 
         elif core_type == "RM":
-            if D_2 <= D_3:
+            if d_2 <= d_3:
                 error_message.append("Wrong core parameters: D_2 must be greater than D_3")
-            if D_4 <= D_5:
+            if d_4 <= d_5:
                 error_message.append("Wrong core parameters: D_4 must be greater than D_5")
-            if D_3 <= D_6:
+            if d_3 <= d_6:
                 error_message.append("Wrong core parameters: D_3 must be greater than D_6")
-            if D_7 == 0:
+            if d_7 == 0:
                 error_message.append("Wrong core parameters: D_7 cannot be zero")
-            if D_8 == 0:
+            if d_8 == 0:
                 error_message.append("Wrong core parameters: D_8 cannot be zero")
 
         elif core_type == "U":
-            if D_3 <= D_4:
+            if d_3 <= d_4:
                 error_message.append("Wrong core parameters: D_3 must be greater than D_4")
 
         elif core_type == "UI":
-            if D_3 <= D_4:
+            if d_3 <= d_4:
                 error_message.append("Wrong core parameters: D_3 must be greater than D_4")
-            if D_6 == 0:
+            if d_6 == 0:
                 error_message.append("Wrong core parameters: D_6 cannot be zero")
-            if D_7 == 0:
+            if d_7 == 0:
                 error_message.append("Wrong core parameters: D_7 cannot be zero")
-            if D_8 == 0:
+            if d_8 == 0:
                 error_message.append("Wrong core parameters: D_8 cannot be zero")
 
         return error_message
@@ -315,11 +316,7 @@ class Validation:
                 maximum_layer = (
                     sum(
                         [
-                            (
-                                layer.conductor.diameter
-                                + 2 * layer.insulation.thickness
-                                + layer_spacing
-                            )
+                            (layer.conductor.diameter + 2 * layer.insulation.thickness + layer_spacing)
                             for layer in winding_properties.layers.values()
                         ]
                     )
@@ -349,13 +346,7 @@ class Validation:
             elif conductor_type == "Circular":
                 maximum_layer = max(
                     [
-                        (
-                            (
-                                layer.conductor.diameter
-                                + 2 * layer.insulation.thickness
-                            )
-                            * layer.turns.quantity
-                        )
+                        ((layer.conductor.diameter + 2 * layer.insulation.thickness) * layer.turns.quantity)
                         for layer in winding_properties.layers.values()
                     ]
                 )
@@ -385,11 +376,7 @@ class Validation:
             maximum_layer = (
                 sum(
                     [
-                        (
-                            layer.conductor.height
-                            + bobbin_board_thickness
-                            + layer_spacing
-                        )
+                        (layer.conductor.height + bobbin_board_thickness + layer_spacing)
                         for layer in winding_properties.layers.values()
                     ]
                 )
@@ -429,9 +416,6 @@ class Validation:
                 error_message.append("Cannot accommodate all windings, increase D_2")
 
         return error_message
-
-
-
 
     def validate_model(self, core_properties, winding_properties, bobbin_properties):
         """Validate the complete transformer model including core and winding.
