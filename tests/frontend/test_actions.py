@@ -45,16 +45,19 @@ class TestFrontend:
         assert frontend.data_manager is not None
         mock_parent_init.assert_called_once()
 
+    @patch("ansys.aedt.toolkits.electronic_transformer.ui.actions.requests.get")
     @patch("ansys.aedt.toolkits.electronic_transformer.ui.actions.requests.post")
     @patch("ansys.aedt.toolkits.electronic_transformer.ui.actions.FrontendGeneric.__init__")
     @patch("tempfile.mkdtemp")
-    def test_create_model_success(self, mock_mkdtemp, mock_parent_init, mock_post):
+    def test_create_model_success(self, mock_mkdtemp, mock_parent_init, mock_post, mock_get):
         """Test successful model creation."""
         mock_mkdtemp.return_value = "/tmp/test"
         mock_parent_init.return_value = None
         mock_response = Mock()
         mock_response.ok = True
+        mock_response.text = ""
         mock_post.return_value = mock_response
+        mock_get.return_value = mock_response
 
         frontend = Frontend()
         frontend.url = "http://localhost:5000"
@@ -74,16 +77,19 @@ class TestFrontend:
         assert result is True
         mock_post.assert_called_once_with("http://localhost:5000/create_model")
 
+    @patch("ansys.aedt.toolkits.electronic_transformer.ui.actions.requests.get")
     @patch("ansys.aedt.toolkits.electronic_transformer.ui.actions.requests.post")
     @patch("ansys.aedt.toolkits.electronic_transformer.ui.actions.FrontendGeneric.__init__")
     @patch("tempfile.mkdtemp")
-    def test_create_model_failure(self, mock_mkdtemp, mock_parent_init, mock_post):
+    def test_create_model_failure(self, mock_mkdtemp, mock_parent_init, mock_post, mock_get):
         """Test failed model creation."""
         mock_mkdtemp.return_value = "/tmp/test"
         mock_parent_init.return_value = None
         mock_response = Mock()
         mock_response.ok = False
+        mock_response.text = "Validation Error\nAnother Error"
         mock_post.return_value = mock_response
+        mock_get.return_value = mock_response
 
         frontend = Frontend()
         frontend.url = "http://localhost:5000"
@@ -102,18 +108,21 @@ class TestFrontend:
 
         assert result is False
 
+    @patch("ansys.aedt.toolkits.electronic_transformer.ui.actions.requests.get")
     @patch("ansys.aedt.toolkits.electronic_transformer.ui.actions.generate_unique_project_name")
     @patch("ansys.aedt.toolkits.electronic_transformer.ui.actions.requests.post")
     @patch("ansys.aedt.toolkits.electronic_transformer.ui.actions.FrontendGeneric.__init__")
     @patch("tempfile.mkdtemp")
-    def test_create_model_no_project(self, mock_mkdtemp, mock_parent_init, mock_post, mock_generate):
+    def test_create_model_no_project(self, mock_mkdtemp, mock_parent_init, mock_post, mock_generate, mock_get):
         """Test model creation with 'No Project' selected."""
         mock_mkdtemp.return_value = "/tmp/test"
         mock_parent_init.return_value = None
         mock_generate.return_value = "Unique_Project_Name"
         mock_response = Mock()
         mock_response.ok = True
+        mock_response.text = ""
         mock_post.return_value = mock_response
+        mock_get.return_value = mock_response
 
         frontend = Frontend()
         frontend.url = "http://localhost:5000"
@@ -167,18 +176,23 @@ class TestFrontend:
         assert {"core": {"supplier": "TDK"}} in call_dicts
         assert {"winding": {"layer_type": "Wound"}} in call_dicts
 
+    @patch("ansys.aedt.toolkits.electronic_transformer.ui.actions.requests.get")
     @patch("ansys.aedt.toolkits.electronic_transformer.ui.actions.generate_unique_project_name")
     @patch("ansys.aedt.toolkits.electronic_transformer.ui.actions.requests.post")
     @patch("ansys.aedt.toolkits.electronic_transformer.ui.actions.FrontendGeneric.__init__")
     @patch("tempfile.mkdtemp")
-    def test_create_model_with_empty_design_list(self, mock_mkdtemp, mock_parent_init, mock_post, mock_generate):
+    def test_create_model_with_empty_design_list(
+        self, mock_mkdtemp, mock_parent_init, mock_post, mock_generate, mock_get
+    ):
         """Test model creation when design list is empty."""
         mock_mkdtemp.return_value = "/tmp/test"
         mock_parent_init.return_value = None
         mock_generate.return_value = "New_Project"
         mock_response = Mock()
         mock_response.ok = True
+        mock_response.text = ""
         mock_post.return_value = mock_response
+        mock_get.return_value = mock_response
 
         frontend = Frontend()
         frontend.url = "http://localhost:5000"
