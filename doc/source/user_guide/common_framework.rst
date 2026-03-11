@@ -3,7 +3,7 @@
 Common framework
 ================
 
-This page explains how to use the the PyETK common framework, which is shared across all AEDT toolkits. It takes you through the UI, from the initial **Welcome** page to configuring settings and viewing logs and online help.
+This page explains how to use the PyETK common framework, which is shared across all AEDT toolkits. It takes you through the UI, from the initial **Welcome** page to configuring settings and viewing logs and online help.
 
 .. image:: ../_static/pyetk-gui.png
    :width: 800
@@ -29,7 +29,7 @@ and any errors that might have occurred during the process.
    :alt: Log icon
 
 
-In the lower left corner, click the **Help** icon to access access information about your PyETK installation, PyETK documentation, and issues tracked in the GitHub repository.
+In the lower left corner, click the **Help** icon to access information about your PyETK installation, PyETK documentation, and issues tracked in the GitHub repository.
 
 .. image:: ../_static/pyetk-toolkit-help.png
     :width: 800
