@@ -20,7 +20,7 @@ jobs:
 
   doc-build:
     name: Documentation build
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, Linux, pyaedt-toolkit]
     permissions:
       contents: read
     steps:

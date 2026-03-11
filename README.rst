@@ -49,11 +49,6 @@ Documentation is currently Work in Progress.
 On the `issues <https://github.com/ansys/ansys-pyetk/issues>`_ page, you can
 create issues to submit questions, report bugs, and request new features.
 
-The following are known missing functionality / current work in progress
-
-- Remove button logic in Winding menu has not been implemented.
-- Check of windings fitting in cores not implemented.
-
 Expected Behaviour
 ------------------
 ETK does not create a unique Maxwell model every time "Create Transformer" button is pressed,

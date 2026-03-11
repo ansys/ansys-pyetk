@@ -131,7 +131,7 @@ jobs:
   build-library:
     name: Build library artifacts
     needs: doc-build
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, Linux, pyaedt-toolkit]
     permissions:
       attestations: write   # Required to create and publish package attestations (SLSA provenance)
       contents: read        # Required to read repository content for packaging
