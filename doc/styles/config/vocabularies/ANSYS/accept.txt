@@ -29,3 +29,5 @@ walkthrough
 ACT
 PyETK
 submenu
+Electronic Transformer ToolKit
+Python

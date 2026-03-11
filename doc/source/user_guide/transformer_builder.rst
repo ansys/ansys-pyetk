@@ -15,12 +15,12 @@ In this tab, specify transformer information:
 - Core dimensions
 - Bobbin type
 - Bobbin dimensions
-- Winding data 
+- Winding data
 - Excitation data
-  
+
 Use the **Settings** pane on the left side of the **Transformer Builder** tab to specify Maxwell analysis settings:
 
 - Number of passes
-- Percentage error 
+- Percentage error
 - Maximum number of passes
 - Frequency sweeps

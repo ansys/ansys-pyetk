@@ -7,7 +7,7 @@ The PyETK API contains the ``ToolkitBackend`` class, which provides methods for 
 
 The `PyAEDT Common Toolkit <https://aedt.common.toolkit.docs.pyansys.com/>`_ provides common methods to create an AEDT session or connect to an existing AEDT session.
 
-For information on using the PyETK API, see 
+For information on using the PyETK API, see
 `Create a transformer model in AEDT using the PyETK API <../examples/api_example.py>`_.
 
 .. automodule:: ansys.aedt.toolkits.electronic_transformer.backend.api
