@@ -2,31 +2,31 @@
 
 Examples
 ========
-Examples are available to demonstrate how to use pyETK in different ways.
+
+This section provides examples that show how to use PyETK.
 
 .. grid:: 2
 
-    .. grid-item-card:: Using the Backend API.
+    .. grid-item-card:: Create a transformer model in AEDT using the PyETK API
         :padding: 2 2 2 2
         :link: api_example
         :link-type: doc
 
-        Example of how to use the pyETK API to create an electronic transformer.
+        Use the PyETK API to create a class instance, set common properties, and define where to read transformer properties.
 
-    .. grid-item-card:: Using the User Interface.
+    .. grid-item-card:: Create a transformer model in AEDT using the PyETK UI
         :padding: 2 2 2 2
         :link: ui_example
         :link-type: doc
 
-        Example of how to use the pyETK's UI to create an electronic transformer.
+        Use the fields and tools in the PyETK UI to specify settings for designing a planar transformer.
 
-    .. grid-item-card:: Migrate from ETK to PyETK.
+    .. grid-item-card:: Migrate ACT JSON files to PyETK JSON files
         :padding: 2 2 2 2
         :link: act_to_pyetk_example
         :link-type: doc
 
-        Using the User Interface to migrate ACT's json files to PyETK.
-
+        Use the PyETK UI to migrate an ACT JSON file to a PyETK JSON file.
 
 .. toctree::
    :hidden:
