@@ -81,16 +81,36 @@ class Frontend(FrontendGeneric):
         # update backend properties
         self._update_backend_properties(be_properties)
 
-        response = requests.post(self.url + "/create_model")
-
-        if response.ok:
-            msg = "Model Created."
-            logger.info(msg)
-            return True
-        else:
-            msg = f"Failed backend call: {self.url}"
+        # Validates the model before creating it
+        validation = requests.get(self.url + "/validate_model")
+        if not validation.ok:
+            msg = f"Model Validation Failed: {self.url}"
             logger.error(msg)
+            if hasattr(self, "ui"):
+                self.ui.update_logger(msg)
+            msg_list = validation.text.split("\\n")  # split string into a list of messages
+            for msg in msg_list:
+                logger.error(msg)
+                msg.replace("\n", "")
+                if hasattr(self, "ui"):
+                    self.ui.update_logger(msg)
             return False
+
+        # Creates the model
+        if validation.ok:
+            response = requests.post(self.url + "/create_model")
+            if response.ok:
+                msg = "Model Created."
+                logger.info(msg)
+                if hasattr(self, "ui"):
+                    self.ui.update_logger(msg)
+                return True
+            else:
+                msg = f"Failed backend call: {self.url}"
+                logger.error(msg)
+                if hasattr(self, "ui"):
+                    self.ui.update_logger(msg)
+                return False
 
     def _update_backend_properties(self, be_props):
         """
