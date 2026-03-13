@@ -97,6 +97,7 @@ class GeometryCommon(GeometryCreatable):
         self.__color = [0, 0, 0]
         self.__objects_list = []
         self.__material = Material
+        self.__aedtapp_gc = aedtapp
 
     @property
     def core_cross_section(self):
@@ -224,7 +225,7 @@ class GeometryCommon(GeometryCreatable):
         material_name = self.__material.name + "_pyETK"
 
         # Creates the material
-        mat = self.aedtapp.materials.add_material(material_name)
+        mat = self.__aedtapp_gc.materials.add_material(material_name)
         mat.conductivity = self.__material.conductivity
 
         # Handles the magnetic permeability
@@ -235,7 +236,7 @@ class GeometryCommon(GeometryCreatable):
                 listx.append(freq)
                 listy.append(mu)
             dataset_name = "Mu_" + material_name
-            self.aedtapp.create_dataset(name=dataset_name, x=listx, y=listy)
+            self.__aedtapp_gc.create_dataset(name=dataset_name, x=listx, y=listy)
             mat.permeability = "pwl($" + dataset_name + ",Freq)"
         else:
             mat.permeability = self.__material.mur
@@ -254,7 +255,7 @@ class GeometryCommon(GeometryCreatable):
             )
 
         # Assign material to objects
-        self.aedtapp.assign_material(assignment=self.__objects_list, material=material_name)
+        self.__aedtapp_gc.assign_material(assignment=self.__objects_list, material=material_name)
 
     @staticmethod
     def air_gap(core_properties):
