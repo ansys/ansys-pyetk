@@ -65,6 +65,7 @@ class Winding(GeometryCommon):
         self.__settings_properties = settings_properties
         self.__bobbin_properties = bobbin_properties
         self.__list_terminal_sections = []
+        self.aedtapp=aedtapp
         # Uses the first layer information
         self.__draw_skin_layers = next(iter(self.properties.layers.values())).conductor.draw_skin_layers
         self.__conductor_type = next(iter(self.properties.layers.values())).conductor.type

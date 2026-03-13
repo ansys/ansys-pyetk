@@ -43,7 +43,7 @@ class Core(GeometryCommon):
             Settings properties.
         """
         super().__init__(name, aedtapp, core_properties)
-
+        self.aedtapp=aedtapp
         self.__segments_number = self.segmentation_angle(settings_properties.segmentation_angle)
 
     def create_geometry(self):
@@ -54,7 +54,12 @@ class Core(GeometryCommon):
         bool
             ``True`` when successful, ``False`` when failed.
         """
+        with open("C:\log.txt", "a") as file:
+            file.write("before object \n")
         list_objects_start = self.aedtapp.modeler.object_list
+
+        with open("C:\log.txt", "a") as file:
+            file.write("after object \n")
 
         core_type = ALL_CORES[self.properties.type]
         match core_type:

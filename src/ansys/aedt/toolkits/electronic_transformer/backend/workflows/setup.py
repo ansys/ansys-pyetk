@@ -43,7 +43,7 @@ class Setup:
             Circuit properties.
         """
         self.__setup_definitions = setup_def
-        self.__aedt = aedtapp
+        self.aedtapp = aedtapp
         self.__winding_definitions = winding_definitions
         self.__circuit_properties = circuit_properties
         self.__matrix = None
@@ -55,7 +55,7 @@ class Setup:
 
     def create_setup(self):
         """Create the AEDT setup."""
-        self.__aedt.solution_type = "EddyCurrent"
+        self.aedtapp.solution_type = "EddyCurrent"
 
         max_num_passes = self.__setup_definitions.analysis_setup.number_passes
         percent_error = self.__setup_definitions.analysis_setup.percentage_error
@@ -116,7 +116,7 @@ class Setup:
         samples : int, optional
             Number of samples. The default is ``None``.
         """
-        setup = self.__aedt.create_setup(name="Setup1")
+        setup = self.aedtapp.create_setup(name="Setup1")
         setup.props["MinimumPasses"] = 2
         setup.props["MaximumPasses"] = max_num_passes
         setup.props["MinimumConvergedPasses"] = 1
@@ -145,7 +145,7 @@ class Setup:
             signal_sources.append(SourceACMagnetic(name=f"Layer_{n + 1}"))
 
         matrix_args = MatrixACMagnetic(signal_sources=signal_sources, matrix_name="Matrix1")
-        self.__matrix = self.__aedt.assign_matrix(matrix_args)
+        self.__matrix = self.aedtapp.assign_matrix(matrix_args)
         self.reduce_matrix()
 
     def reduce_matrix(self):
@@ -195,7 +195,7 @@ class Setup:
         #     :return:
         #     """
         #     layer = "Layer_" + list(side_definition.keys())[0]
-        #     self.__aedt.odesign.ChangeProperty(
+        #     self.aedtapp.odesign.ChangeProperty(
         #         [
         #             "NAME:AllTabs",
         #             [
@@ -207,7 +207,7 @@ class Setup:
         #     )
         #     # self.circuit.change_prop(comp, "name", "Side_" + side_num)
         #     # also rename component in circuit
-        #     comp = self.__aedt.oeditor.FindElements(
+        #     comp = self.aedtapp.oeditor.FindElements(
         #         ["NAME:SearchProps", "Prop:=", ["name", layer, 2]],
         #         [
         #             "NAME:Parameters",
@@ -270,18 +270,18 @@ class Setup:
             obs_list.extend(winding.skin_layers_list)
             obs_list.extend(bobbin.objects_list)
 
-            first_vertex_id_first_terminal = self.__aedt.modeler.get_object_vertices(winding.terminals_list[0])[0]
-            x_coord = float(self.__aedt.modeler.get_vertex_position(first_vertex_id_first_terminal)[0])
+            first_vertex_id_first_terminal = self.aedtapp.modeler.get_object_vertices(winding.terminals_list[0])[0]
+            x_coord = float(self.aedtapp.modeler.get_vertex_position(first_vertex_id_first_terminal)[0])
 
             if x_coord >= 0:
-                self.__aedt.modeler.mirror(assignment=winding.terminals_list, origin=[0, 0, 0], vector=[-1, 0, 0])
+                self.aedtapp.modeler.mirror(assignment=winding.terminals_list, origin=[0, 0, 0], vector=[-1, 0, 0])
 
-            self.__aedt.change_symmetry_multiplier(value=2)
-            self.__aedt.modeler.split(assignment=obs_list, plane="YZ", sides="NegativeOnly", tool=None)
+            self.aedtapp.change_symmetry_multiplier(value=2)
+            self.aedtapp.modeler.split(assignment=obs_list, plane="YZ", sides="NegativeOnly", tool=None)
 
-            self.__aedt.modeler.change_region_padding("0", padding_type="Percentage Offset", direction="+X")
+            self.aedtapp.modeler.change_region_padding("0", padding_type="Percentage Offset", direction="+X")
 
-            self.__aedt.modeler.fit_all()
+            self.aedtapp.modeler.fit_all()
 
     def assign_mesh_operations(self, core: Core, winding: Winding):
         """Assign mesh operations to the model.
@@ -298,7 +298,7 @@ class Setup:
             dimension_list.append(float(each_dim_val))
         mesh_op_sz = max(dimension_list) / 20.0
 
-        self.__aedt.mesh.assign_length_mesh(assignment=core.objects_list, maximum_length=mesh_op_sz, name="Core")
-        self.__aedt.mesh.assign_length_mesh(
+        self.aedtapp.mesh.assign_length_mesh(assignment=core.objects_list, maximum_length=mesh_op_sz, name="Core")
+        self.aedtapp.mesh.assign_length_mesh(
             assignment=winding.objects_list, maximum_length=mesh_op_sz / 2, name="Layers"
         )

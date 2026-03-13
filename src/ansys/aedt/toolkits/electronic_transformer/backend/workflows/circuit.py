@@ -37,7 +37,7 @@ class Circuit:
         circuit_properties : :class:`ansys.aedt.toolkits.common.properties.CircuitProperties`
             Circuit properties.
         """
-        self.__aedt = aedtapp
+        self.aedtapp = aedtapp
         self.__excitation_type: ExcitationType = circuit_properties.excitation.type
         self.__excitation_value: float = circuit_properties.excitation.value
         self.__setup_properties = setup_properties
@@ -46,7 +46,7 @@ class Circuit:
         self.__grid_cell_size = 0.00254
         self._id = 1000
         self.__page = 1
-        self.__design_name = self.__aedt.design_name
+        self.__design_name = self.aedtapp.design_name
         self.__maxwell_circuit_editor = MaxwellCircuit(design="circuit_" + self.__design_name)
         self.__schematic = self.__maxwell_circuit_editor.modeler.schematic
         self.__winding_connection = self.__circuit_properties.connections
@@ -469,4 +469,4 @@ class Circuit:
 
         self.__maxwell_circuit_editor.export_netlist_from_schematic(circuit_path)
 
-        self.__aedt.edit_external_circuit(netlist_file_path=circuit_path, schematic_design_name=circuit_design_name)
+        self.aedtapp.edit_external_circuit(netlist_file_path=circuit_path, schematic_design_name=circuit_design_name)

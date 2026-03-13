@@ -54,6 +54,7 @@ class Bobbin(GeometryCommon):
         self.__core_properties = core_properties
         self.__winding_properties = winding_properties
         self.__segments_number = self.segmentation_angle(settings_properties.segmentation_angle)
+        self.aedtapp=aedtapp
 
     def create_geometry(self):
         """Create the bobbin geometry."""

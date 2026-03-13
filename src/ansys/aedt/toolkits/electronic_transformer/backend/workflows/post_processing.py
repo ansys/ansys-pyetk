@@ -43,9 +43,9 @@ class PostProcessing:
         self.__core = core
         self.__winding = winding
         self.__setup = setup
-        self.__aedt = aedtapp
+        self.aedtapp = aedtapp
         self.__circuit_properties = circuit_properties
-        self.aedt_test = aedtapp
+       
 
     def __get_objects_surfaces(self, object_list):
         """Get the surfaces of a list of objects.
@@ -62,7 +62,7 @@ class PostProcessing:
         """
         surf_list = []
         for item in object_list:
-            surf_list.append(self.__aedt.modeler.get_object_faces(assignment=item.name))
+            surf_list.append(self.aedtapp.modeler.get_object_faces(assignment=item.name))
         flat_surf_list = []
         for xs in surf_list:
             for x in xs:
@@ -80,14 +80,14 @@ class PostProcessing:
         # Windings
         surface_list = self.__get_objects_surfaces(self.__winding.objects_list)
 
-        self.__aedt.post.create_fieldplot_surface(
+        self.aedtapp.post.create_fieldplot_surface(
             assignment=surface_list,
             quantity="Mag_J",
             intrinsics=intrinsic_dict,
             plot_name="J",
         )
 
-        self.__aedt.post.create_fieldplot_surface(
+        self.aedtapp.post.create_fieldplot_surface(
             assignment=surface_list,
             quantity="Ohmic_Loss",
             intrinsics=intrinsic_dict,
@@ -97,14 +97,14 @@ class PostProcessing:
         # Core
         surface_list = self.__get_objects_surfaces(self.__core.objects_list)
 
-        self.__aedt.post.create_fieldplot_surface(
+        self.aedtapp.post.create_fieldplot_surface(
             assignment=surface_list,
             quantity="Mag_B",
             intrinsics=intrinsic_dict,
             plot_name="B",
         )
 
-        self.__aedt.post.create_fieldplot_surface(
+        self.aedtapp.post.create_fieldplot_surface(
             assignment=surface_list,
             quantity="Core_Loss",
             intrinsics=intrinsic_dict,
@@ -154,7 +154,7 @@ class PostProcessing:
                     ] = equation
 
         plot_name = "PyETK Leakage_Inductance"
-        report = self.aedt_test.post.create_report(
+        report = self.aedtapp.post.create_report(
             plot_name=plot_name,
             domain="Sweep",
             expressions=list(all_leakages.values()),

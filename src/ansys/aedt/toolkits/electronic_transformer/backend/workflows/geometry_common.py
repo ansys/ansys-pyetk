@@ -92,7 +92,6 @@ class GeometryCommon(GeometryCreatable):
         """
         self.__name = name
         self.__properties = properties
-        self.__aedtapp = aedtapp
         self.__volume = 0
         self.__core_cross_section = CoreCrossSection.NONE
         self.__color = [0, 0, 0]
@@ -151,16 +150,6 @@ class GeometryCommon(GeometryCreatable):
     def volume(self, value: float):
         self.__volume = value
 
-    @property
-    def aedtapp(self):
-        """Get the AEDT application instance.
-
-        Returns
-        -------
-        :class:`pyaedt.Maxwell3d`
-            AEDT application instance.
-        """
-        return self.__aedtapp
 
     @property
     def color(self):

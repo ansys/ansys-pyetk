@@ -34,12 +34,12 @@ class Region(GeometryCreatable):
             Setup properties.
         """
         self.__setup_definitions = setup_def
-        self.__aedt = aedtapp
+        self.aedtapp = aedtapp
         self.__offset = int(float(self.__setup_definitions.region_offset))
 
     def create_geometry(self):
         """Create the region geometry."""
-        self.__aedt.modeler.create_region(
+        self.aedtapp.modeler.create_region(
             [self.__offset, self.__offset, self.__offset, self.__offset, self.__offset, self.__offset]
         )
-        self.__aedt.modeler.fit_all()
+        self.aedtapp.modeler.fit_all()
