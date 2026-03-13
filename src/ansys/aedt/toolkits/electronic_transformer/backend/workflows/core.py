@@ -42,7 +42,7 @@ class Core(GeometryCommon):
         settings_properties : :class:`ansys.aedt.toolkits.common.properties.SettingsProperties`
             Settings properties.
         """
-        super().__init__(name, aedtapp, core_properties)
+        super().__init__(name,aedtapp, core_properties)
         self.aedtapp=aedtapp
         self.__segments_number = self.segmentation_angle(settings_properties.segmentation_angle)
 

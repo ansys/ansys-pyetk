@@ -17,6 +17,20 @@
 # limitations under the License.
 
 
+import glob
+import os
+import sysconfig
+
 from PyInstaller.utils.hooks import collect_data_files
+from PyInstaller.utils.hooks import collect_dynamic_libs
 
 datas = collect_data_files("ansys.aedt.core")
+binaries = collect_dynamic_libs("ansys.aedt.core")
+
+# collect_dynamic_libs misses .pyd files nested inside syslib — add them explicitly
+_site_packages = sysconfig.get_path("purelib")
+_nastran_src = os.path.join(_site_packages, "ansys", "aedt", "core", "syslib", "nastran_import")
+_dest = os.path.join("ansys", "aedt", "core", "syslib", "nastran_import")
+
+for _pyd in glob.glob(os.path.join(_nastran_src, "*.pyd")):
+    binaries.append((_pyd, _dest))

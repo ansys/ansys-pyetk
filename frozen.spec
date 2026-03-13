@@ -46,6 +46,7 @@ added_files += collect_data_files('rfc3987_syntax', includes=['**/*'])
 example_dir = os.path.join("tests/backend/json_files")
 added_files += [(os.path.join(example_dir, "*.json"), "examples")]
 
+
 hidden = [
     'ansys.aedt.toolkits.electronic_transformer.backend.run_backend',
     'ansys.aedt.toolkits.electronic_transformer.ui.run_frontend',
