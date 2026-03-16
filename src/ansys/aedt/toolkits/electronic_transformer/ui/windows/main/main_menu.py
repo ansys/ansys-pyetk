@@ -558,7 +558,10 @@ class GeometryMenu(object):
         selected_dimensions = self.cores_database[self.gui_properties.core.supplier][self.gui_properties.core.type][self.gui_properties.core.model]
         unused_values = ["", " "]
         json_dims = {}
-        core_dimensions = {}
+
+        # Copy core dimensions from the properties so they persist across multiple core edits
+        prev_dims = getattr(self.gui_properties.core, "dimensions")
+        core_dimensions = prev_dims.copy()
 
         # Returns Bool state of custom core checkbox
         custom_core = self.custom_core.isChecked()
@@ -607,8 +610,13 @@ class GeometryMenu(object):
             except (TypeError, ValueError):
                 nominal_val = 0.0
 
-            # When Custom Core is enabled allow editing and show reference value if different
-            current_val = core_dimensions.get(nominal_dim,float(json_dims.get(nominal_dim, nominal_val)))
+            # When Custom Core is enabled allow edits and show nominal value if different
+            # Prefer 1)Stored custom value over 2)Value from imported JSON then finally 3)Nominal
+            core_value = core_dimensions[nominal_dim]
+            if core_value is None:
+                current_val = float(json_dims[nominal_dim])
+            else:
+                current_val = core_value
 
             if custom_core:
                 line_edit.setReadOnly(False)
