@@ -8,7 +8,7 @@
                 "y": 2.51
             },
             "density": 4800,
-            "mu(freq)": [
+            "mu_vs_freq": [
                 [
                     0.0,
                     2700.0
@@ -107,7 +107,7 @@
                 "y": 2.875
             },
             "density": 4800,
-            "mu(freq)": [
+            "mu_vs_freq": [
                 [
                     0.0,
                     3000.0
@@ -206,7 +206,7 @@
                 "y": 2.69
             },
             "density": 4800,
-            "mu(freq)": [
+            "mu_vs_freq": [
                 [
                     0.0,
                     2300.0
@@ -301,7 +301,7 @@
                 "y": 2.744
             },
             "density": 4750,
-            "mu(freq)": [
+            "mu_vs_freq": [
                 [
                     0.0,
                     1400.0
@@ -420,7 +420,7 @@
                 "y": 2.576
             },
             "density": 4800,
-            "mu(freq)": [
+            "mu_vs_freq": [
                 [
                     0.0,
                     2000.0
@@ -559,7 +559,7 @@
                 "y": 2.181
             },
             "density": 4600,
-            "mu(freq)": [
+            "mu_vs_freq": [
                 [
                     0.0,
                     80.0
@@ -706,7 +706,7 @@
                 "y": 2.8
             },
             "density": 4800,
-            "mu(freq)": [
+            "mu_vs_freq": [
                 [
                     0.0,
                     2100.0
@@ -833,7 +833,7 @@
                 "y": 2.766
             },
             "density": 4800,
-            "mu(freq)": [
+            "mu_vs_freq": [
                 [
                     0.0,
                     1800.0
@@ -1004,7 +1004,7 @@
                 "y": 2.7
             },
             "density": 4800,
-            "mu(freq)": [
+            "mu_vs_freq": [
                 [
                     0.0,
                     2100.0
@@ -1087,7 +1087,7 @@
                 "y": 2.725
             },
             "density": 4800,
-            "mu(freq)": [
+            "mu_vs_freq": [
                 [
                     0.0,
                     2300.0
@@ -1194,7 +1194,7 @@
                 "y": 2.1
             },
             "density": 4700,
-            "mu(freq)": [
+            "mu_vs_freq": [
                 [
                     0.0,
                     900.0
@@ -1329,7 +1329,7 @@
                 "y": 2.15
             },
             "density": 4750,
-            "mu(freq)": [
+            "mu_vs_freq": [
                 [
                     0.0,
                     2000.0
@@ -1475,12 +1475,12 @@
     },
 
     "winding": {
-        "Aluminium": {"conductivity":  38e6, "mur": 1, "eps_r": 1},
-        "Copper": {"conductivity": 58e6, "mur": 1, "eps_r": 1},
-        "material_insulation": {"mur": 1, "eps_r": 4}
+        "Aluminium": {"conductivity":  38e6, "mur": 1, "epsr": 1},
+        "Copper": {"conductivity": 58e6, "mur": 1, "epsr": 1},
+        "material_insulation": {"mur": 1, "epsr": 4}
     },
 
     "bobbin": {
-        "material_bobbin": {"mur": 1, "eps_r": 4}
+        "material_bobbin": {"mur": 1, "epsr": 4}
     }
 }

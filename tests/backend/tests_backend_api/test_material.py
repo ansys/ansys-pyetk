@@ -37,7 +37,7 @@ class TestBackendAPI:
         assert aedt_common_fixture_function.properties.materials["3F3"].power_ferrite_loss_params.x == 1.561
         assert aedt_common_fixture_function.properties.materials["3F3"].power_ferrite_loss_params.cm == 0.195
         assert aedt_common_fixture_function.properties.materials["3F3"].power_ferrite_loss_params.y == 2.15
-        assert aedt_common_fixture_function.properties.materials["3F3"].mu_vs_freq_list == [
+        assert aedt_common_fixture_function.properties.materials["3F3"].mu_vs_freq == [
             [0.0, 2000.0],
             [98459.6815894695, 2027.2],
             [197983.598439825, 2051.0],
