@@ -280,10 +280,10 @@
             }
           ]
         },
-        "eps_r": {
+        "epsr": {
           "type": "number"
         },
-        "mu(freq)": {
+        "mu_vs_freq": {
           "type": "array",
           "items": {
             "type": "array",
