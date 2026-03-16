@@ -132,8 +132,8 @@ class ToolkitBackend(AEDTCommon):
                 this_material.power_ferrite_loss_params.x = float(value_material["power_ferrite_loss_params"]["x"])
                 this_material.power_ferrite_loss_params.y = float(value_material["power_ferrite_loss_params"]["y"])
 
-            if "mu(freq)" in value_material:
-                this_material.mu_vs_freq_list = value_material["mu(freq)"]
+            if "mu_vs_freq" in value_material:
+                this_material.mu_vs_freq = value_material["mu_vs_freq"]
 
             self.properties.materials[key_material] = this_material
 

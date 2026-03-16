@@ -121,5 +121,15 @@ class Frontend(FrontendGeneric):
         """
         etk_model = self.data_manager.create_backend_data()
         be_props.update(etk_model)
+
+        # # Rename keys in each material entry (eps_r to epsr, mu(freq) to mu_vs_freq_list)
+        # if "materials" in be_props and isinstance(be_props["materials"], dict):
+        #     for material_name, material_data in be_props["materials"].items():
+        #         if isinstance(material_data, dict):
+        #             if "mu(freq)" in material_data:
+        #                 material_data["mu_vs_freq_list"] = material_data.pop("mu(freq)")
+        #             if "eps_r" in material_data:
+        #                 material_data["epsr"] = material_data.pop("eps_r")
+
         for prop in etk_model:
             self.set_properties({prop: be_props[prop]})

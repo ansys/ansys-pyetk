@@ -239,10 +239,10 @@ class GeometryCommon(GeometryCreatable):
         mat.conductivity = self.__material.conductivity
 
         # Handles the magnetic permeability
-        if len(self.__material.mu_vs_freq_list) > 0:
+        if len(self.__material.mu_vs_freq) > 0:
             # Creates the data set
             listx, listy = [], []
-            for freq, mu in self.__material.mu_vs_freq_list:
+            for freq, mu in self.__material.mu_vs_freq:
                 listx.append(freq)
                 listy.append(mu)
             dataset_name = "Mu_" + material_name

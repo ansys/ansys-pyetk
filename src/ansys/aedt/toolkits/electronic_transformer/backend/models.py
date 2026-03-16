@@ -182,7 +182,7 @@ class Material(BaseModel, validate_assignment=True):
     density: float = 0.0
     mur: float = 0.0
     epsr: float = 0.0
-    mu_vs_freq_list: List[Any] = []
+    mu_vs_freq: List[Any] = []
     name: str = ""
 
 

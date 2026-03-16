@@ -169,12 +169,12 @@
   "materials": {
     "material_insulation": {
       "mur": 1,
-      "eps_r": 4
+      "epsr": 4
     },
     "Copper": {
       "conductivity": 58000000.0,
       "mur": 1,
-      "eps_r": 1
+      "epsr": 1
     },
     "4F1": {
       "conductivity": 1e-06,
@@ -184,7 +184,7 @@
         "y": 2.181
       },
       "density": 4600,
-      "mu(freq)": [
+      "mu_vs_freq": [
         [
           0.0,
           80.0
@@ -325,7 +325,7 @@
     },
     "material_bobbin": {
       "mur": 1,
-      "eps_r": 4
+      "epsr": 4
     }
   }
 }
