@@ -70,7 +70,7 @@ For PyETK installation instructions, see :ref:`installation`.
        :width: 600
        :alt: Winding menu
 
-   .. warning::
+   .. important::
     The transformer requires at least one winding layer. The winding section initializes with one layer containing default values. You can modify these values or add more layers as needed. Additionally, you must specify the layer connection. By default, every layer in a winding side connects in series.
 
     To modify the circuit connections between layers, select the layers of interest, click **Disconnect**, and then choose either **Series** or **Parallel** as the connection. You can also specify the connection between layers of each winding side by clicking **Side <number>** in the top Winding menu,
