@@ -28,7 +28,7 @@ jobs:
       ANS_NODEPCHECK: '1'
     steps:
       - name: Build documentation
-        uses: ansys/actions/doc-build@3931ac9351b13ae11b1203c2ef6b51e5c75502ea # v10.2.5
+        uses: ansys/actions/doc-build@2a2b198b65c63adb69c0d032d180e4dc728d4809 # v10.2.9
         with:
           add-pdf-html-docs-as-assets: true
           check-links: false
@@ -43,7 +43,7 @@ jobs:
     permissions:
       contents: write # Needed to update files on the gh-pages branch
     steps:
-      - uses: ansys/actions/doc-deploy-dev@3931ac9351b13ae11b1203c2ef6b51e5c75502ea # v10.2.5
+      - uses: ansys/actions/doc-deploy-dev@2a2b198b65c63adb69c0d032d180e4dc728d4809 # v10.2.9
         with:
           cname: ${{ env.DOCUMENTATION_CNAME }}
           token: ${{ secrets.GITHUB_TOKEN }}
