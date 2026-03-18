@@ -120,15 +120,9 @@ To run PyEDT, use this command:
 
    uv run run_toolkit
 
-**Details**
+**Work environment setup**
 
-To install in developer mode, perform these steps:
-
-#. Clone the repository:
-
-   .. code:: bash
-
-      git clone https://github.com/ansys/ansys-pyetk
+To set up your work environment for development, follow these steps:
 
 #. Create a fresh-clean Python environment and activate it. For more information,
    see the `venv`_ Python documentation.
@@ -213,9 +207,13 @@ You can deploy PyETK as a *frozen* application using `PyInstaller
    uv pip install -e .[freeze]
    uv run pyinstaller frozen.spec
 
-This generates app files at ``dist/ansys_python_manager``. To
-run the Ansys Python Manager locally, execute the ``Ansys Python Manager.exe``
-file.
+This generates app files at ``dist/ansys_pyetk/Electronic Transformer Toolkit.exe``. To
+The ``Electronic Transformer Toolkit.exe`` is a standalone application,
+without the need to install Python or any dependencies.
+
+It is also possible to deploy an Windows installer using `NSIS`.
+
+For more information see: `Distributing Toolkits <https://aedt.common.toolkit.docs.pyansys.com/version/stable/distributing.html>`_
 
 Build documentation
 -------------------
