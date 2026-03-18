@@ -207,7 +207,7 @@ You can deploy PyETK as a *frozen* application using `PyInstaller
    uv pip install -e .[freeze]
    uv run pyinstaller frozen.spec
 
-This generates app files at ``dist/ansys_pyetk/Electronic Transformer Toolkit.exe``. To
+This generates app files at ``dist/ansys_pyetk/Electronic Transformer Toolkit.exe``.
 The ``Electronic Transformer Toolkit.exe`` is a standalone application,
 without the need to install Python or any dependencies.
 
