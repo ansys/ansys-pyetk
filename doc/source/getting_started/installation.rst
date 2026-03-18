@@ -211,7 +211,7 @@ This generates app files at ``dist/ansys_pyetk/Electronic Transformer Toolkit.ex
 The ``Electronic Transformer Toolkit.exe`` is a standalone application,
 without the need to install Python or any dependencies.
 
-It is also possible to deploy an Windows installer using `NSIS`.
+It is also possible to deploy an Windows installer using ``NSIS``.
 
 For more information see: `Distributing Toolkits <https://aedt.common.toolkit.docs.pyansys.com/version/stable/distributing.html>`_
 
