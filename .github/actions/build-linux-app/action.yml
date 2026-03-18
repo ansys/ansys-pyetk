@@ -105,9 +105,12 @@ runs:
         os_version_processed="${UBUNTU_VERSION//./_}"
         zip_name="PyETK-Installer-ubuntu_${os_version_processed}.zip"
         zip -r $zip_name ansys_pyetk.deb installer.sh postInstallScript.sh
+        echo "ZIP_NAME=$zip_name" >> $GITHUB_OUTPUT
 
     - name: Upload artifact
       uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
+      env:
+        ZIP_NAME: ${{ steps.create-zip.outputs.ZIP_NAME }}
       with:
         name: ${{ inputs.artifact-name }}
-        path: PyETK-Installer-ubuntu_${{ env.OS_VERSION_PROCESSED }}.zip
+        path: ${{ steps.create-zip.outputs.ZIP_NAME }}
