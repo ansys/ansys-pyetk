@@ -275,8 +275,8 @@ class ToolkitBackend(AEDTCommon):
 
         Parameters
         ----------
-        frontend_properties : dict, optional
-            Frontend properties. The default is ``None``.
+        frontend_properties : dict, default: None
+            Frontend properties.
 
         Returns
         -------
@@ -288,7 +288,7 @@ class ToolkitBackend(AEDTCommon):
 
         self.connect_design("Maxwell3D")
         if self.aedtapp is None:
-            logger.error("Not connected")
+            logger.error("Not connected.")
             return False
 
         ocore = Core("Core", self.aedtapp, properties.core, properties.settings)
@@ -296,7 +296,7 @@ class ToolkitBackend(AEDTCommon):
         self.release_aedt()
 
         if not ocore:
-            logger.error("Core not created")
+            logger.error("Core not created.")
             return False
         return ocore
 
@@ -305,8 +305,8 @@ class ToolkitBackend(AEDTCommon):
 
         Parameters
         ----------
-        frontend_properties : dict, optional
-            Frontend properties. The default is ``None``.
+        frontend_properties : dict, default: None
+            Frontend properties.
 
         Returns
         -------
@@ -319,7 +319,7 @@ class ToolkitBackend(AEDTCommon):
 
         self.connect_design("Maxwell3D")
         if self.aedtapp is None:
-            logger.error("Not connected")
+            logger.error("Not connected.")
             return False
 
         owinding = Winding(
@@ -335,7 +335,7 @@ class ToolkitBackend(AEDTCommon):
         self.release_aedt()
 
         if not owinding:
-            logger.error("Windings not created")
+            logger.error("Windings not created.")
             return False
         return owinding
 
@@ -344,8 +344,8 @@ class ToolkitBackend(AEDTCommon):
 
         Parameters
         ----------
-        frontend_properties : dict, optional
-            Frontend properties. The default is ``None``.
+        frontend_properties : dict, default: None
+            Frontend properties.
 
         Returns
         -------
@@ -358,7 +358,7 @@ class ToolkitBackend(AEDTCommon):
 
         self.connect_design("Maxwell3D")
         if self.aedtapp is None:
-            logger.error("Not connected")
+            logger.error("Not connected.")
             return False
 
         obobbin = Bobbin(
@@ -368,7 +368,7 @@ class ToolkitBackend(AEDTCommon):
         self.release_aedt()
 
         if not obobbin:
-            logger.error("Bobbin not created")
+            logger.error("Bobbin not created.")
             return False
         return obobbin
 
@@ -416,8 +416,8 @@ class ToolkitBackend(AEDTCommon):
 
         Parameters
         ----------
-        frontend_properties : dict, optional
-            Frontend properties. The default is ``None``.
+        frontend_properties : dict, default: None
+            Frontend properties.
 
         Returns
         -------
@@ -435,7 +435,7 @@ class ToolkitBackend(AEDTCommon):
 
         self.connect_design("Maxwell3D")
         if self.aedtapp is None:
-            logger.error("Not connected")
+            logger.error("Not connected.")
             return False
 
         oetk = ETK(
@@ -452,7 +452,7 @@ class ToolkitBackend(AEDTCommon):
         self.release_aedt()
 
         if not oetk:
-            logger.error("Model not created")
+            logger.error("Model not created.")
             return False
         return True
 
