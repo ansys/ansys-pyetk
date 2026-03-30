@@ -18,7 +18,7 @@ electronics applications.
 For simplicity, the example covers one submenu at a time, starting with the core model, dimensions, and materials. It then moves to the bobbin, winding, and excitation information and concludes with Maxwell settings.
 
 #. Launch the PyETK UI and connect to AEDT by clicking **Connect to AEDT**.
-For PyETK installation instructions, see :ref:`installation`.
+   For PyETK installation instructions, see :ref:`installation`.
 
    .. image:: ../_static/pyetk-toolkit-settings.png
       :align: center
@@ -26,7 +26,7 @@ For PyETK installation instructions, see :ref:`installation`.
       :alt: UI settings
 
 #. In the upper left corner of the UI, click the cube icon to display the
-**Transformer Builder** tab.
+   **Transformer Builder** tab.
 
    This tab contains all the fields and tools to design and model electronic transformers.
 
@@ -35,7 +35,8 @@ For PyETK installation instructions, see :ref:`installation`.
       :width: 800
       :alt: Transformer Builder tab
 
-#. In the **Core** area, select the core type, dimensions, and material. Select the **Custom Core** checkbox to apply a standard core shape with custom dimensions.
+#. In the **Core** area, select the core type, dimensions, and material. Select the
+   **Custom Core** checkbox to apply a standard core shape with custom dimensions.
 
    .. image:: ../_static/menu-core.png
       :align: center
@@ -105,7 +106,7 @@ For PyETK installation instructions, see :ref:`installation`.
 #. In the **Settings** pane on the left, specify Maxwell settings, including the
    number of passes, percentage error, maximum number of passes, and frequency sweeps.
 
-    Maxwell settings control the accuracy and convergence of the Maxwell analysis performed after creating the transformer geometry in AEDT.
+   Maxwell settings control the accuracy and convergence of the Maxwell analysis performed after creating the transformer geometry in AEDT.
 
    .. image:: ../_static/menu-settings.png
        :align: center
