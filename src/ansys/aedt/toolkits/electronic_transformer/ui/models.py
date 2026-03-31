@@ -104,9 +104,9 @@ class FrequencySweepProperties(BaseModel, validate_assignment=True):
 
     frequency_sweep: bool = True
     start_frequency: float = 1.0
-    start_frequency_unit: str = "Hz"
+    start_frequency_unit: str = "kHz"
     stop_frequency: float = 100.0
-    stop_frequency_unit: str = "Hz"
+    stop_frequency_unit: str = "kHz"
     samples: int = 3
     scale: str = "Logarithmic"
 
@@ -210,7 +210,7 @@ class BobbinBoardAndMarginGUIProperties(BaseModel, validate_assignment=True):
 class ElectricalGUIProperties(BaseModel, validate_assignment=True):
     """Manages UI electrical menu properties."""
 
-    adaptive_frequency: float = 100.0
+    adaptive_frequency: float = 100000.0
     excitation_strategy: str = "Voltage"
     voltage: float = 1.0
     current: float = 2.0
@@ -223,10 +223,10 @@ class SettingsGUIProperties(BaseModel, validate_assignment=True):
     draw_skin_layers: bool = True
     full_model: bool = False
     include_bobbin: bool = True
-    number_passes: int = 2
+    number_passes: int = 5
     percentage_error: float = 1.0
-    segmentation_angle: float = 13.0
-    offset: float = 50.3
+    segmentation_angle: float = 10.0
+    offset: float = 50
     project_path: str = ""
     segments_number: int = 8
     frequency_sweep_definition: FrequencySweepProperties = FrequencySweepProperties()
