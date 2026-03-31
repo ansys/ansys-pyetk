@@ -406,9 +406,7 @@ class DataManager:
         self.properties.winding.side_margin = self.gui_properties.bobbin_board_and_margin.side_margin
 
         # Setup and Excitation definitions from UI
-        self.properties.settings.adaptive_frequency = (
-            self.gui_properties.electrical.adaptive_frequency * freq_scale["kHz"]
-        )
+        self.properties.settings.adaptive_frequency = self.gui_properties.electrical.adaptive_frequency
         self.properties.settings.percentage_error = self.gui_properties.settings.percentage_error
         self.properties.settings.number_passes = self.gui_properties.settings.number_passes
         self.properties.circuit.transformer_sides = len(self.properties.circuit.side_loads)
