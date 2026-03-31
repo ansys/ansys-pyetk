@@ -1,6 +1,10 @@
 name: CI - Pull Request
 on:
+  # By default, a workflow only runs when a pull_request event's activity type is opened, synchronize, or reopened.
+  # To retrigger the workflow when the PR's title is edited we need to specify the types explicitly.
+  # See https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows#pull_request
   pull_request:
+    types: [opened, reopened, synchronize, edited]
 
 env:
   ANSYSLMD_LICENSE_FILE: ${{ format('1055@{0}', secrets.LICENSE_SERVER) }}
