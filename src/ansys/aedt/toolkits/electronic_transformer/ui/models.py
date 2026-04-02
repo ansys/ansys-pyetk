@@ -300,3 +300,15 @@ for common_key in general_settings:
 
 fe_properties = Properties(**toolkit_property, **new_common_properties)
 gui_properties = GUIProperties(**toolkit_property, **new_common_properties)
+
+# Set the window icon and logo to the PyETK assets located in the images folder of this
+# package, unless the user has already provided custom values via frontend_properties.toml.
+_images_dir = Path(__file__).parent / "windows" / "images"
+_icon_path = str(_images_dir / "pyetk_icon.png")
+if not fe_properties.icon and Path(_icon_path).is_file():
+    fe_properties.icon = _icon_path
+
+_logo_path = str(_images_dir / "pyetk_logo.svg")
+if not fe_properties.logo and Path(_logo_path).is_file():
+    fe_properties.logo = _logo_path
+pass
