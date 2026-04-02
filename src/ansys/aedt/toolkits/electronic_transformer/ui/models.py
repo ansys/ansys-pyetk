@@ -305,4 +305,3 @@ for common_key in general_settings:
 
 fe_properties = Properties(**toolkit_property, **new_common_properties)
 gui_properties = GUIProperties(**toolkit_property, **new_common_properties)
-
