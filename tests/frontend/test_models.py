@@ -177,9 +177,9 @@ class TestFrequencySweepProperties:
         sweep = FrequencySweepProperties()
         assert sweep.frequency_sweep is True
         assert sweep.start_frequency == 1.0
-        assert sweep.start_frequency_unit == "Hz"
+        assert sweep.start_frequency_unit == "kHz"
         assert sweep.stop_frequency == 100.0
-        assert sweep.stop_frequency_unit == "Hz"
+        assert sweep.stop_frequency_unit == "kHz"
         assert sweep.samples == 3
         assert sweep.scale == "Logarithmic"
 
@@ -313,7 +313,7 @@ class TestElectricalGUIProperties:
     def test_default_values(self):
         """Test default values for ElectricalGUIProperties."""
         electrical = ElectricalGUIProperties()
-        assert electrical.adaptive_frequency == 100.0
+        assert electrical.adaptive_frequency == 100000.0
         assert electrical.excitation_strategy == "Voltage"
         assert electrical.voltage == 1.0
         assert electrical.current == 2.0
@@ -329,10 +329,10 @@ class TestSettingsGUIProperties:
         assert settings.draw_skin_layers is True
         assert settings.full_model is False
         assert settings.include_bobbin is True
-        assert settings.number_passes == 2
+        assert settings.number_passes == 5
         assert settings.percentage_error == 1.0
-        assert settings.segmentation_angle == 13.0
-        assert settings.offset == 50.3
+        assert settings.segmentation_angle == 10.0
+        assert settings.offset == 50
         assert settings.project_path == ""
         assert settings.segments_number == 8
         assert isinstance(settings.frequency_sweep_definition, FrequencySweepProperties)
