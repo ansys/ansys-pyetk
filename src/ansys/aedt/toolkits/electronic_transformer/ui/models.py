@@ -274,8 +274,8 @@ class Properties(UIProperties, validate_assignment=True):
 
 # Set logo and icon for the toolkit
 images_dir = Path(__file__).parent / "windows" / "images"
-general_settings.icon=str(images_dir / "pyetk_icon.png")
-general_settings.logo=str(images_dir / "pyetk_logo.svg")
+general_settings.icon = str(images_dir / "pyetk_icon.png")
+general_settings.logo = str(images_dir / "pyetk_logo.svg")
 
 frontend_properties = {}
 if "PYAEDT_TOOLKIT_CONFIG_DIR" in os.environ:
