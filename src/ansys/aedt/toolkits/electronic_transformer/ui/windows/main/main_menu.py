@@ -1995,7 +1995,6 @@ class GeometryMenu(object):
             self.start_frequency_unit.setCurrentText(freq_sweep.get("start_frequency_unit", self.gui_properties.settings.frequency_sweep_definition.start_frequency_unit))
             self.stop_frequency.setText(str(freq_sweep.get("stop_frequency", self.gui_properties.settings.frequency_sweep_definition.stop_frequency)))
             self.stop_frequency_unit.setCurrentText(freq_sweep.get("stop_frequency_unit", self.gui_properties.settings.frequency_sweep_definition.stop_frequency_unit))
-
             self.samples.setText(str(freq_sweep.get("samples", self.gui_properties.settings.frequency_sweep_definition.samples)))
             self.scale.setCurrentText(freq_sweep.get("scale", self.gui_properties.settings.frequency_sweep_definition.scale))
 
