@@ -30,6 +30,7 @@ from ansys.aedt.toolkits.electronic_transformer.ui.common.database_manager impor
 from ansys.aedt.toolkits.electronic_transformer.ui.models import fe_properties
 from ansys.aedt.toolkits.electronic_transformer.ui.models import gui_properties
 from ansys.aedt.toolkits.electronic_transformer.ui.models import AirGapConfig
+from ansys.aedt.toolkits.electronic_transformer.ui.models import GUIProperties
 from ansys.aedt.toolkits.electronic_transformer.ui.common.data_manager import data_manager
 from ansys.aedt.toolkits.electronic_transformer.ui.common.units_and_scales import freq_units
 from ansys.aedt.toolkits.electronic_transformer.ui.common.units_and_scales import freq_scale
@@ -350,8 +351,13 @@ class GeometryMenu(object):
         self.example_button.clicked.connect(self.example_button_clicked)
         self.next_example_button = self.geometry_menu_widget.findChild(QPushButton, "next_example_button")
         self.previous_example_button = self.geometry_menu_widget.findChild(QPushButton, "previous_example_button")
+        self.reset_examples_button = self.geometry_menu_widget.findChild(QPushButton, "reset_examples")
         self.example_name = self.geometry_menu_widget.findChild(QLineEdit, "example_name")
         self.save_etk = self.geometry_menu_widget.findChild(QPushButton, "save_etk")
+
+        # Active directory drives Next/Previous navigation — starts at default examples location
+        self._active_dir = example_files
+        self._last_dialog_dir = str(example_files)
 
         # Load all example files from directory and add placeholder [None] for "Start New design"
         self.example_files = sorted(example_files.glob("*.json")) + [None]
@@ -360,6 +366,7 @@ class GeometryMenu(object):
         # Connect signals
         self.next_example_button.clicked.connect(lambda: self.load_example(direction="Forwards"))
         self.previous_example_button.clicked.connect(lambda: self.load_example(direction="Backwards"))
+        self.reset_examples_button.clicked.connect(self._reset_example_dir)
         self.save_etk.clicked.connect(self.save_button_clicked)
 
         # Populate UI widgets before signals are assigned to avoid misfires
@@ -409,6 +416,11 @@ class GeometryMenu(object):
         """
         # Reset UI defaults
         if path is None:
+            # Reset gui_properties to factory defaults
+            self.gui_properties = GUIProperties()
+            self.data_manager.gui_properties = self.gui_properties
+            # Repopulate every UI field from the fresh defaults
+            self._write_ui_data()
             self.example_name.setText(self.new_filename)
         else:
             msg, is_valid = self.data_manager._import_data_from_json(path)
@@ -1760,7 +1772,7 @@ class GeometryMenu(object):
         """Handle the example button click event."""
         file_name_tuple = QFileDialog.getOpenFileName(
             caption="Open ETK file",
-            dir=str(example_files),
+            dir=self._last_dialog_dir,
             filter="ETK files (*.json)",
         )
 
@@ -1769,12 +1781,33 @@ class GeometryMenu(object):
             return
 
         file_name = Path(file_name_tuple[0])
+
+        # Update active directory and rebuild Next/Previous list from the new location
+        self._last_dialog_dir = str(file_name.parent)
+        self._active_dir = file_name.parent
+        self.example_files = sorted(self._active_dir.glob("*.json")) + [None]
+
+
+        # Set index to the opened file so Next/Previous continues from here
+        try:
+            self.current_example_index = self.example_files.index(file_name)
+        except ValueError:
+            self.current_example_index = 0
+
         msg, is_valid = self.data_manager._import_data_from_json(file_name)
         self.ui.update_logger(msg)
         if is_valid:
             self._write_ui_data()
             self.example_name.setText(file_name.name)
 
+    def _reset_example_dir(self):
+        """Reset navigation to default examples directory and revert displayed design to New Design."""
+        self._active_dir = example_files
+        self._last_dialog_dir = str(example_files)
+        self.example_files = sorted(self._active_dir.glob("*.json")) + [None]
+        self.current_example_index = 0
+        self._load_etk_json(None)  # resets gui_properties AND all UI fields
+        self.ui.update_logger("Example directory reset to default.")
 
     def _clear_connection_state(self):
         "Clears Connections tree UI, conn_saved and conn_wip form UI UserData"
@@ -2114,13 +2147,17 @@ class GeometryMenu(object):
     def save_button_clicked(self):
         """Save the UI state to a JSON file."""
         file_name_tuple = QFileDialog.getSaveFileName(
-            caption="Save ETK file", dir=str(example_files), filter="ETK files (*.json)"
+            caption="Save ETK file", dir=self._last_dialog_dir, filter="ETK files (*.json)"
         )
         file_name = Path(file_name_tuple[0])
 
         # handle the event where the user cancels the option to save
         if file_name != Path("."):
             self._save_model(file=file_name)
+            self._last_dialog_dir = str(file_name.parent)
+            self._active_dir = file_name.parent
+            self.example_files = sorted(self._active_dir.glob("*.json")) + [None]
+            self.example_name.setText(file_name.name)
         else:
             self.ui.update_logger("Save As operation cancelled by user")
 
