@@ -30,6 +30,7 @@ you acknowledge that you are responsible for complying with any associated terms
 <a href='{ISSUE_TRACKER_URL}'>ansys-pyetk Issues</a> page.
 </p>
 <p>Alternatively, you can contact us at <a href='mailto:pyansys.core@ansys.com'>pyansys.core@ansys.com</a>.</p>
+<p>Ferroxcube material properties can be found under <a href='https://www.ferroxcube.com/en-global/ak_material/index/power_conversion#5'>Ferroxcube Power Conversion Materials</a>.</p>
 """
 
 
