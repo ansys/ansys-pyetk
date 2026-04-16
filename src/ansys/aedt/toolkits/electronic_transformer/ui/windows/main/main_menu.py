@@ -236,7 +236,7 @@ class GeometryMenu(object):
         self.excitation_label = self.geometry_menu_widget.findChild(QLabel, "excitation_label")
 
         # Populate UI with default values
-        self.adaptive_frequency.setText(str(float(self.gui_properties.electrical.adaptive_frequency) / freq_scale["kHz"]))
+        self.adaptive_frequency.setText(str(float(self.gui_properties.electrical.adaptive_frequency)))
         self.excitation_combo.addItem("Voltage")
         self.excitation_combo.addItem("Current")
         self.excitation_combo.setCurrentText(self.gui_properties.electrical.excitation_strategy)
@@ -2185,7 +2185,7 @@ class GeometryMenu(object):
         self.gui_properties.bobbin_board_and_margin.top_margin = float(self.top_margin.text())
         self.gui_properties.bobbin_board_and_margin.side_margin = float(self.side_margin.text())
 
-        self.gui_properties.electrical.adaptive_frequency = float(self.adaptive_frequency.text()) * freq_scale["kHz"]
+        self.gui_properties.electrical.adaptive_frequency = float(self.adaptive_frequency.text())
         self.gui_properties.electrical.excitation_strategy = self.excitation_combo.currentText()
         self.gui_properties.electrical.excitation_value = float(self.excitation_value.text())
         self.gui_properties.settings.percentage_error = float(self.percentage_error.text())

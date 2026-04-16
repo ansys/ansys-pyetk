@@ -152,9 +152,8 @@ class DataManager:
                 self.gui_properties.settings.full_model = data["settings"]["full_model"]
                 self.gui_properties.settings.offset = data["settings"]["region_offset"]
                 self.gui_properties.settings.segmentation_angle = data["settings"]["segmentation_angle"]
-                self.gui_properties.electrical.adaptive_frequency = data["settings"]["analysis_setup"][
-                    "adaptive_frequency"
-                ]
+                self.gui_properties.electrical.adaptive_frequency = (
+                        data["settings"]["analysis_setup"]["adaptive_frequency"] / freq_scale["kHz"])
                 self.gui_properties.settings.percentage_error = data["settings"]["analysis_setup"]["percentage_error"]
                 self.gui_properties.settings.number_passes = data["settings"]["analysis_setup"]["number_passes"]
                 self.gui_properties.settings.frequency_sweep_definition = data["settings"]["analysis_setup"][
@@ -211,7 +210,8 @@ class DataManager:
             self.gui_properties.winding.layers_definition = data["winding_definition"]["layers_definition"]
 
             self.gui_properties.core.material = data["setup_definition"]["core_material"]
-            self.gui_properties.electrical.adaptive_frequency = data["setup_definition"]["adaptive_frequency"]
+            self.gui_properties.electrical.adaptive_frequency = (
+                    float(data["setup_definition"]["adaptive_frequency"]) / freq_scale["kHz"])
             self.gui_properties.settings.percentage_error = data["setup_definition"]["percentage_error"]
             self.gui_properties.settings.number_passes = data["setup_definition"]["number_passes"]
             self.gui_properties.winding.side_loads = data["setup_definition"]["side_loads"]
@@ -406,7 +406,7 @@ class DataManager:
         self.properties.winding.side_margin = self.gui_properties.bobbin_board_and_margin.side_margin
 
         # Setup and Excitation definitions from UI
-        self.properties.settings.adaptive_frequency = self.gui_properties.electrical.adaptive_frequency
+        self.properties.settings.adaptive_frequency = self.gui_properties.electrical.adaptive_frequency * freq_scale["kHz"]
         self.properties.settings.percentage_error = self.gui_properties.settings.percentage_error
         self.properties.settings.number_passes = self.gui_properties.settings.number_passes
         self.properties.circuit.transformer_sides = len(self.properties.circuit.side_loads)
