@@ -1798,9 +1798,10 @@ class GeometryMenu(object):
         self.example_files = sorted(self._active_dir.glob("*.json")) + [None]
         self.current_example_index = 0
 
-        # Reset gui_properties defaults and sync with data_manager
-        self.gui_properties = GUIProperties()
-        self.data_manager.gui_properties = self.gui_properties
+        # Reset gui_properties to factory defaults in-place so all holders stay in sync
+        defaults = GUIProperties()
+        for field_name in defaults.model_fields:
+            setattr(self.gui_properties, field_name, getattr(defaults, field_name))
 
         self._write_ui_data()
         self.example_name.setText(self.new_filename)
