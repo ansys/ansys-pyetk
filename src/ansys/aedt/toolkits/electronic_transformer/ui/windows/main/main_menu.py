@@ -52,15 +52,6 @@ if hasattr(sys, '_MEIPASS'):
 else:
     example_files = etk_root / "tests" / "backend" / "json_files"
 
-def _auto_freq_unit(freq_hz):
-    """Return a sensible unit for a frequency in Hz."""
-    if freq_hz >= 1e6:
-        return freq_hz / 1e6, "MHz"
-    elif freq_hz >= 1e3:
-        return freq_hz / 1e3, "kHz"
-    else:
-        return freq_hz, "Hz"
-
 class WindingTreeDelegate(QStyledItemDelegate):
     """Need to use this to apply validators to the QTreeWidget used for winding configuration,
     as it doesn't support them by default."""
@@ -1889,7 +1880,7 @@ class GeometryMenu(object):
         self.side_margin.setText(str(self.gui_properties.bobbin_board_and_margin.side_margin))
 
         # Populate UI for Electrical Group
-        self.adaptive_frequency.setText(str(float(self.gui_properties.electrical.adaptive_frequency) / freq_scale["kHz"]))
+        self.adaptive_frequency.setText(str(float(self.gui_properties.electrical.adaptive_frequency)))
         self.excitation_combo.setCurrentText(self.gui_properties.electrical.excitation_strategy)
 
         if self.excitation_combo.currentText() == "Voltage":
@@ -1969,12 +1960,11 @@ class GeometryMenu(object):
             for widget in frequency_widgets:
                 widget.setEnabled(enabled)
 
-            # Auto-select friendly units from raw Hz values in JSON
-            start_hz = freq_sweep.get("start_frequency", self.gui_properties.settings.frequency_sweep_definition.start_frequency)
-            stop_hz = freq_sweep.get("stop_frequency", self.gui_properties.settings.frequency_sweep_definition.stop_frequency)
-
-            start_val, start_unit = _auto_freq_unit(start_hz)
-            stop_val, stop_unit = _auto_freq_unit(stop_hz)
+            # Values already converted to display units by data_manager
+            start_val = freq_sweep.get("start_frequency", self.gui_properties.settings.frequency_sweep_definition.start_frequency)
+            start_unit = freq_sweep.get("start_frequency_unit", self.gui_properties.settings.frequency_sweep_definition.start_frequency_unit)
+            stop_val = freq_sweep.get("stop_frequency", self.gui_properties.settings.frequency_sweep_definition.stop_frequency)
+            stop_unit = freq_sweep.get("stop_frequency_unit", self.gui_properties.settings.frequency_sweep_definition.stop_frequency_unit)
 
             self.start_frequency.setText(str(start_val))
             self.start_frequency_unit.setCurrentText(start_unit)

@@ -210,7 +210,7 @@ class BobbinBoardAndMarginGUIProperties(BaseModel, validate_assignment=True):
 class ElectricalGUIProperties(BaseModel, validate_assignment=True):
     """Manages UI electrical menu properties."""
 
-    adaptive_frequency: float = 100000.0
+    adaptive_frequency: float = 100.0
     excitation_strategy: str = "Voltage"
     voltage: float = 1.0
     current: float = 2.0

@@ -185,7 +185,11 @@ class TestDataManager:
         assert dm.gui_properties.core.material == "N87"
         assert dm.gui_properties.settings.include_bobbin is True
         assert dm.gui_properties.bobbin_board_and_margin.thickness == 1.6
-        assert dm.gui_properties.electrical.adaptive_frequency == 100000.0
+        assert dm.gui_properties.electrical.adaptive_frequency == 100.0
+        assert dm.gui_properties.settings.frequency_sweep_definition.start_frequency == 1.0
+        assert dm.gui_properties.settings.frequency_sweep_definition.start_frequency_unit == "kHz"
+        assert dm.gui_properties.settings.frequency_sweep_definition.stop_frequency == 1.0
+        assert dm.gui_properties.settings.frequency_sweep_definition.stop_frequency_unit == "MHz"
 
     def test_format_input_version_voltage_excitation(self):
         """Test formatting input with voltage excitation."""

@@ -313,7 +313,7 @@ class TestElectricalGUIProperties:
     def test_default_values(self):
         """Test default values for ElectricalGUIProperties."""
         electrical = ElectricalGUIProperties()
-        assert electrical.adaptive_frequency == 100000.0
+        assert electrical.adaptive_frequency == 100.0
         assert electrical.excitation_strategy == "Voltage"
         assert electrical.voltage == 1.0
         assert electrical.current == 2.0

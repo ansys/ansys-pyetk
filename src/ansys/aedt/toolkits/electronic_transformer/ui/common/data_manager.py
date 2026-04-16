@@ -19,6 +19,7 @@
 import json
 
 from ansys.aedt.toolkits.electronic_transformer.ui.common.database_manager import database_manager
+from ansys.aedt.toolkits.electronic_transformer.ui.common.units_and_scales import auto_freq_unit
 from ansys.aedt.toolkits.electronic_transformer.ui.common.units_and_scales import freq_scale
 from ansys.aedt.toolkits.electronic_transformer.ui.models import AirGapConfig
 from ansys.aedt.toolkits.electronic_transformer.ui.models import fe_properties
@@ -157,11 +158,14 @@ class DataManager:
                 )
                 self.gui_properties.settings.percentage_error = data["settings"]["analysis_setup"]["percentage_error"]
                 self.gui_properties.settings.number_passes = data["settings"]["analysis_setup"]["number_passes"]
-                self.gui_properties.settings.frequency_sweep_definition = data["settings"]["analysis_setup"][
-                    "frequency_sweep"
-                ]
-                self.gui_properties.settings.frequency_sweep_definition.start_frequency_unit = "Hz"
-                self.gui_properties.settings.frequency_sweep_definition.stop_frequency_unit = "Hz"
+                freq_sweep_raw = data["settings"]["analysis_setup"]["frequency_sweep"]
+                self.gui_properties.settings.frequency_sweep_definition = freq_sweep_raw
+                start_val, start_unit = auto_freq_unit(freq_sweep_raw["start_frequency"])
+                stop_val, stop_unit = auto_freq_unit(freq_sweep_raw["stop_frequency"])
+                self.gui_properties.settings.frequency_sweep_definition.start_frequency = start_val
+                self.gui_properties.settings.frequency_sweep_definition.start_frequency_unit = start_unit
+                self.gui_properties.settings.frequency_sweep_definition.stop_frequency = stop_val
+                self.gui_properties.settings.frequency_sweep_definition.stop_frequency_unit = stop_unit
 
                 self.gui_properties.electrical.excitation_strategy = data["circuit"]["excitation"]["type"]
                 if self.gui_properties.electrical.excitation_strategy.lower() == "voltage":

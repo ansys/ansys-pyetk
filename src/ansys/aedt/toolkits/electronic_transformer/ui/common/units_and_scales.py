@@ -19,3 +19,21 @@
 freq_scale = {"Hz": 1, "kHz": 1e3, "MHz": 1e6}
 freq_units = ["Hz", "kHz", "MHz"]
 scale_units = ["Logarithmic", "Linear"]
+
+
+def auto_freq_unit(freq_hz):
+    """Return a frequency value and sensible unit string for a value given in Hz.
+
+    Args:
+        freq_hz (float): Frequency in Hz.
+
+    Returns
+    -------
+        tuple[float, str]: Converted value and unit string (``"Hz"``, ``"kHz"``, or ``"MHz"``).
+    """
+    if freq_hz >= 1e6:
+        return freq_hz / 1e6, "MHz"
+    elif freq_hz >= 1e3:
+        return freq_hz / 1e3, "kHz"
+    else:
+        return freq_hz, "Hz"
