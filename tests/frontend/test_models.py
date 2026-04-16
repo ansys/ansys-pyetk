@@ -177,9 +177,9 @@ class TestFrequencySweepProperties:
         sweep = FrequencySweepProperties()
         assert sweep.frequency_sweep is True
         assert sweep.start_frequency == 1.0
-        assert sweep.start_frequency_unit == "kHz"
+        assert sweep.start_frequency_unit == "Hz"
         assert sweep.stop_frequency == 100.0
-        assert sweep.stop_frequency_unit == "kHz"
+        assert sweep.stop_frequency_unit == "Hz"
         assert sweep.samples == 3
         assert sweep.scale == "Logarithmic"
 
@@ -313,7 +313,7 @@ class TestElectricalGUIProperties:
     def test_default_values(self):
         """Test default values for ElectricalGUIProperties."""
         electrical = ElectricalGUIProperties()
-        assert electrical.adaptive_frequency == 100000.0
+        assert electrical.adaptive_frequency == 100.0
         assert electrical.excitation_strategy == "Voltage"
         assert electrical.voltage == 1.0
         assert electrical.current == 2.0
