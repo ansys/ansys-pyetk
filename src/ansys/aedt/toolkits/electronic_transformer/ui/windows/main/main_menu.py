@@ -41,6 +41,7 @@ from ansys.aedt.toolkits.electronic_transformer.ui.common.data_manager import da
 from ansys.aedt.toolkits.electronic_transformer.ui.common.units_and_scales import freq_units
 from ansys.aedt.toolkits.electronic_transformer.ui.common.units_and_scales import freq_scale
 from ansys.aedt.toolkits.electronic_transformer.ui.common.units_and_scales import scale_units
+from ansys.aedt.toolkits.electronic_transformer.ui.workflows.ui_validation import Validation
 
 from ansys.aedt.toolkits.electronic_transformer.ui.windows.main.main_column import Ui_LeftColumn
 from ansys.aedt.toolkits.electronic_transformer.ui.windows.main.main_page import Ui_Geometry
@@ -185,6 +186,7 @@ class GeometryMenu(object):
             getattr(self, key).setReadOnly(True)
             line_edit = getattr(self,key)
             line_edit.editingFinished.connect(lambda k=key, le=line_edit:self._update_core_dimensions({"dimensions":{k:le.text()}}))
+            line_edit.editingFinished.connect(self._validate_core_dimensions_live)
 
         # Initialize last airgap value
         self._last_valid_airgap_value = "0.0"
@@ -200,6 +202,7 @@ class GeometryMenu(object):
         self.model_combo.currentIndexChanged.connect(self._update_core_dimensions)
         self.airgap_combo.currentTextChanged.connect(self._update_airgap_type)
         self.custom_core.toggled.connect(self._update_core_dimensions)
+        self.custom_core.toggled.connect(self._validate_core_dimensions_live)
 
         # ───────────────────────────────
         # Bobbin and Margin
@@ -445,6 +448,51 @@ class GeometryMenu(object):
         style.unpolish(widget)
         style.polish(widget)
         widget.update()
+
+    @property
+    def _dim_keys(self):
+        """Generate a list of core dimension keys."""
+        return list(self.properties.core.dimensions.keys())
+
+    def _validate_core_dimensions_live(self):
+        """Validate core dimensions live as the user edits and highlight errors in red.
+
+        Only active when custom core is enabled — dimensions are read-only otherwise.
+        Clears all highlights first, then re-applies based on current validation result.
+        Error messages are also written to the UI logger.
+        """
+        # Dimensions are read-only when not in custom core mode — nothing to validate
+        if self.custom_core.isChecked():
+            validator = Validation()
+            errors = validator._Validation__validate_core(self.gui_properties.core)
+            self._clear_core_dimension_errors()
+
+            if errors:
+                self._highlight_core_dimension_errors(errors)
+                for message in errors:
+                    self.ui.update_logger(message)
+        else:
+            self._clear_core_dimension_errors()
+
+    def _highlight_core_dimension_errors(self, error_messages):
+        """Set a red border on core dimension QLineEdits referenced in error messages.
+
+        Args:
+            error_messages (list[str]): List of validation error strings.
+        """
+        for message in error_messages:
+            for dim_key in self._dim_keys:
+                if dim_key in message:
+                    widget = getattr(self, dim_key, None)
+                    if widget is not None:
+                        self._set_invalid(widget, True, message)
+
+    def _clear_core_dimension_errors(self):
+        """Remove red border from all core dimension QLineEdits."""
+        for dim_key in self._dim_keys:
+            widget = getattr(self, dim_key, None)
+            if widget is not None:
+                self._set_invalid(widget, False)
 
     def load_example(self, direction):
         """Load an example file by stepping forwards or backwards.
