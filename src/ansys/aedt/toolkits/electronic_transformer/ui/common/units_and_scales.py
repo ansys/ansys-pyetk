@@ -27,8 +27,7 @@ def auto_freq_unit(freq_hz):
     Args:
         freq_hz (float): Frequency in Hz.
 
-    Returns
-    -------
+    Returns:
         tuple[float, str]: Converted value and unit string (``"Hz"``, ``"kHz"``, or ``"MHz"``).
     """
     if freq_hz >= 1e6:
