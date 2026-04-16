@@ -180,7 +180,7 @@ class DataManager:
                 self._set_layers_from_json(data["winding"]["layers"])
                 self.gui_properties.winding.side_loads = data["circuit"]["side_loads"]
 
-                msg = "Working with version: " + str(data["json_version"])
+                msg = "Working with .json version: " + str(data["json_version"])
                 return msg
             else:
                 return "Version " + str(data["json_version"]) + " Not Supported"
