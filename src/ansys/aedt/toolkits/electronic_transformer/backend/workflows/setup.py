@@ -80,25 +80,29 @@ class Setup:
                 stop_sweep_freq=stop_frequency,
                 samples=samples,
                 sweep_type=sweep_scale,
-                frequency_sweep=sweep.frequency_sweep
+                frequency_sweep=sweep.frequency_sweep,
             )
 
         else:
-            self.insert_setup(max_num_passes=max_num_passes, percent_error=percent_error, frequency=adapt_freq,
-                              frequency_sweep=sweep.frequency_sweep)
+            self.insert_setup(
+                max_num_passes=max_num_passes,
+                percent_error=percent_error,
+                frequency=adapt_freq,
+                frequency_sweep=sweep.frequency_sweep,
+            )
 
         return adapt_freq
 
     def insert_setup(
-            self,
-            max_num_passes,
-            percent_error,
-            frequency,
-            sweep_type=None,
-            start_sweep_freq=None,
-            stop_sweep_freq=None,
-            samples=None,
-            frequency_sweep=False,
+        self,
+        max_num_passes,
+        percent_error,
+        frequency,
+        sweep_type=None,
+        start_sweep_freq=None,
+        stop_sweep_freq=None,
+        samples=None,
+        frequency_sweep=False,
     ):
         """Create and configure an analysis setup in AEDT.
 
