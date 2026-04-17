@@ -6,6 +6,8 @@ import sys
 from PySide6.QtCore import QThread
 from PySide6.QtCore import Qt
 from PySide6.QtCore import Signal
+from PySide6.QtCore import QLocale
+
 from PySide6.QtGui import QDoubleValidator
 from PySide6.QtGui import QPixmap
 from PySide6.QtWidgets import QAbstractItemView
@@ -24,12 +26,17 @@ from PySide6.QtWidgets import QPushButton
 from PySide6.QtWidgets import QTreeWidget
 from PySide6.QtWidgets import QTreeWidgetItem
 from PySide6.QtWidgets import QWidget
+from PySide6.QtWidgets import QStyledItemDelegate
+from PySide6.QtCore import QRegularExpression
+from PySide6.QtGui import QRegularExpressionValidator
+from PySide6.QtGui import QIntValidator
 
 from ansys.aedt.toolkits.electronic_transformer.ui.common.database_manager import database_manager
 # Default user interface properties
 from ansys.aedt.toolkits.electronic_transformer.ui.models import fe_properties
 from ansys.aedt.toolkits.electronic_transformer.ui.models import gui_properties
 from ansys.aedt.toolkits.electronic_transformer.ui.models import AirGapConfig
+from ansys.aedt.toolkits.electronic_transformer.ui.models import GUIProperties
 from ansys.aedt.toolkits.electronic_transformer.ui.common.data_manager import data_manager
 from ansys.aedt.toolkits.electronic_transformer.ui.common.units_and_scales import freq_units
 from ansys.aedt.toolkits.electronic_transformer.ui.common.units_and_scales import freq_scale
@@ -45,6 +52,44 @@ if hasattr(sys, '_MEIPASS'):
     example_files = Path(sys._MEIPASS) / 'examples'
 else:
     example_files = etk_root / "tests" / "backend" / "json_files"
+
+class WindingTreeDelegate(QStyledItemDelegate):
+    """Need to use this to apply validators to the QTreeWidget used for winding configuration,
+    as it doesn't support them by default."""
+
+    rect_cond_regex = QRegularExpression(r"^\d*\.?\d+(\s*x\s*|\s+)\d*\.?\d+$")
+
+    def createEditor(self, parent, option, index):
+        column_index = index.column()
+        is_parent = not index.parent().isValid()
+
+        # Specify which cells in tree are locked
+        # Set winding column to locked
+        if column_index == 0:
+            return None
+        # Only one cell in column 4 and Side layer where side load is set is active, all others are locked
+        if is_parent and column_index != 4:
+            return None
+        if not is_parent and column_index == 4:
+            return None
+
+        # Specify which cells in tree can be modified and create editor for circular or rectangular shapes
+        editor = QLineEdit(parent)
+        if column_index == 1:
+            editor.setValidator(QIntValidator(1, 1000, editor))
+        elif column_index == 2:
+            is_circular = "Diameter" in self.parent().headerItem().text(2)
+            if is_circular:
+                dv = QDoubleValidator(editor)
+                dv.setLocale(QLocale.c())
+                editor.setValidator(dv)
+            else:
+                editor.setValidator(QRegularExpressionValidator(self.rect_cond_regex, editor))
+        else:
+            dv = QDoubleValidator(editor)
+            dv.setLocale(QLocale.c())
+            editor.setValidator(dv)
+        return editor
 
 class CreateGeometryThread(QThread):
     """Manages the geometry creation thread."""
@@ -313,45 +358,58 @@ class GeometryMenu(object):
         # ───────────────────────────────
         # UI Formatting
         # ───────────────────────────────
-        # Restrict what can be entered into the LineEdit fields of the UI
-        # Numbers only
-        # Iterate over all attributes of self to find those that contain QLineEdit
+        # Collect all QLineEdit instance attributes assigned so far
         line_edits = []
-
-        for attr_name in dir(self):
-            attr = getattr(self, attr_name)
+        for attr in vars(self).values():
             if isinstance(attr, QLineEdit):
                 line_edits.append(attr)
 
-        # Construct validator restrictions for QLineEdit fields in UI
-        validator = QDoubleValidator()
-        validator.setBottom(0.0)
-        validator.setTop(1000.0)
-        validator.setDecimals(4)
+        # Ensures "." is the decimal separator and ".25" is accepted based on local region it could be ",25"
+        float_validator = QDoubleValidator(0.0, 1e9, 6)
+        float_validator.setLocale(QLocale.c())
 
-        # Apply validator restrictions to fields
-        for line_edit in line_edits:
-            line_edit.setValidator(validator)
+        for line in line_edits:
+            line.setValidator(float_validator)
+
+        # Integer fields override the float validator
+        self.number_passes.setValidator(QIntValidator(1, 10))
+        self.samples.setValidator(QIntValidator(1, 99))
+
+        # Normalise float display on focus-out: ".25" → "0.25"
+        def _normalise_float(line):
+            txt = line.text().strip()
+            if txt.startswith("."):
+                line.setText("0" + txt)
+
+        for line in line_edits:
+            if line not in (self.number_passes, self.samples):
+                line.editingFinished.connect(lambda field=line: _normalise_float(field))
+
+        # Normalise integer fields on focus-out: remove leading zeros
+        self.number_passes.editingFinished.connect(
+            lambda: self.number_passes.setText(str(int(self.number_passes.text()))) if self.number_passes.text() else None
+        )
+        self.samples.editingFinished.connect(
+            lambda: self.samples.setText(str(int(self.samples.text()))) if self.samples.text() else None
+        )
 
         self.connections_tree_widget.setHeaderLabels(["Connections"])
-
-        self.winding_tree_widget.setEditTriggers(QTreeWidget.DoubleClicked | QTreeWidget.EditKeyPressed)
-        self.winding_tree_widget.setDragDropMode(QTreeWidget.InternalMove)
-        self.winding_tree_widget.setDefaultDropAction(Qt.MoveAction)
-        self.winding_tree_widget.setSelectionMode(QTreeWidget.SingleSelection)
-        self.winding_tree_widget.setDragEnabled(True)
-        self.winding_tree_widget.setAcceptDrops(True)
-        self.winding_tree_widget.setDropIndicatorShown(True)
-        self.winding_tree_widget.setSelectionMode(QAbstractItemView.ExtendedSelection)  # Allows ctrl-Click
         self.connections_tree_widget.setSelectionMode(QAbstractItemView.ExtendedSelection)  # Allows ctrl-Click
+
+        self.winding_tree_widget.setItemDelegate(WindingTreeDelegate(self.winding_tree_widget))
+        self.winding_tree_widget.setEditTriggers(QTreeWidget.DoubleClicked | QTreeWidget.EditKeyPressed)
 
         # UI Controls: Button Setup
         self.example_button = self.geometry_menu_widget.findChild(QPushButton, "open_etk")
         self.example_button.clicked.connect(self.example_button_clicked)
         self.next_example_button = self.geometry_menu_widget.findChild(QPushButton, "next_example_button")
         self.previous_example_button = self.geometry_menu_widget.findChild(QPushButton, "previous_example_button")
+        self.reset_examples_button = self.geometry_menu_widget.findChild(QPushButton, "reset_examples")
         self.example_name = self.geometry_menu_widget.findChild(QLineEdit, "example_name")
         self.save_etk = self.geometry_menu_widget.findChild(QPushButton, "save_etk")
+
+        # Active directory drives Next/Previous navigation — starts at default examples location
+        self._active_dir = example_files
 
         # Load all example files from directory and add placeholder [None] for "Start New design"
         self.example_files = sorted(example_files.glob("*.json")) + [None]
@@ -360,6 +418,7 @@ class GeometryMenu(object):
         # Connect signals
         self.next_example_button.clicked.connect(lambda: self.load_example(direction="Forwards"))
         self.previous_example_button.clicked.connect(lambda: self.load_example(direction="Backwards"))
+        self.reset_examples_button.clicked.connect(self._reset_example_dir)
         self.save_etk.clicked.connect(self.save_button_clicked)
 
         # Populate UI widgets before signals are assigned to avoid misfires
@@ -409,14 +468,14 @@ class GeometryMenu(object):
         """
         # Reset UI defaults
         if path is None:
-            self.example_name.setText(self.new_filename)
-        else:
-            msg, is_valid = self.data_manager._import_data_from_json(path)
-            self.ui.update_logger(msg)
+            return
 
-            if is_valid:
-                self._write_ui_data()
-                self.example_name.setText(path.name)
+        msg, is_valid = self.data_manager._import_data_from_json(path)
+        self.ui.update_logger(msg)
+
+        if is_valid:
+            self._write_ui_data()
+            self.example_name.setText(path.name)
 
     def setup(self):
         """Set up the geometry menu."""
@@ -858,7 +917,7 @@ class GeometryMenu(object):
         self.gui_properties.winding.conductor_type = cond_text
 
     def _winding_item_changed(self, item, column):
-        """Update ``UserRole`` with modified winding tree entries.
+        """Update ``UserRole`` with modified winding tree entries and correct formatting of inputted values in UI
         Args:
             item (QTreeWidgetItem): The item that was changed.
             column (int): The column of the changed item.
@@ -868,7 +927,13 @@ class GeometryMenu(object):
 
         if row_type == "Layer":
             if column == 1:
-                data["turns"] = int(item.text(1))
+                turns = int(item.text(1))
+                data["turns"] = turns
+                self.winding_tree_widget.blockSignals(True)
+                # Remove leading 0 from user input
+                item.setText(1, str(turns))
+                self.winding_tree_widget.blockSignals(False)
+
 
             elif column == 2:
                 mode = self.cond_type.currentText()
@@ -880,21 +945,35 @@ class GeometryMenu(object):
                 if mode == "Circular":
                     dia = float(parts[0])
                     cond["diameter"] = dia
+                    self.winding_tree_widget.blockSignals(True)
+                    item.setText(2, str(dia))
+                    self.winding_tree_widget.blockSignals(False)
                 else:
                     width = float(parts[0])
                     height = float(parts[1])
                     cond["width"] = width
                     cond["height"] = height
+                    self.winding_tree_widget.blockSignals(True)
+                    item.setText(2, f"{width} x {height}")
+                    self.winding_tree_widget.blockSignals(False)
 
             elif column == 3:
-                data["insulation"] = float(item.text(3))
+                insulation = float(item.text(3))
+                data["insulation"] = insulation
+                self.winding_tree_widget.blockSignals(True)
+                item.setText(3, str(insulation))
+                self.winding_tree_widget.blockSignals(False)
 
             elif column == 4:
                 return
 
         elif row_type == "Winding":
             if column == 4:
-                data["side_load"] = float(item.text(4))
+                side_load = float(item.text(4))
+                data["side_load"] = side_load
+                self.winding_tree_widget.blockSignals(True)
+                item.setText(4, str(side_load))
+                self.winding_tree_widget.blockSignals(False)
             else:
                 return
 
@@ -1760,7 +1839,7 @@ class GeometryMenu(object):
         """Handle the example button click event."""
         file_name_tuple = QFileDialog.getOpenFileName(
             caption="Open ETK file",
-            dir=str(example_files),
+            dir=str(self._active_dir),
             filter="ETK files (*.json)",
         )
 
@@ -1769,12 +1848,37 @@ class GeometryMenu(object):
             return
 
         file_name = Path(file_name_tuple[0])
+
+        # Update active directory and rebuild Next/Previous list from the new location
+        self._active_dir = file_name.parent
+        self.example_files = sorted(self._active_dir.glob("*.json")) + [None]
+
+        # Set index to the opened file so Next/Previous continues from here
+        try:
+            self.current_example_index = self.example_files.index(file_name)
+        except ValueError:
+            self.current_example_index = 0
+
         msg, is_valid = self.data_manager._import_data_from_json(file_name)
         self.ui.update_logger(msg)
         if is_valid:
             self._write_ui_data()
             self.example_name.setText(file_name.name)
 
+    def _reset_example_dir(self):
+        """Reset navigation to default examples directory and revert displayed design to 'New Design'."""
+        self._active_dir = example_files
+        self.example_files = sorted(self._active_dir.glob("*.json")) + [None]
+        self.current_example_index = 0
+
+        # Reset gui_properties to factory defaults in-place so all holders stay in sync
+        defaults = GUIProperties()
+        for field_name in defaults.model_fields:
+            setattr(self.gui_properties, field_name, getattr(defaults, field_name))
+
+        self._write_ui_data()
+        self.example_name.setText(self.new_filename)
+        self.ui.update_logger("Example directory reset to default.")
 
     def _clear_connection_state(self):
         "Clears Connections tree UI, conn_saved and conn_wip form UI UserData"
@@ -1891,6 +1995,7 @@ class GeometryMenu(object):
             self.start_frequency_unit.setCurrentText(freq_sweep.get("start_frequency_unit", self.gui_properties.settings.frequency_sweep_definition.start_frequency_unit))
             self.stop_frequency.setText(str(freq_sweep.get("stop_frequency", self.gui_properties.settings.frequency_sweep_definition.stop_frequency)))
             self.stop_frequency_unit.setCurrentText(freq_sweep.get("stop_frequency_unit", self.gui_properties.settings.frequency_sweep_definition.stop_frequency_unit))
+
             self.samples.setText(str(freq_sweep.get("samples", self.gui_properties.settings.frequency_sweep_definition.samples)))
             self.scale.setCurrentText(freq_sweep.get("scale", self.gui_properties.settings.frequency_sweep_definition.scale))
 
@@ -2114,13 +2219,16 @@ class GeometryMenu(object):
     def save_button_clicked(self):
         """Save the UI state to a JSON file."""
         file_name_tuple = QFileDialog.getSaveFileName(
-            caption="Save ETK file", dir=str(example_files), filter="ETK files (*.json)"
+            caption="Save ETK file", dir=str(self._active_dir), filter="ETK files (*.json)"
         )
         file_name = Path(file_name_tuple[0])
 
         # handle the event where the user cancels the option to save
         if file_name != Path("."):
             self._save_model(file=file_name)
+            self._active_dir = file_name.parent
+            self.example_files = sorted(self._active_dir.glob("*.json")) + [None]
+            self.example_name.setText(file_name.name)
         else:
             self.ui.update_logger("Save As operation cancelled by user")
 

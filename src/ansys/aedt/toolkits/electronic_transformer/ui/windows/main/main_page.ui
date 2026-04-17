@@ -75,7 +75,7 @@
           </size>
          </property>
          <property name="title">
-          <string>Open PyETK or Load Example</string>
+          <string>Open PyETK</string>
          </property>
          <widget class="QPushButton" name="open_etk">
           <property name="geometry">
@@ -101,18 +101,18 @@
            <rect>
             <x>90</x>
             <y>20</y>
-            <width>91</width>
+            <width>51</width>
             <height>16</height>
            </rect>
           </property>
           <property name="text">
-           <string>Browse Example</string>
+           <string>Browse</string>
           </property>
          </widget>
          <widget class="QPushButton" name="previous_example_button">
           <property name="geometry">
            <rect>
-            <x>180</x>
+            <x>160</x>
             <y>20</y>
             <width>40</width>
             <height>24</height>
@@ -131,7 +131,7 @@
          <widget class="QPushButton" name="next_example_button">
           <property name="geometry">
            <rect>
-            <x>220</x>
+            <x>200</x>
             <y>20</y>
             <width>40</width>
             <height>24</height>
@@ -150,11 +150,24 @@
          <widget class="QLineEdit" name="example_name">
           <property name="geometry">
            <rect>
-            <x>260</x>
+            <x>240</x>
             <y>20</y>
-            <width>251</width>
+            <width>201</width>
             <height>22</height>
            </rect>
+          </property>
+         </widget>
+         <widget class="QPushButton" name="reset_examples">
+          <property name="geometry">
+           <rect>
+            <x>448</x>
+            <y>20</y>
+            <width>101</width>
+            <height>24</height>
+           </rect>
+          </property>
+          <property name="text">
+           <string>Reset Example Dir</string>
           </property>
          </widget>
         </widget>

@@ -329,10 +329,10 @@ class TestSettingsGUIProperties:
         assert settings.draw_skin_layers is True
         assert settings.full_model is False
         assert settings.include_bobbin is True
-        assert settings.number_passes == 2
+        assert settings.number_passes == 5
         assert settings.percentage_error == 1.0
-        assert settings.segmentation_angle == 13.0
-        assert settings.offset == 50.3
+        assert settings.segmentation_angle == 10.0
+        assert settings.offset == 50
         assert settings.project_path == ""
         assert settings.segments_number == 8
         assert isinstance(settings.frequency_sweep_definition, FrequencySweepProperties)
