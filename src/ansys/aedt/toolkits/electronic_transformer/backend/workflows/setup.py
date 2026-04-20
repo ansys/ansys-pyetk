@@ -308,7 +308,9 @@ class Setup:
             dimension_list.append(float(each_dim_val))
         mesh_op_sz = max(dimension_list) / 20.0
 
-        self.__aedt.mesh.assign_length_mesh(assignment=core.objects_list, maximum_length=mesh_op_sz, name="Core")
+        self.__aedt.mesh.assign_length_mesh(
+            assignment=core.objects_list, maximum_length=mesh_op_sz, maximum_elements=None, name="Core"
+        )
         self.__aedt.mesh.assign_length_mesh(
             assignment=winding.objects_list, maximum_length=mesh_op_sz / 2, name="Layers"
         )

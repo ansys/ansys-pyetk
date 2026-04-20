@@ -3,7 +3,7 @@
 ################################################################################
 ## Form generated from reading UI file 'main_page.ui'
 ##
-## Created by: Qt User Interface Compiler version 6.9.2
+## Created by: Qt User Interface Compiler version 6.10.0
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
@@ -43,7 +43,7 @@ class Ui_Geometry(object):
         self.verticalLayout_3.setContentsMargins(5, 5, 5, 5)
         self.groupBox_6 = QGroupBox(Geometry)
         self.groupBox_6.setObjectName(u"groupBox_6")
-        self.groupBox_6.setMinimumSize(QSize(555, 50))
+        self.groupBox_6.setMinimumSize(QSize(555, 55))
         self.groupBox_6.setMaximumSize(QSize(575, 100))
         self.open_etk = QPushButton(self.groupBox_6)
         self.open_etk.setObjectName(u"open_etk")
@@ -51,18 +51,21 @@ class Ui_Geometry(object):
         self.open_etk.setMaximumSize(QSize(75, 16777215))
         self.label_13 = QLabel(self.groupBox_6)
         self.label_13.setObjectName(u"label_13")
-        self.label_13.setGeometry(QRect(90, 20, 91, 16))
+        self.label_13.setGeometry(QRect(90, 20, 51, 16))
         self.previous_example_button = QPushButton(self.groupBox_6)
         self.previous_example_button.setObjectName(u"previous_example_button")
-        self.previous_example_button.setGeometry(QRect(180, 20, 40, 24))
+        self.previous_example_button.setGeometry(QRect(160, 20, 40, 24))
         self.previous_example_button.setMaximumSize(QSize(40, 16777215))
         self.next_example_button = QPushButton(self.groupBox_6)
         self.next_example_button.setObjectName(u"next_example_button")
-        self.next_example_button.setGeometry(QRect(220, 20, 40, 24))
+        self.next_example_button.setGeometry(QRect(200, 20, 40, 24))
         self.next_example_button.setMaximumSize(QSize(40, 16777215))
         self.example_name = QLineEdit(self.groupBox_6)
         self.example_name.setObjectName(u"example_name")
-        self.example_name.setGeometry(QRect(260, 20, 251, 22))
+        self.example_name.setGeometry(QRect(240, 20, 201, 22))
+        self.reset_examples = QPushButton(self.groupBox_6)
+        self.reset_examples.setObjectName(u"reset_examples")
+        self.reset_examples.setGeometry(QRect(448, 20, 101, 24))
 
         self.verticalLayout_3.addWidget(self.groupBox_6)
 
@@ -73,8 +76,8 @@ class Ui_Geometry(object):
         sizePolicy1.setVerticalStretch(0)
         sizePolicy1.setHeightForWidth(self.groupBox_4.sizePolicy().hasHeightForWidth())
         self.groupBox_4.setSizePolicy(sizePolicy1)
-        self.groupBox_4.setMinimumSize(QSize(555, 568))
-        self.groupBox_4.setMaximumSize(QSize(555, 625))
+        self.groupBox_4.setMinimumSize(QSize(555, 563))
+        self.groupBox_4.setMaximumSize(QSize(555, 620))
         self.horizontalLayout_2 = QHBoxLayout(self.groupBox_4)
         self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
         self.gridLayout = QGridLayout()
@@ -201,6 +204,15 @@ class Ui_Geometry(object):
         self.verticalSpacer_16 = QSpacerItem(5, 85, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
 
         self.gridLayout.addItem(self.verticalSpacer_16, 18, 4, 1, 1)
+
+        self.material_combo = QComboBox(self.groupBox_4)
+        self.material_combo.setObjectName(u"material_combo")
+        sizePolicy.setHeightForWidth(self.material_combo.sizePolicy().hasHeightForWidth())
+        self.material_combo.setSizePolicy(sizePolicy)
+        self.material_combo.setMinimumSize(QSize(100, 0))
+        self.material_combo.setMaximumSize(QSize(100, 30))
+
+        self.gridLayout.addWidget(self.material_combo, 3, 2, 1, 2)
 
         self.airgap_combo = QComboBox(self.groupBox_4)
         self.airgap_combo.addItem("")
@@ -343,15 +355,6 @@ class Ui_Geometry(object):
         self.verticalSpacer_7 = QSpacerItem(20, 10, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed)
 
         self.gridLayout.addItem(self.verticalSpacer_7, 6, 0, 1, 1)
-
-        self.material_combo = QComboBox(self.groupBox_4)
-        self.material_combo.setObjectName(u"material_combo")
-        sizePolicy.setHeightForWidth(self.material_combo.sizePolicy().hasHeightForWidth())
-        self.material_combo.setSizePolicy(sizePolicy)
-        self.material_combo.setMinimumSize(QSize(100, 0))
-        self.material_combo.setMaximumSize(QSize(100, 30))
-
-        self.gridLayout.addWidget(self.material_combo, 3, 2, 1, 2)
 
 
         self.horizontalLayout_2.addLayout(self.gridLayout)
@@ -800,11 +803,12 @@ class Ui_Geometry(object):
 
     def retranslateUi(self, Geometry):
         Geometry.setWindowTitle(QCoreApplication.translate("Geometry", u"Form", None))
-        self.groupBox_6.setTitle(QCoreApplication.translate("Geometry", u"Open", None))
+        self.groupBox_6.setTitle(QCoreApplication.translate("Geometry", u"Open PyETK", None))
         self.open_etk.setText(QCoreApplication.translate("Geometry", u"Open", None))
-        self.label_13.setText(QCoreApplication.translate("Geometry", u"Browse Example", None))
+        self.label_13.setText(QCoreApplication.translate("Geometry", u"Browse", None))
         self.previous_example_button.setText(QCoreApplication.translate("Geometry", u"<", None))
         self.next_example_button.setText(QCoreApplication.translate("Geometry", u">", None))
+        self.reset_examples.setText(QCoreApplication.translate("Geometry", u"Reset Example Dir", None))
         self.groupBox_4.setTitle(QCoreApplication.translate("Geometry", u"Core", None))
         self.D_1_label.setText(QCoreApplication.translate("Geometry", u"D_1, (mm)", None))
         self.D_6_ref.setText(QCoreApplication.translate("Geometry", u"TextLabel", None))
