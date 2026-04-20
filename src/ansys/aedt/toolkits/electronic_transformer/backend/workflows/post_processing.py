@@ -87,7 +87,7 @@ class PostProcessing:
             plot_name="J",
         )
 
-        self.__aedt.post.create_fieldplot_surface(
+        ohmic_plot = self.__aedt.post.create_fieldplot_surface(
             assignment=surface_list,
             quantity="Ohmic_Loss",
             intrinsics=intrinsic_dict,
@@ -110,6 +110,11 @@ class PostProcessing:
             intrinsics=intrinsic_dict,
             plot_name="Core_Loss",
         )
+
+        # Save project first before applying log scale to Ohmic_Loss plot from folder_settings.
+        self.__aedt.save_project()
+        ohmic_plot.folder_settings.scale_settings.log = True
+        ohmic_plot.folder_settings.update()
 
     def create_post_processing(self):
         """Create the post-processing."""
