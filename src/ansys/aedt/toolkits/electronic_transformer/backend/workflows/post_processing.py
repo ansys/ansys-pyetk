@@ -127,31 +127,25 @@ class PostProcessing:
         for key_x, val_x in connections.items():
             next_key = list(val_x.keys())[0]
             if "P" in next_key or "S" in next_key:
-                connection_str_x = "Side"
+                # connection_str_x = "Side"
                 x = key_x
             else:
-                connection_str_x = "Layer"
+                # connection_str_x = "Layer"
                 x = next_key
 
             for key_y, val_y in connections.items():
                 next_key = list(val_y.keys())[0]
                 if "P" in next_key or "S" in next_key:
-                    connection_str_y = "Side"
+                    # connection_str_y = "Side"
                     y = key_y
                 else:
-                    connection_str_y = "Layer"
+                    # connection_str_y = "Layer"
                     y = next_key
 
-                if int(x) <= int(y):
-                    coupling_coef = "CplCoef({0}_{1},{2}_{3})".format(
-                        connection_str_x, str(x), connection_str_y, str(y)
-                    )
-                    equation = "L({0}_{1},{2}_{3})*(1-sqr({4}))".format(
-                        connection_str_x, x, connection_str_y, y, coupling_coef
-                    )
-                    all_leakages[
-                        "Leakage_Inductance_{0}_{1},{2}_{3}".format(connection_str_x, x, connection_str_y, y)
-                    ] = equation
+                if int(x) > int(y):
+                    coupling_coef = f"CplCoef(Side_{x},Side_{y})"
+                    equation = f"L(Side_{x},Side_{x})*(1-sqr({coupling_coef}))"
+                    all_leakages[f"Leakage_Inductance_Side_{x},Side_{y}"] = equation
 
         plot_name = "PyETK Leakage_Inductance"
         report = self.aedt_test.post.create_report(
