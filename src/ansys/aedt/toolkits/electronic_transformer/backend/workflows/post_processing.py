@@ -142,7 +142,7 @@ class PostProcessing:
                     # connection_str_y = "Layer"
                     y = next_key
 
-                if int(x) > int(y):
+                if int(x) < int(y):
                     coupling_coef = f"CplCoef(Side_{x},Side_{y})"
                     equation = f"L(Side_{x},Side_{x})*(1-sqr({coupling_coef}))"
                     all_leakages[f"Leakage_Inductance_Side_{x},Side_{y}"] = equation
