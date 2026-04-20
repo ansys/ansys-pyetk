@@ -129,18 +129,18 @@ class PostProcessing:
             if "P" in next_key or "S" in next_key:
                 # connection_str_x = "Side"
                 x = key_x
-            else:
-                # connection_str_x = "Layer"
-                x = next_key
+            # else:
+            # connection_str_x = "Layer"
+            # x = next_key
 
             for key_y, val_y in connections.items():
                 next_key = list(val_y.keys())[0]
                 if "P" in next_key or "S" in next_key:
                     # connection_str_y = "Side"
                     y = key_y
-                else:
-                    # connection_str_y = "Layer"
-                    y = next_key
+                # else:
+                # connection_str_y = "Layer"
+                # y = next_key
 
                 if int(x) < int(y):
                     coupling_coef = f"CplCoef(Side_{x},Side_{y})"
