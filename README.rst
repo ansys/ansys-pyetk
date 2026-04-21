@@ -1,5 +1,5 @@
-Electronic Transformer toolKit (PyETK)
-=============================================
+Electronic Transformer ToolKit (PyETK)
+======================================
 
 |pyansys| |PythonVersion| |GH-CI| |Apache| |coverage| |ruff|
 
@@ -24,9 +24,9 @@ Electronic Transformer toolKit (PyETK)
    :alt: Ruff
 
 
-The ``ansys-pyetk`` package provides a user-friendly interface to set up electronic transformer
-models in Ansys Electronic Desktop (AEDT). The toolkit could be used inside AEDT or launched
-from a python console. The toolkit leverages the common toolkit library that consists of two
+PyETK provides a user-friendly interface to set up electronic transformer
+models in Ansys Electronic Desktop (AEDT). You can use this toolkit inside AEDT or launch it
+from a Python console. PyETK leverages the common toolkit library that consists of two
 main parts: a backend and a User Interface (UI).
 
 - The backend has some common methods for controlling an AEDT session and also an
@@ -38,31 +38,32 @@ main parts: a backend and a User Interface (UI).
 
 Requirements
 ~~~~~~~~~~~~
-In addition to the runtime dependencies listed in the installation information, this toolkit
-requires Ansys Electronics Desktop (AEDT) 2025 R2 or later.
+In addition to the runtime dependencies listed in the installation information, PyETK
+requires AEDT 2025 R2 or later.
 
 
 Documentation and issues
 ~~~~~~~~~~~~~~~~~~~~~~~~
-Documentation is currently Work in Progress.
+Documentation for the latest stable release of PyETK is hosted at
+`PyETK documentation <https://etk.docs.pyansys.com/>`_.
 
-On the `issues <https://github.com/ansys/ansys-pyetk/issues>`_ page, you can
+On the repository's `Issues <https://github.com/ansys/ansys-pyetk/issues>`_ page, you can
 create issues to submit questions, report bugs, and request new features.
 
-Expected Behaviour
+Expected behavior
 ------------------
-ETK does not create a unique Maxwell model every time "Create Transformer" button is pressed,
-after the first click it will create a model on top of the previous one.
+ETK does not create a unique Maxwell model every time you click the **Create Transformer** button.
+After the first click, it creates a model on top of the previous one.
 
 Installation
 ~~~~~~~~~~~~
-Visit the `Releases <https://github.com/ansys/ansys-pyetk/releases>`__ page and pull
-down the latest installer.
+To install PyETK, go to the repository's `Releases <https://github.com/ansys/ansys-pyetk/releases>`__ page
+and download the latest installer for your operating system.
 
 Distributing
 ~~~~~~~~~~~~
-This project is vectored to be an open-source project. For the time being, feel
-free to distribute it internally, but direct users to visit the
+This project is vectored to be an open source project. For the time being, feel
+free to distribute it internally, but direct users to visit the repository's
 `Releases <https://github.com/ansys/ansys-pyetk/releases>`__ page.
 
 Security

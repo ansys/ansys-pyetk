@@ -223,10 +223,10 @@ class SettingsGUIProperties(BaseModel, validate_assignment=True):
     draw_skin_layers: bool = True
     full_model: bool = False
     include_bobbin: bool = True
-    number_passes: int = 2
+    number_passes: int = 5
     percentage_error: float = 1.0
-    segmentation_angle: float = 13.0
-    offset: float = 50.3
+    segmentation_angle: float = 10.0
+    offset: float = 50
     project_path: str = ""
     segments_number: int = 8
     frequency_sweep_definition: FrequencySweepProperties = FrequencySweepProperties()
@@ -271,6 +271,11 @@ class Properties(UIProperties, validate_assignment=True):
     settings: SettingsProperties = SettingsProperties()
     materials: Dict[str, Any] = Field(default_factory=dict)
 
+
+# Set logo and icon for the toolkit
+images_dir = Path(__file__).parent / "windows" / "images"
+general_settings.icon = str(images_dir / "pyetk_icon.png")
+general_settings.logo = str(images_dir / "pyetk_logo.svg")
 
 frontend_properties = {}
 if "PYAEDT_TOOLKIT_CONFIG_DIR" in os.environ:

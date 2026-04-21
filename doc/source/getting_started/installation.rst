@@ -1,124 +1,110 @@
 .. _installation:
 
 Installation
-=============
+============
 
-Download links
---------------
+You can install PyETK using an installer, using Python, or in developer mode. Choose the method that best suits your needs.
 
-The following installers are available for different operating systems:
+Install PyETK using an installer
+================================
 
-.. list-table:: Available Installers
-   :header-rows: 1
-   :widths: 60 40
+The repository's `Releases  <https://github.com/ansys/ansys-pyetk/releases>`_ page provides for
+downloading PyETK assets. For the `latest PyETK release <https://github.com/ansys/ansys-pyetk/releases/latest/>`_, use one of these links to download the installer for your operating system:
 
-   * - `Installer Link <https://github.com/ansys/ansys-pyetk/releases/latest/>`_
-     - Operating System
-   * - `Windows Installer <https://github.com/ansys/ansys-pyetk/releases/latest/download/PyETK-Installer-Windows.exe>`_
-     - Windows
-   * - `Ubuntu 22.04 Installer <https://github.com/ansys/ansys-pyetk/releases/latest/download/PyETK-Installer-ubuntu_22_04.zip>`_
-     - Ubuntu 22.04
-   * - `Ubuntu 24.04 Installer <https://github.com/ansys/ansys-pyetk/releases/latest/download/PyETK-Installer-ubuntu_24_04.zip>`_
-     - Ubuntu 24.04
-
-
-Installing the ``Electronic Transformer toolKit (PyETK)``
-================================================================
-
+- `Windows installer <https://github.com/ansys/ansys-pyetk/releases/latest/download/PyETK-Installer-Windows.exe>`_
+- `Ubuntu 22.04 installer <https://github.com/ansys/ansys-pyetk/releases/latest/download/PyETK-Installer-ubuntu_22_04.zip>`_
+- `Ubuntu 24.04 installer <https://github.com/ansys/ansys-pyetk/releases/latest/download/PyETK-Installer-ubuntu_24_04.zip>`_
 
 .. tab-set::
 
   .. tab-item:: Windows
 
-    First step is installing the ``PyETK``. In order to do so, follow the next steps.
+   Follow these steps to use the Windows installer to install PyETK in user mode:
 
-    #. Download the necessary installer from the `latest available release <https://github.com/ansys/ansys-pyetk/releases/latest>`_.
-       The file should be named ``PyETK-Installer-Windows.exe``.
+   #. Download the `Windows installer <https://github.com/ansys/ansys-pyetk/releases/latest/download/PyETK-Installer-Windows.exe>`_. The file should be named ``PyETK-Installer-Windows.exe``.
 
-    #. Execute the installer.
+   #. Run the installer.
 
-    #. Search for the ``PyETK`` and run it.
+   #. Search for ``PyETK`` and run it.
 
-    The ``PyETK`` window should appear at this stage.
+   The PyETK UI opens.
 
   .. tab-item:: Linux
 
-    .. tab-set::
+   On Linux, supported operating systems are Ubuntu 22.04 and 24.04.
 
-      .. tab-item:: Ubuntu
+   Follow these steps to use a Linux installer to install PyETK in user mode:
 
-        Prerequisites:
+   #. Run the following commands to update the ``apt-get`` repository and install these packages
+      with **sudo** privileges: ``wget``, ``gnome``, ``libffi-dev``, ``libssl-dev``, ``libsqlite3-dev``, ``libxcb-xinerama0``, and ``build-essential``:
 
-        #. **OS** supported for **Ubuntu(24.04 and 22.04)**.
+      .. code:: shell
 
-        #. Update ``apt-get`` repository and install the following packages with **sudo** privileges:
-           **wget, gnome, libffi-dev, libssl-dev, libsqlite3-dev, libxcb-xinerama0 and build-essential** packages with **sudo** privileges
+         sudo apt-get update -y
+         sudo apt-get install wget gnome libffi-dev libssl-dev libsqlite3-dev libxcb-xinerama0 build-essential -y
 
-           .. code:: shell
+   #. Install the ``zlib`` package:
 
-             sudo apt-get update -y
-             sudo apt-get install wget gnome libffi-dev libssl-dev libsqlite3-dev libxcb-xinerama0 build-essential -y
+      .. code:: shell
 
-        #. Install **zlib** package
+         wget https://zlib.net/current/zlib.tar.gz
+         tar xvzf zlib.tar.gz
+         cd zlib-*
+         make clean
+         ./configure
+         make
+         sudo make install
 
-           .. code:: shell
+   #. Install the Toolkit Template:
 
-             wget https://zlib.net/current/zlib.tar.gz
-             tar xvzf zlib.tar.gz
-             cd zlib-*
-             make clean
-             ./configure
-             make
-             sudo make install
+      #. Download the latest ``Toolkit-Template_*.zip`` file from the repository's
+         `Release <https://github.com/ansys/ansys-pyetk/releases/latest>`_ page.
 
-        To install the ``Template Toolkit``, follow below steps.
+      #. Run this command on the terminal:
 
-        #. Download the necessary installer from the `latest available release <https://github.com/ansys/ansys-pyetk/releases/latest>`_.
-           The file should be named ``Toolkit-Template_*.zip``.
+         .. code:: shell
 
-        #. Execute the below command on the terminal
+            unzip Toolkit-Template_*.zip
+            ./installer.sh
 
-           .. code:: shell
+      #. Search for ``PyETK`` and run it.
 
-             unzip Toolkit-Template_*.zip
-             ./installer.sh
+   The PyETK UI opens.
 
-        #. Search for the ``PyETK`` and run it.
+To uninstall PyETK, follow these steps.
 
-        The ``PyETK`` window should appear at this stage.
+#. Select **File > Uninstall**.
 
-        To uninstall the ``PyETK``, follow below steps.
+#. Click **Uninstall**.
 
-        #. Go to File menu. Click Uninstall option.
+Install PyETK using Python
+==========================
 
-        #. Click ``Uninstall`` button.
+You can use Python to install from PyPI either both the PyETK backend and UI
+methods or only the backend methods.
 
-
-Python installation
-===================
-
-The Toolkit Template can be installed like any other open source package.
-
-From PyPI, you can either install both the backend and user interface (UI)
-methods or install only the backend methods.
-
-To install both the backend and UI methods, run this command:
+To install both the backend and UI methods:
 
 .. code:: bash
 
     pip install ansys-pyetk[all]
 
-If you only need the common API, install only the backend methods with this
-command:
+To install only the backend methods:
 
 .. code:: bash
 
     pip install ansys-pyetk
 
+Install PyETK in developer mode
+===============================
 
-For developers
-==============
-You can be up and running with four lines of code:
+Installing PyETK in developer mode allows you to modify the source
+and enhance it.
+
+.. note::
+   Before contributing to the project, see the `PyAnsys developer's guide`_.
+
+You can install PyETK in developer mode with only these few lines of code:
 
 .. code:: bash
 
@@ -128,28 +114,18 @@ You can be up and running with four lines of code:
    uv venv
    uv pip install -e .
 
-Now you can run it with:
+To run PyEDT, use this command:
 
 .. code:: bash
 
    uv run run_toolkit
 
-**Details**
+**Work environment setup**
 
-Installing Pytools installer in developer mode allows you to modify the source
-and enhance it.
+To set up your work environment for development, follow these steps:
 
-Before contributing to the project, please refer to the `PyAnsys Developer's
-guide`_. You need to follow these steps:
-
-#. Start by cloning this repository:
-
-   .. code:: bash
-
-      git clone https://github.com/ansys/ansys-pyetk
-
-#. Create a fresh-clean Python environment and activate it. Refer to the
-   official `venv`_ documentation if you require further information:
+#. Create a fresh-clean Python environment and activate it. For more information,
+   see the `venv`_ Python documentation.
 
    .. code:: bash
 
@@ -177,24 +153,27 @@ guide`_. You need to follow these steps:
 
       python -m uv pip install -e .[tests,doc]
 
-#. Finally, verify your development installation by running:
+#. Verify your development installation by running the tests:
 
    .. code:: bash
 
       uv run pytest tests -v
 
 
-Style and testing
------------------
-This project uses `pre-commit <https://pre-commit.com/>`_. Install with:
+Run style checks and tests
+--------------------------
+This project uses `pre-commit <https://pre-commit.com/>`_ to run style
+checks and tests.
+
+Install ``pre-commit``:
 
 .. code::
 
    uv pip install pre-commit
    uv run pre-commit install
 
-This now runs ``pre-commit`` for each commit to ensure you follow project
-style guidelines. For example:
+After each commit, ``pre-commit`` runs to ensure your changes follow project
+style guidelines:
 
 .. code::
 
@@ -211,30 +190,34 @@ style guidelines. For example:
    trim trailing whitespace.................................................Passed
    Validate GitHub Workflows................................................Passed
 
-If you need to run it again on all files and not just staged files, run:
+If you need to run ``pre-commit`` again on all files and not just staged files, run
+it with the ``--all-files`` option:
 
 .. code::
 
    uv run pre-commit run --all-files
 
-
-Local build
------------
-This application can be deployed as a 'frozen' application using `pyinstaller
-<https://pypi.org/project/pyinstaller/>`_ with:
+Deploy a local build
+--------------------
+You can deploy PyETK as a *frozen* application using `PyInstaller
+<https://pypi.org/project/pyinstaller/>`_:
 
 .. code::
 
    uv pip install -e .[freeze]
    uv run pyinstaller frozen.spec
 
-This generates application files at ``dist/ansys_python_manager`` and you
-can run it locally by executing ``Ansys Python Manager.exe``.
+This generates app files at ``dist/ansys_pyetk/Electronic Transformer Toolkit.exe``.
+The ``Electronic Transformer Toolkit.exe`` is a standalone application,
+without the need to install Python or any dependencies.
 
+It is also possible to deploy an Windows installer using ``NSIS``.
 
-Documentation
--------------
-For building documentation, you can either run the usual rules provided in the
+For more information see: `Distributing Toolkits <https://aedt.common.toolkit.docs.pyansys.com/version/stable/distributing.html>`_
+
+Build documentation
+-------------------
+To build the documentation, run the usual rules provided in the
 `Sphinx`_ Makefile:
 
 .. code:: bash
@@ -246,7 +229,7 @@ For building documentation, you can either run the usual rules provided in the
     <your_browser_name> doc/html/index.html
 
 .. LINKS AND REFERENCES
-.. _PyAnsys Developer's guide: https://dev.docs.pyansys.com/
+.. _PyAnsys developer's guide: https://dev.docs.pyansys.com/
 .. _Sphinx: https://www.sphinx-doc.org/en/master/
 .. _pip: https://pypi.org/project/pip/
 .. _venv: https://docs.python.org/3/library/venv.html

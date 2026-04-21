@@ -30,6 +30,7 @@ you acknowledge that you are responsible for complying with any associated terms
 <a href='{ISSUE_TRACKER_URL}'>ansys-pyetk Issues</a> page.
 </p>
 <p>Alternatively, you can contact us at <a href='mailto:pyansys.core@ansys.com'>pyansys.core@ansys.com</a>.</p>
+<p>PyETK contains material datapoints from Ferroxcube <a href='https://www.ferroxcube.com/en-global/ak_material/index/power_conversion#5'>Ferroxcube Power Conversion Materials</a> and may be subject to additional licensing.</p>
 """
 
 

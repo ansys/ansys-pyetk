@@ -16,14 +16,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# # Use the ToolkitBackend API to create a transformer model in AEDT
+# # Create a transformer model in AEDT using the PyETK API
 #
-# This example demonstrates how to use the ``ToolkitBackend`` class.
-# More specifically, it does the following:
+# This example shows how to use the ``ToolkitBackend`` class in the PyEDT API to
+# create a transformer model in AEDT. More specifically, it does the following:
 # - Initializes the ``ToolkitBackend`` class.
 # - Sets common properties like ``non_graphical`` and ``aedt_version``.
 # - Defines the path to the JSON file with the transformer properties.
-# - Reads the properties from the JSON file.
+# - Reads the transformer properties from the JSON file.
 # - Launches AEDT.
 # - Creates the transformer model.
 
@@ -65,5 +65,5 @@ if not idle:
     print("AEDT not initialized.")
     sys.exit()
 
-# ## Create the models
+# ## Create the model
 setup = toolkit_api.create_model()
