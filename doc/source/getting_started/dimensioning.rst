@@ -15,14 +15,14 @@ the PCB as traces, while the wound winding wraps around a leg of the magnetic co
 
 Wound build type
 ----------------
-.. image:: ../_static/topology-wound.jpg
+.. image:: ../_static/topology-wound.svg
     :align: center
     :width: 600
     :alt: Wound transformer
 
 Planar build type
 -----------------
-.. image:: ../_static/topology-planar.jpg
+.. image:: ../_static/topology-planar.svg
     :align: center
     :width: 600
     :alt: Planar transformer

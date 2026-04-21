@@ -11,7 +11,7 @@ This example shows how to migrate an existing ACT JSON file for ETK to a PyETK J
    The ACT JSON file does not include a version. Its structure contains three main sections: ``core_dimensions``, ``winding_definitions``, and ``setup_definitions``.
    It looks like this:
 
-   .. image:: ../_static/act-toolkit-json.png
+   .. image:: ../_static/act-toolkit-json.svg
       :align: center
       :width: 400
       :alt: UI start page tab
@@ -29,7 +29,7 @@ This example shows how to migrate an existing ACT JSON file for ETK to a PyETK J
 #. If you want to reuse this configuration file, click **Save As** to save it in the latest
    working JSON format.
 
-   .. image:: ../_static/load-act-json.png
+   .. image:: ../_static/load-act-json.svg
       :align: center
       :width: 800
       :alt: Transformer Builder tab
@@ -40,7 +40,7 @@ This example shows how to migrate an existing ACT JSON file for ETK to a PyETK J
 PyETK's versioned JSON file resembles the original ACT JSON configuration file.
 However, it has a more structured format, with clear sections for core dimensions, winding definitions, and setup definitions. This structure makes it easier to navigate and understand the different components of the transformer configuration.
 
-.. image:: ../_static/pyetk-toolkit-json.png
+.. image:: ../_static/pyetk-toolkit-json.svg
    :align: center
    :width: 250
    :alt: Versioned JSON file
