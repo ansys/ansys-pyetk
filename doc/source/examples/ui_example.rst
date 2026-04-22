@@ -10,7 +10,7 @@ the available fields and tools.
 The design is for a planar transformer, which is commonly used in power
 electronics applications.
 
-.. image:: ../_static/planar-transformer.png
+.. image:: ../_static/planar-transformer.svg
     :align: center
     :width: 400
     :alt: Planar transformer
@@ -20,7 +20,7 @@ For simplicity, the example covers one submenu at a time, starting with the core
 #. Launch the PyETK UI and connect to AEDT by clicking **Connect to AEDT**.
    For PyETK installation instructions, see :ref:`installation`.
 
-   .. image:: ../_static/pyetk-toolkit-settings.png
+   .. image:: ../_static/pyetk-toolkit-settings.svg
       :align: center
       :width: 800
       :alt: UI settings
@@ -30,7 +30,7 @@ For simplicity, the example covers one submenu at a time, starting with the core
 
    This tab contains all the fields and tools to design and model electronic transformers.
 
-   .. image:: ../_static/menu-builder-tab.png
+   .. image:: ../_static/menu-builder-tab.svg
       :align: center
       :width: 800
       :alt: Transformer Builder tab
@@ -38,14 +38,14 @@ For simplicity, the example covers one submenu at a time, starting with the core
 #. In the **Core** area, select the core type, dimensions, and material. Select the
    **Custom Core** checkbox to apply a standard core shape with custom dimensions.
 
-   .. image:: ../_static/menu-core.png
+   .. image:: ../_static/menu-core.svg
       :align: center
       :width: 600
       :alt: Transformer Builder tab
 
 #. In the **Board and Margin** area, specify the thickness and margins in millimeters.
 
-   .. image:: ../_static/menu-bobbin-margin.png
+   .. image:: ../_static/menu-bobbin-margin.svg
       :align: center
       :width: 350
       :alt: Board and Margin area
@@ -56,7 +56,7 @@ For simplicity, the example covers one submenu at a time, starting with the core
 #. In the **Electrical** area, modify the electrical source information, such as frequency,
    excitation strategy, and excitation value.
 
-   .. image:: ../_static/menu-electrical.png
+   .. image:: ../_static/menu-electrical.svg
        :align: center
        :width: 350
        :alt: Excitation menu
@@ -66,7 +66,7 @@ For simplicity, the example covers one submenu at a time, starting with the core
 
    The **Winding** area initializes as follows:
 
-   .. image:: ../_static/menu-winding.png
+   .. image:: ../_static/menu-winding.svg
        :align: center
        :width: 600
        :alt: Winding menu
@@ -77,28 +77,28 @@ For simplicity, the example covers one submenu at a time, starting with the core
     To modify the circuit connections between layers, select the layers of interest, click **Disconnect**, and then choose either **Series** or **Parallel** as the connection. You can also specify the connection between layers of each winding side by clicking **Side <number>** in the top Winding menu,
     and selecting either **Series** or **Parallel** to connect the layers in the bottom Winding/Connection menu.
 
-    .. image:: ../_static/menu-winding-2.png
+    .. image:: ../_static/menu-winding-2.svg
         :align: center
         :width: 600
         :alt: Winding layers and connections
 
     After disconnecting, the default connection appears as follows:
 
-    .. image:: ../_static/menu-winding-3.png
+    .. image:: ../_static/menu-winding-3.svg
         :align: center
         :width: 600
         :alt: Winding layers and connections disconnected
 
     Connect the layers in parallel:
 
-    .. image:: ../_static/menu-winding-4.png
+    .. image:: ../_static/menu-winding-4.svg
         :align: center
         :width: 600
         :alt: Winding layers and connections in parallel
 
 #. Create the winding layers and connections for the planar transformer as shown:
 
-   .. image:: ../_static/menu-winding-5.png
+   .. image:: ../_static/menu-winding-5.svg
        :align: center
        :width: 600
        :alt: Winding menu Planar
@@ -108,14 +108,14 @@ For simplicity, the example covers one submenu at a time, starting with the core
 
    Maxwell settings control the accuracy and convergence of the Maxwell analysis performed after creating the transformer geometry in AEDT.
 
-   .. image:: ../_static/menu-settings.png
+   .. image:: ../_static/menu-settings.svg
        :align: center
-       :width: 350
+       :width: 300
        :alt: Settings pane for Maxwell analysis
 
 #. Click **Create Transformer** to create the transformer geometry in AEDT.
 
-   .. image:: ../_static/menu-save-create.png
+   .. image:: ../_static/menu-save-create.svg
        :align: center
        :width: 600
        :alt: Save As and Create Transformer buttons
@@ -139,7 +139,7 @@ You can open or load a pre-packaged example in the PyETK UI:
 - Click **Open** and select the JSON file.
 - Use the forward and backward buttons to navigate through the JSON files.
 
-.. image:: ../_static/menu-examples.png
+.. image:: ../_static/menu-examples.svg
     :align: center
     :width: 600
     :alt: Open and browse examples
