@@ -5,7 +5,8 @@ ci:
 
 exclude: |
   (?x)(
-      src/ansys/aedt/toolkits/electronic_transformer/ui/windows/.*
+      src/ansys/aedt/toolkits/electronic_transformer/ui/windows/.*|
+      doc/source/_static/.*
   )
 
 repos:
