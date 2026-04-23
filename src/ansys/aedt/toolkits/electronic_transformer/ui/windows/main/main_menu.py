@@ -41,7 +41,8 @@ from ansys.aedt.toolkits.electronic_transformer.ui.common.data_manager import da
 from ansys.aedt.toolkits.electronic_transformer.ui.common.units_and_scales import freq_units
 from ansys.aedt.toolkits.electronic_transformer.ui.common.units_and_scales import freq_scale
 from ansys.aedt.toolkits.electronic_transformer.ui.common.units_and_scales import scale_units
-from ansys.aedt.toolkits.electronic_transformer.ui.workflows.ui_validation import Validation
+# from ansys.aedt.toolkits.electronic_transformer.ui.workflows.ui_validation import Validation
+from ansys.aedt.toolkits.electronic_transformer.common.validation import Validation
 
 from ansys.aedt.toolkits.electronic_transformer.ui.windows.main.main_column import Ui_LeftColumn
 from ansys.aedt.toolkits.electronic_transformer.ui.windows.main.main_page import Ui_Geometry
