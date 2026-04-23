@@ -178,6 +178,15 @@ class GeometryMenu(object):
         self.airgap_value.setText("0.0")
         self.airgap_combo_label = self.geometry_menu_widget.findChild(QLabel, "core_airgap_size")
 
+        # Core/Coil validation widgets
+        self.winding_width = self.geometry_menu_widget.findChild(QLineEdit, "winding_width")
+        self.winding_height = self.geometry_menu_widget.findChild(QLineEdit, "winding_height")
+        self.window_width = self.geometry_menu_widget.findChild(QLineEdit, "window_width")
+        self.window_height = self.geometry_menu_widget.findChild(QLineEdit, "window_height")
+
+        for widget in (self.winding_width, self.winding_height, self.window_width, self.window_height):
+            widget.setReadOnly(True)
+
         # Assign to QLineEdit and QLabel for core dimensions
         for key, value in self.properties.core.dimensions.items():
             setattr(self, key + "_label", self.geometry_menu_widget.findChild(QLabel, key + "_label"))
@@ -294,6 +303,22 @@ class GeometryMenu(object):
 
         # Add first winding so window isn't empty
         self._add_winding()
+
+        # ───────────────────────────────
+        # Core/Coil Validation Check
+        # ───────────────────────────────
+        # Update winding fit summary text when relevant fields change
+        self.bobbin_board_thickness.editingFinished.connect(self._update_core_validation_text)
+        self.top_margin.editingFinished.connect(self._update_core_validation_text)
+        self.side_margin.editingFinished.connect(self._update_core_validation_text)
+        self.layer_spacing.editingFinished.connect(self._update_core_validation_text)
+
+        # When winding tree values change, update summary after edits are committed
+        self.winding_tree_widget.itemChanged.connect(lambda *_: self._update_core_validation_text())
+
+        # When core model/dims change
+        self.model_combo.currentIndexChanged.connect(lambda *_: self._update_core_validation_text())
+        self.custom_core.toggled.connect(lambda *_: self._update_core_validation_text())
 
         # ───────────────────────────────
         # File Handling
@@ -493,6 +518,88 @@ class GeometryMenu(object):
             widget = getattr(self, dim_key, None)
             if widget is not None:
                 self._set_invalid(widget, False)
+
+    def _update_core_validation_text(self):
+        """Update winding-fit fields (winding build vs window size).
+
+        Populates the UI line edits:
+        - winding_width, winding_height
+        - window_width, window_height
+
+        Highlights winding_width and/or winding_height in red if they exceed
+        the available window_width/window_height.
+        """
+        # Always clear previous invalid styling first (prevents "sticky" red borders)
+        for widget in (self.winding_width, self.winding_height):
+            self._set_invalid(widget, False, "")
+
+        try:
+            # IMPORTANT: Do not call _read_ui_data() here.
+            # During JSON import / programmatic UI writes, calling _read_ui_data()
+            # can overwrite imported gui_properties with stale widget values.
+
+            # Sync gui_properties -> data_manager.properties (fe_properties structure)
+            self.data_manager._update_frontend_properties()
+
+            validator = Validation()
+            metrics = validator.winding_fit_metrics(
+                self.data_manager.properties.core,
+                self.data_manager.properties.winding,
+                self.data_manager.properties.bobbin,
+            )
+
+            rw = metrics.get("required_width_mm")
+            rh = metrics.get("required_height_mm")
+            ww = metrics.get("window_width_mm")
+            wh = metrics.get("window_height_mm")
+
+            # If anything is missing, clear all 4 fields and exit
+            if None in (rw, rh, ww, wh):
+                for w in (self.winding_width, self.winding_height, self.window_width, self.window_height):
+                    if w is not None:
+                        w.setText("")
+                return
+
+            # Populate the UI fields (numeric only, since these are separate line edits)
+            if self.winding_width is not None:
+                self.winding_width.setText(f"{float(rw):.3f}")
+            if self.winding_height is not None:
+                self.winding_height.setText(f"{float(rh):.3f}")
+            if self.window_width is not None:
+                self.window_width.setText(f"{float(ww):.3f}")
+            if self.window_height is not None:
+                self.window_height.setText(f"{float(wh):.3f}")
+
+            # Compare and highlight only the winding build fields if they exceed the window
+            width_exceeds = float(rw) > float(ww)
+            height_exceeds = float(rh) > float(wh)
+
+            if self.winding_width is not None:
+                self._set_invalid(
+                    self.winding_width,
+                    width_exceeds,
+                    f"Winding width ({float(rw):.3f} mm) exceeds window width ({float(ww):.3f} mm)."
+                    if width_exceeds
+                    else "",
+                )
+
+            if self.winding_height is not None:
+                self._set_invalid(
+                    self.winding_height,
+                    height_exceeds,
+                    f"Winding height ({float(rh):.3f} mm) exceeds window height ({float(wh):.3f} mm)."
+                    if height_exceeds
+                    else "",
+                )
+
+        except Exception:
+            # Keep UI stable if the model is temporarily inconsistent during edits
+            for widget in (self.winding_width, self.winding_height, self.window_width, self.window_height):
+                if widget is not None:
+                    widget.setText("")
+            for widget in (self.winding_width, self.winding_height):
+                if widget is not None:
+                    self._set_invalid(widget, False, "")
 
     def load_example(self, direction):
         """Load an example file by stepping forwards or backwards.
@@ -745,6 +852,7 @@ class GeometryMenu(object):
             # Update core dimensions dictionary with values
             core_dimensions[nominal_dim] = float(line_edit.text())
         self.gui_properties.core.dimensions = core_dimensions
+        self._update_core_validation_text()
 
     def show_core_img(self):
         """Display the expected core type image."""
@@ -920,6 +1028,12 @@ class GeometryMenu(object):
         self.winding_tree_widget.setCurrentItem(new_winding)
 
         self._add_layer()
+
+        self.gui_properties.winding.layers_definition = self._update_layers_definition()
+        self.gui_properties.winding.layer_side_definition = self._update_layer_side_definition()
+        self.gui_properties.winding.side_loads = self._update_loads_definition()
+
+        self._update_core_validation_text()
 
     def _conductor_type_changed(self):
         """Handle the conductor type change event.
@@ -1169,6 +1283,13 @@ class GeometryMenu(object):
             self.update_connections_def()
             self._display_connection_scheme()
 
+        # Sync GUI model after programmatic changes so validation/build updates
+        self.gui_properties.winding.layers_definition = self._update_layers_definition()
+        self.gui_properties.winding.layer_side_definition = self._update_layer_side_definition()
+        self.gui_properties.winding.side_loads = self._update_loads_definition()
+
+        self._update_core_validation_text()
+
     def _delete_row(self):
         """Deletes a row of type either side or layer from the winding group."""
         item = self.winding_tree_widget.currentItem()
@@ -1239,6 +1360,8 @@ class GeometryMenu(object):
         self.gui_properties.winding.layer_side_definition = self._update_layer_side_definition()
         self.gui_properties.winding.side_loads = self._update_loads_definition()
 
+        self._update_core_validation_text()
+
     def _delete_side(self):
         """Deletes a side and any containing layers from winding group then updates stored connections and properties"""
 
@@ -1286,6 +1409,8 @@ class GeometryMenu(object):
         self.gui_properties.winding.layers_definition = self._update_layers_definition()
         self.gui_properties.winding.layer_side_definition = self._update_layer_side_definition()
         self.gui_properties.winding.side_loads = self._update_loads_definition()
+
+        self._update_core_validation_text()
 
     def _default_conn_wip_rows_for_side(self, side_item):
         """Return WIP connections rows for a side."""

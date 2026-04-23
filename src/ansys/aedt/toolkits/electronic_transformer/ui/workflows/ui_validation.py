@@ -417,6 +417,162 @@ class Validation:
 
         return error_message
 
+    def winding_fit_metrics(self, core_properties, winding_properties, bobbin_properties):
+        """Compute winding envelope (build) and core window envelopes in mm.
+
+        Parameters
+        ----------
+        core_properties : Properties.core (CoreProperties)
+        winding_properties : Properties.winding (WindingProperties)
+        bobbin_properties : Properties.bobbin (BobbinProperties)
+
+        Returns
+        -------
+        dict
+            {
+                "required_width_mm": float | None,
+                "required_height_mm": float | None,
+                "window_width_mm": float | None,
+                "window_height_mm": float | None,
+            }
+        """
+        # Pull values from the *current* FE Properties model shape
+        side_margin = float(getattr(winding_properties, "side_margin", 0.0) or 0.0)
+        top_margin = float(getattr(winding_properties, "top_margin", 0.0) or 0.0)
+
+        layers_obj = getattr(winding_properties, "layers", None)
+        if not layers_obj:
+            return {
+                "required_width_mm": None,
+                "required_height_mm": None,
+                "window_width_mm": None,
+                "window_height_mm": None,
+            }
+
+        layer_type = getattr(layers_obj, "type", "") or ""
+        layer_spacing = float(getattr(layers_obj, "spacing", 0.0) or 0.0)
+        layers = getattr(layers_obj, "definition_per_layer", None) or {}
+
+        if not layers:
+            return {
+                "required_width_mm": None,
+                "required_height_mm": None,
+                "window_width_mm": None,
+                "window_height_mm": None,
+            }
+
+        bobbin_thickness = float(getattr(bobbin_properties, "thickness", 0.0) or 0.0)
+
+        # Determine conductor type from first layer (Rectangular/Circular)
+        first_layer = next(iter(layers.values()))
+        conductor = (first_layer or {}).get("conductor", {}) or {}
+        conductor_type = (conductor.get("type") or "").strip()  # "Rectangular" / "Circular"
+
+        def _ins_thickness(layer_dict):
+            # Insulation may not be present in current backend layer dict. Default to 0.0.
+            ins = (layer_dict or {}).get("insulation", {}) or {}
+            return float(ins.get("thickness", 0.0) or 0.0)
+
+        def _turns_qty(layer_dict):
+            turns = (layer_dict or {}).get("turns", {}) or {}
+            return int(turns.get("quantity", 0) or 0)
+
+        # ---- required width/height (winding build envelope) ----
+        required_width = None
+        required_height = None
+
+        if layer_type.lower() == "wound":
+            # Width: sum of layer widths (or diameters) + insulation on both sides + spacing between layers
+            if conductor_type.lower() == "rectangular":
+                max_layer_sum = (
+                    sum(
+                        float(layer["conductor"].get("width", 0.0) or 0.0) + 2.0 * _ins_thickness(layer) + layer_spacing
+                        for layer in layers.values()
+                    )
+                    - layer_spacing
+                )
+            else:
+                # Circular
+                max_layer_sum = (
+                    sum(
+                        float(layer["conductor"].get("diameter", 0.0) or 0.0)
+                        + 2.0 * _ins_thickness(layer)
+                        + layer_spacing
+                        for layer in layers.values()
+                    )
+                    - layer_spacing
+                )
+
+            required_width = 2.0 * (bobbin_thickness + side_margin + max_layer_sum)
+
+            # Height: max of (height/diameter + 2*insulation) * turns
+            if conductor_type.lower() == "rectangular":
+                max_layer = max(
+                    (float(layer["conductor"].get("height", 0.0) or 0.0) + 2.0 * _ins_thickness(layer))
+                    * _turns_qty(layer)
+                    for layer in layers.values()
+                )
+            else:
+                max_layer = max(
+                    (float(layer["conductor"].get("diameter", 0.0) or 0.0) + 2.0 * _ins_thickness(layer))
+                    * _turns_qty(layer)
+                    for layer in layers.values()
+                )
+
+            required_height = 2.0 * bobbin_thickness + top_margin + max_layer
+
+        else:
+            # Planar
+            # Width: max over layers of (width + turn_spacing/insulation.thickness) * turns
+            max_layer = max(
+                (
+                    float(layer["conductor"].get("width", 0.0) or 0.0) + _ins_thickness(layer)
+                    # In planar case, original validation uses + insulation.thickness (not x2)
+                )
+                * _turns_qty(layer)
+                for layer in layers.values()
+            )
+            required_width = 2.0 * max_layer + 2.0 * side_margin
+
+            # Height: sum of (height + bobbin_thickness + spacing) - spacing + top_margin
+            height_sum = (
+                sum(
+                    float(layer["conductor"].get("height", 0.0) or 0.0) + bobbin_thickness + layer_spacing
+                    for layer in layers.values()
+                )
+                - layer_spacing
+            )
+            required_height = height_sum + top_margin
+
+        # ---- available window width/height ----
+        dims = core_properties.dimensions
+        core_type = core_properties.type
+
+        # Height window depends on core type
+        if core_type in ["E", "EC", "EFD", "EQ", "ER", "ETD", "PH"]:
+            window_height = 2.0 * float(dims["D_5"])
+        elif core_type in ["EI", "EP", "P", "PT", "PQ", "RM"]:
+            window_height = float(dims["D_5"])
+        elif core_type == "UI":
+            window_height = float(dims["D_4"])
+        elif core_type == "U":
+            window_height = 2.0 * float(dims["D_4"])
+        else:
+            window_height = None
+
+        # Width window depends on core type
+        if core_type not in ["U", "UI"]:
+            window_width = float(dims["D_2"]) - float(dims["D_3"])
+        else:
+            window_width = 2.0 * float(dims["D_2"])
+
+        return {
+            "required_width_mm": required_width,
+            "required_height_mm": required_height,
+            "window_width_mm": window_width,
+            "window_height_mm": window_height,
+        }
+
     def validate_model(self, core_properties, winding_properties, bobbin_properties):
         """Validate the complete transformer model including core and winding.
 

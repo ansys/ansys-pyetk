@@ -362,17 +362,14 @@ class Ui_Geometry(object):
         self.gridLayout_9 = QGridLayout()
         self.gridLayout_9.setObjectName(u"gridLayout_9")
         self.gridLayout_9.setContentsMargins(5, -1, -1, -1)
-        self.verticalSpacer_17 = QSpacerItem(20, 60, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed)
+        self.window_height = QLineEdit(self.groupBox_4)
+        self.window_height.setObjectName(u"window_height")
 
-        self.gridLayout_9.addItem(self.verticalSpacer_17, 3, 0, 1, 1)
+        self.gridLayout_9.addWidget(self.window_height, 7, 3, 1, 1)
 
         self.horizontalSpacer_7 = QSpacerItem(40, 20, QSizePolicy.Policy.Maximum, QSizePolicy.Policy.Minimum)
 
-        self.gridLayout_9.addItem(self.horizontalSpacer_7, 0, 1, 1, 1)
-
-        self.verticalSpacer_12 = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
-
-        self.gridLayout_9.addItem(self.verticalSpacer_12, 1, 0, 1, 1)
+        self.gridLayout_9.addItem(self.horizontalSpacer_7, 0, 3, 1, 1)
 
         self.core_image = QGraphicsView(self.groupBox_4)
         self.core_image.setObjectName(u"core_image")
@@ -382,7 +379,54 @@ class Ui_Geometry(object):
         self.core_image.setMaximumSize(QSize(310, 370))
         self.core_image.setTransformationAnchor(QGraphicsView.ViewportAnchor.NoAnchor)
 
-        self.gridLayout_9.addWidget(self.core_image, 2, 0, 1, 1, Qt.AlignmentFlag.AlignTop)
+        self.gridLayout_9.addWidget(self.core_image, 1, 1, 1, 1)
+
+        self.winding_height = QLineEdit(self.groupBox_4)
+        self.winding_height.setObjectName(u"winding_height")
+
+        self.gridLayout_9.addWidget(self.winding_height, 6, 3, 1, 1)
+
+        self.verticalSpacer_12 = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
+
+        self.gridLayout_9.addItem(self.verticalSpacer_12, 1, 2, 1, 1)
+
+        self.verticalSpacer_17 = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed)
+
+        self.gridLayout_9.addItem(self.verticalSpacer_17, 4, 2, 1, 1)
+
+        self.window_width = QLineEdit(self.groupBox_4)
+        self.window_width.setObjectName(u"window_width")
+
+        self.gridLayout_9.addWidget(self.window_width, 7, 2, 1, 1)
+
+        self.label_17 = QLabel(self.groupBox_4)
+        self.label_17.setObjectName(u"label_17")
+
+        self.gridLayout_9.addWidget(self.label_17, 5, 3, 1, 1)
+
+        self.label_15 = QLabel(self.groupBox_4)
+        self.label_15.setObjectName(u"label_15")
+
+        self.gridLayout_9.addWidget(self.label_15, 5, 2, 1, 1)
+
+        self.label_14 = QLabel(self.groupBox_4)
+        self.label_14.setObjectName(u"label_14")
+        self.label_14.setLayoutDirection(Qt.LayoutDirection.RightToLeft)
+        self.label_14.setScaledContents(False)
+        self.label_14.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
+
+        self.gridLayout_9.addWidget(self.label_14, 6, 1, 1, 1)
+
+        self.label_16 = QLabel(self.groupBox_4)
+        self.label_16.setObjectName(u"label_16")
+        self.label_16.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
+
+        self.gridLayout_9.addWidget(self.label_16, 7, 1, 1, 1)
+
+        self.winding_width = QLineEdit(self.groupBox_4)
+        self.winding_width.setObjectName(u"winding_width")
+
+        self.gridLayout_9.addWidget(self.winding_width, 6, 2, 1, 1)
 
 
         self.horizontalLayout_2.addLayout(self.gridLayout_9)
@@ -776,8 +820,7 @@ class Ui_Geometry(object):
         QWidget.setTabOrder(self.D_7, self.D_8)
         QWidget.setTabOrder(self.D_8, self.airgap_combo)
         QWidget.setTabOrder(self.airgap_combo, self.airgap_value)
-        QWidget.setTabOrder(self.airgap_value, self.core_image)
-        QWidget.setTabOrder(self.core_image, self.bobbin_board_thickness)
+        QWidget.setTabOrder(self.airgap_value, self.bobbin_board_thickness)
         QWidget.setTabOrder(self.bobbin_board_thickness, self.top_margin)
         QWidget.setTabOrder(self.top_margin, self.side_margin)
         QWidget.setTabOrder(self.side_margin, self.adaptive_frequency)
@@ -838,6 +881,10 @@ class Ui_Geometry(object):
         self.label.setText(QCoreApplication.translate("Geometry", u"Material", None))
         self.D_1_ref.setText(QCoreApplication.translate("Geometry", u"TextLabel", None))
         self.D_4_label.setText(QCoreApplication.translate("Geometry", u"D_4, (mm)", None))
+        self.label_17.setText(QCoreApplication.translate("Geometry", u"Height", None))
+        self.label_15.setText(QCoreApplication.translate("Geometry", u"Width", None))
+        self.label_14.setText(QCoreApplication.translate("Geometry", u"Winding", None))
+        self.label_16.setText(QCoreApplication.translate("Geometry", u"Window", None))
         self.bobbin_groupbox.setTitle(QCoreApplication.translate("Geometry", u"Bobbin and Margin", None))
         self.bobbin_label.setText(QCoreApplication.translate("Geometry", u"Bobbin Thickness, (mm)", None))
         self.label_11.setText(QCoreApplication.translate("Geometry", u"Side Margin, (mm)", None))
