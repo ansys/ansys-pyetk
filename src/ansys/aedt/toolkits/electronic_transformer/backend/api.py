@@ -37,8 +37,8 @@ from ansys.aedt.toolkits.electronic_transformer.backend.models import properties
 from ansys.aedt.toolkits.electronic_transformer.backend.workflows.bobbin import Bobbin
 from ansys.aedt.toolkits.electronic_transformer.backend.workflows.core import Core
 from ansys.aedt.toolkits.electronic_transformer.backend.workflows.etk import ETK
-from ansys.aedt.toolkits.electronic_transformer.backend.workflows.validation import Validation
 from ansys.aedt.toolkits.electronic_transformer.backend.workflows.winding import Winding
+from ansys.aedt.toolkits.electronic_transformer.common.validation import Validation
 
 
 class ToolkitBackend(AEDTCommon):
