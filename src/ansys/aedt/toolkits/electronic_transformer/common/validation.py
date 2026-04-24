@@ -28,7 +28,7 @@ class Validation:
 
     def __init__(self):
         """Initialize and launch the validation component."""
-        self.schema = Path(__file__).parents[1] / "schemas" / "pyetk_schema.json"
+        self.schema = Path(__file__).resolve().parents[1] / "backend" / "schemas" / "pyetk_schema.json"
 
     def __validate_core(self, core_properties):
         """Validate core dimensions and parameters.

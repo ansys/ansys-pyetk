@@ -72,25 +72,18 @@ class PostProcessing:
 
     def __creat_3d_field_plot(self):
         """Create a 3D field plot."""
-        intrinsic_dict = {
-            "Freq": str(self.__setup.definitions.analysis_setup.adaptive_frequency) + "Hz",
-            "Phase": "0deg",
-        }
-
         # Windings
         surface_list = self.__get_objects_surfaces(self.__winding.objects_list)
 
         self.__aedt.post.create_fieldplot_surface(
             assignment=surface_list,
             quantity="Mag_J",
-            intrinsics=intrinsic_dict,
             plot_name="J",
         )
 
         ohmic_plot = self.__aedt.post.create_fieldplot_surface(
             assignment=surface_list,
             quantity="Ohmic_Loss",
-            intrinsics=intrinsic_dict,
             plot_name="Ohmic_Loss",
         )
 
@@ -100,14 +93,12 @@ class PostProcessing:
         self.__aedt.post.create_fieldplot_surface(
             assignment=surface_list,
             quantity="Mag_B",
-            intrinsics=intrinsic_dict,
             plot_name="B",
         )
 
         self.__aedt.post.create_fieldplot_surface(
             assignment=surface_list,
             quantity="Core_Loss",
-            intrinsics=intrinsic_dict,
             plot_name="Core_Loss",
         )
 
