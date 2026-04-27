@@ -143,15 +143,9 @@ class PostProcessing:
                     y = next_key
 
                 if int(x) < int(y):
-                    coupling_coef = "CplCoef({0}_{1},{2}_{3})".format(
-                        connection_str_x, str(x), connection_str_y, str(y)
-                    )
-                    equation = "L({0}_{1},{2}_{3})*(1-sqr({4}))".format(
-                        connection_str_x, x, connection_str_x, x, coupling_coef
-                    )
-                    all_leakages[
-                        "Leakage_Inductance_{0}_{1},{2}_{3}".format(connection_str_x, x, connection_str_y, y)
-                    ] = equation
+                    coupling_coef = f"CplCoef({connection_str_x}_{x},{connection_str_y}_{y})"
+                    equation = f"L({connection_str_x}_{x},{connection_str_x}_{x})*(1-sqr({coupling_coef}))"
+                    all_leakages[f"Leakage_Inductance_{connection_str_x}_{x},{connection_str_y}_{y}"] = equation
 
         plot_name = "PyETK Leakage_Inductance"
         report = self.aedt_test.post.create_report(
