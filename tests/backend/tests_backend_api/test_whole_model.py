@@ -38,7 +38,7 @@ pytestmark = [pytest.mark.backend]
 @pytest.mark.skipif(is_linux, reason="Crashing on Linux")
 class TestBackendAPI:
     def test_01_create_model(self, aedt_common_fixture_class):
-        json_file_name = "EI_planar_rectangular.json"
+        json_file_name = "RM_wound_circular.json"
         json_path = Path(json_files_path) / json_file_name
         aedt_common_fixture_class.load_properties_from_json(json_path)
 
@@ -80,7 +80,7 @@ class TestBackendAPI:
         aedtapp = aedt_common_fixture_class.aedtapp
         assert aedtapp.post.field_plot_names == ["B", "Core_Loss", "J", "Ohmic_Loss"]
         assert aedtapp.post.plots[0].plot_name == "PyETK Leakage_Inductance"
-        assert aedtapp.post.plots[0].expressions in ["L(Side_1,Side_1)*(1-sqr(CplCoef(Side_1,Side_2)))"]
+        assert aedtapp.post.plots[0].expressions == ["L(Layer_1,Layer_1)*(1-sqr(CplCoef(Layer_1,Layer_1)))"]
 
     def test_05_circut(self, aedt_common_fixture_class):
         aedt_common_fixture_class.connect_design("Maxwell3D")
