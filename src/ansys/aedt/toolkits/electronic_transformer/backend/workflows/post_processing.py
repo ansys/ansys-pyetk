@@ -144,7 +144,7 @@ class PostProcessing:
 
                 if int(x) < int(y):
                     coupling_coef = f"CplCoef({connection_str_x}_{x},{connection_str_y}_{y})"
-                    equation = f"L({connection_str_x}_{x},{connection_str_x}_{x})*(1-sqr({coupling_coef}))"
+                    equation = f"L({connection_str_x}_{x},{connection_str_x}_{x})*(1-({coupling_coef})^2)"
                     all_leakages[f"Leakage_Inductance_{connection_str_x}_{x},{connection_str_y}_{y}"] = equation
 
         plot_name = "PyETK Leakage_Inductance"
