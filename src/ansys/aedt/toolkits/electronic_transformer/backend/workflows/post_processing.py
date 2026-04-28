@@ -110,7 +110,11 @@ class PostProcessing:
     def create_post_processing(self):
         """Create the post-processing."""
         self.__creat_3d_field_plot()
-        self.__create_leakage_plot()
+
+        # Create leakage plot, only if there are at least 2 sides.
+        # For a single side, there is no leakage inductance to calculate.
+        if len(self.__circuit_properties.connections) > 1:
+            self.__create_leakage_plot()
 
     def __create_leakage_plot(self):
         """Create equations to calculate leakage inductance.
@@ -138,16 +142,10 @@ class PostProcessing:
                     connection_str_y = "Layer"
                     y = next_key
 
-                if int(x) <= int(y):
-                    coupling_coef = "CplCoef({0}_{1},{2}_{3})".format(
-                        connection_str_x, str(x), connection_str_y, str(y)
-                    )
-                    equation = "L({0}_{1},{2}_{3})*(1-sqr({4}))".format(
-                        connection_str_x, x, connection_str_y, y, coupling_coef
-                    )
-                    all_leakages[
-                        "Leakage_Inductance_{0}_{1},{2}_{3}".format(connection_str_x, x, connection_str_y, y)
-                    ] = equation
+                if int(x) < int(y):
+                    coupling_coef = f"CplCoef({connection_str_x}_{x},{connection_str_y}_{y})"
+                    equation = f"L({connection_str_x}_{x},{connection_str_x}_{x})*(1-({coupling_coef})^2)"
+                    all_leakages[f"Leakage_Inductance_{connection_str_x}_{x},{connection_str_y}_{y}"] = equation
 
         plot_name = "PyETK Leakage_Inductance"
         report = self.aedt_test.post.create_report(

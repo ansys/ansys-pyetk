@@ -50,11 +50,6 @@ Documentation for the latest stable release of PyETK is hosted at
 On the repository's `Issues <https://github.com/ansys/ansys-pyetk/issues>`_ page, you can
 create issues to submit questions, report bugs, and request new features.
 
-Expected behavior
-------------------
-ETK does not create a unique Maxwell model every time you click the **Create Transformer** button.
-After the first click, it creates a model on top of the previous one.
-
 Installation
 ~~~~~~~~~~~~
 To install PyETK, go to the repository's `Releases <https://github.com/ansys/ansys-pyetk/releases>`__ page
