@@ -493,7 +493,7 @@ class TestDataManager:
             data = json.load(f)
         result = dm._format_input_version(data)
 
-        assert "Version 0.0.1 Not Supported" == result
+        assert ".json version 0.0.1 Not Supported" == result
 
     def test_format_input_version_legacy_act(self):
         """Test branch: if "json_version" not in data.keys()."""
