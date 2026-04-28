@@ -553,22 +553,14 @@ class GeometryMenu(object):
             ww = metrics.get("window_width_mm")
             wh = metrics.get("window_height_mm")
 
-            # If anything is missing, clear all 4 fields and exit
-            if None in (rw, rh, ww, wh):
-                for w in (self.winding_width, self.winding_height, self.window_width, self.window_height):
-                    if w is not None:
-                        w.setText("")
-                return
+            # Validation checks use total window and winding widths
+            rw_display = float(rw) / 2.0
+            ww_display = float(ww) / 2.0
 
-            # Populate the UI fields (numeric only, since these are separate line edits)
-            if self.winding_width is not None:
-                self.winding_width.setText(f"{float(rw):.3f}")
-            if self.winding_height is not None:
-                self.winding_height.setText(f"{float(rh):.3f}")
-            if self.window_width is not None:
-                self.window_width.setText(f"{float(ww):.3f}")
-            if self.window_height is not None:
-                self.window_height.setText(f"{float(wh):.3f}")
+            self.winding_width.setText(f"{rw_display:.3f}")
+            self.winding_height.setText(f"{float(rh):.3f}")
+            self.window_width.setText(f"{ww_display:.3f}")
+            self.window_height.setText(f"{float(wh):.3f}")
 
             # Compare and highlight only the winding build fields if they exceed the window
             width_exceeds = float(rw) > float(ww)
