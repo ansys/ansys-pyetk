@@ -178,7 +178,7 @@ class TestDataManager:
 
         result = dm._format_input_version(data)
 
-        assert "Working with version" in result
+        assert "Working with .json version" in result
         assert dm.gui_properties.core.supplier == "TDK"
         assert dm.gui_properties.core.type == "EI"
         assert dm.gui_properties.core.model == "EI30"
@@ -515,7 +515,7 @@ class TestDataManager:
             data = json.load(f)
 
         result = dm._format_input_version(data)
-        assert result == "Working with version: 0.1.0"
+        assert result == "Working with .json version: 0.1.0"
 
     def test_import_data_from_json(self):
         """Import data only if valid."""
@@ -525,7 +525,7 @@ class TestDataManager:
 
         msg, is_valid = dm._import_data_from_json(versioned_json_model)
         assert is_valid is True
-        assert msg == "Working with version: 0.1.0"
+        assert msg == "Working with .json version: 0.1.0"
 
         msg, is_valid = dm._import_data_from_json(not_supported_json)
         assert is_valid is False
