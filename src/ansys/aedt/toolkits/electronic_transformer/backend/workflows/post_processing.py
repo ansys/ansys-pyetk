@@ -111,6 +111,7 @@ class PostProcessing:
     def create_post_processing(self):
         """Create the post-processing."""
         self.__creat_3d_field_plot()
+        self.__create_loss_report()
 
         # Create leakage plot, only if there are at least 2 sides.
         # For a single side, there is no leakage inductance to calculate.
@@ -163,3 +164,11 @@ class PostProcessing:
                 if each_trace.name == val:
                     each_trace.curve_properties["Number Format"] = "Scientific"
                     each_trace.name = key
+
+    def __create_loss_report(self):
+        """Create the loss report."""
+        self.__aedt.post.create_report(
+            plot_name="Loss Table",
+            expressions=["CoreLoss", "SolidLoss"],
+            plot_type="Data Table",
+        )
