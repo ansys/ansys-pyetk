@@ -79,9 +79,7 @@ class TestBackendAPI:
         aedt_common_fixture_class.connect_design("Maxwell3D")
         aedtapp = aedt_common_fixture_class.aedtapp
         assert aedtapp.post.field_plot_names == ["B", "Core_Loss", "J", "Ohmic_Loss"]
-        # RM_wound_circular has only 1 layer, so no leakage inductance plot is created
-        with pytest.raises(IndexError):
-            _ = aedtapp.post.plots[0]
+        assert str(aedtapp.post.plots[0]) == "Loss Table"
 
     def test_05_circut(self, aedt_common_fixture_class):
         aedt_common_fixture_class.connect_design("Maxwell3D")
