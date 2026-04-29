@@ -302,13 +302,18 @@ class TestDataManager:
                 "supplier": "TDK",
                 "core_type": "EI",
                 "core_model": "EI30",
-                "dimensions": {"D_1": 30.0},
+                "D_1": 30.0,
+                "D_2": 15.0,
+                "D_3": 10.0,
+                "D_4": 5.0,
+                "D_5": 3.0,
+                "D_6": 0.0,
+                "D_7": 12.0,
+                "D_8": 8.0,
                 "airgap": {"define_airgap": False},
                 "segmentation_angle": 13.0,
             },
             "winding_definition": {
-                "material_name": "Copper",
-                "draw_skin_layers": True,
                 "layer_type": "Wound",
                 "number_of_layers": 2,
                 "layer_spacing": 0.5,
@@ -320,6 +325,8 @@ class TestDataManager:
                 "layers_definition": {},
             },
             "setup_definition": {
+                "coil_material": "Copper",
+                "draw_skin_layers": True,
                 "core_material": "N87",
                 "adaptive_frequency": 100000.0,
                 "percentage_error": 1.0,
@@ -502,10 +509,11 @@ class TestDataManager:
         act_json_model = Path(__file__).parent / "act_json" / "demo_IEEE.json"
         with act_json_model.open("rb") as f:
             data = json.load(f)
-        result = dm._format_input_version(data)
 
-        # This triggers the outer 'else' block for legacy ACT format
-        assert "Input in Legacy Format. Save data in new format." == result
+        # demo_IEEE.json uses the old ACT format with nested "dimensions" dict
+        # and "material_name" in winding_definition, which is no longer supported
+        with pytest.raises(KeyError):
+            dm._format_input_version(data)
 
     def test_format_input_version_current_exact(self):
         """Ensure boundary condition for version comparison is covered."""
