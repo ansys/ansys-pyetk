@@ -287,7 +287,10 @@ class Setup:
                 self.__aedt.modeler.mirror(assignment=winding.terminals_list, origin=[0, 0, 0], vector=[-1, 0, 0])
 
             self.__aedt.change_symmetry_multiplier(value=2)
-            self.__aedt.modeler.split(assignment=obs_list, plane="YZ", sides="NegativeOnly", tool=None)
+            if core.properties.type not in ["U", "UI"]:
+                self.__aedt.modeler.split(assignment=obs_list, plane="YZ", sides="NegativeOnly", tool=None)
+            else:
+                self.__aedt.modeler.split(assignment=obs_list, plane="XZ", sides="NegativeOnly", tool=None)
 
             self.__aedt.modeler.change_region_padding("0", padding_type="Percentage Offset", direction="+X")
 
