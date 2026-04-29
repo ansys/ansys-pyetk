@@ -88,6 +88,7 @@ class PostProcessing:
         )
 
         # Core
+        self.__aedt.set_core_losses(assignment=self.__core.objects_list, core_loss_on_field=True)
         surface_list = self.__get_objects_surfaces(self.__core.objects_list)
 
         self.__aedt.post.create_fieldplot_surface(
