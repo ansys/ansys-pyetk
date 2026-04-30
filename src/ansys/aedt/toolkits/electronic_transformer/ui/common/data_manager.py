@@ -349,20 +349,18 @@ class DataManager:
                 "turns": {
                     "quantity": layers[f"layer_{n}"]["turns_number"],
                     "spacing": "top",
-                    "distance": layers[f"layer_{n}"].get("turn_spacing", 0.0),
+                    "distance": layers[f"layer_{n}"].get(
+                        "turn_spacing", layers[f"layer_{n}"].get("insulation_thickness", 0.0)
+                    ),
                 },
             }
 
             # update insulation only if available in model
-            if self.gui_properties.winding.conductor_type.lower() == "wound":
-                layers[f"layer_{n}"].update(
-                    {
-                        "insulation": {
-                            "thickness": layers[f"layer_{n}"].get("insulation_thickness", 0.0),
-                            "material": self.gui_properties.winding.insulation_material,
-                        }
-                    }
-                )
+            if self.gui_properties.winding.layer_type.lower() == "wound":
+                be_layers[f"layer_{n}"]["insulation"] = {
+                    "thickness": be_layers[f"layer_{n}"]["turns"]["distance"],
+                    "material": self.gui_properties.winding.insulation_material,
+                }
 
             # depending on conductor cross section populate dimensions
             if self.gui_properties.winding.conductor_type.lower() == "circular":
