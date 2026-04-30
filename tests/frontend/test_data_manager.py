@@ -509,11 +509,10 @@ class TestDataManager:
         act_json_model = Path(__file__).parent / "act_json" / "demo_IEEE.json"
         with act_json_model.open("rb") as f:
             data = json.load(f)
+        result = dm._format_input_version(data)
 
-        # demo_IEEE.json uses the old ACT format with nested "dimensions" dict
-        # and "material_name" in winding_definition, which is no longer supported
-        with pytest.raises(KeyError):
-            dm._format_input_version(data)
+        # This triggers the outer 'else' block for legacy ACT format
+        assert "Input in Legacy Format. Save data in new format." == result
 
     def test_format_input_version_current_exact(self):
         """Ensure boundary condition for version comparison is covered."""
