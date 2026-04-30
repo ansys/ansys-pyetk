@@ -149,6 +149,8 @@ jobs:
     name: Release
     runs-on: ubuntu-latest
     needs: [build-library, build-application-windows, build-application-linux-debian]
+    # Specifying a GitHub environment is optional, but strongly encouraged
+    environment: release
     permissions:
       id-token: write # Needed for trusted publishing OIDC
       contents: write # Needed for releasing to GitHub
