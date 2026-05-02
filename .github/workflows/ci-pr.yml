@@ -61,7 +61,7 @@ jobs:
     permissions:
       contents: read   # Required to read workflow files and check for security issues
     steps:
-      - uses: ansys/actions/check-actions-security@2a2b198b65c63adb69c0d032d180e4dc728d4809 # v10.2.9
+      - uses: ansys/actions/check-actions-security@73fa84c704bb6691f254cfe4d4b928c338b0d4da # v10.3.0
         with:
           generate-summary: true
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -75,7 +75,7 @@ jobs:
       pull-requests: read   # Required to read PR metadata
     steps:
       - name: Check the title of the pull request
-        uses: ansys/actions/check-pr-title@2a2b198b65c63adb69c0d032d180e4dc728d4809 # v10.2.9
+        uses: ansys/actions/check-pr-title@73fa84c704bb6691f254cfe4d4b928c338b0d4da # v10.3.0
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           use-upper-case: true
@@ -112,7 +112,7 @@ jobs:
       pull-requests: write # Write a fragment file in the pull-request
     runs-on: ubuntu-latest
     steps:
-      - uses: ansys/actions/doc-changelog@2a2b198b65c63adb69c0d032d180e4dc728d4809 # v10.2.9
+      - uses: ansys/actions/doc-changelog@73fa84c704bb6691f254cfe4d4b928c338b0d4da # v10.3.0
         with:
           token: ${{ secrets.PYANSYS_CI_BOT_TOKEN }}
           use-pull-request-title: true
@@ -128,7 +128,7 @@ jobs:
     permissions:
       contents: read   # Required to read code files for style checking
     steps:
-      - uses: ansys/actions/code-style@2a2b198b65c63adb69c0d032d180e4dc728d4809 # v10.2.9
+      - uses: ansys/actions/code-style@73fa84c704bb6691f254cfe4d4b928c338b0d4da # v10.3.0
         with:
           python-version: ${{ env.MAIN_PYTHON_VERSION }}
           use-python-cache: false
@@ -176,7 +176,7 @@ jobs:
       contents: read   # Required to read documentation files for style checking
     steps:
       - name: Check documentation style
-        uses: ansys/actions/doc-style@2a2b198b65c63adb69c0d032d180e4dc728d4809 # v10.2.9
+        uses: ansys/actions/doc-style@73fa84c704bb6691f254cfe4d4b928c338b0d4da # v10.3.0
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           fail-level: 'warning'
@@ -189,7 +189,7 @@ jobs:
       contents: read
     steps:
       - name: Build documentation
-        uses: ansys/actions/doc-build@2a2b198b65c63adb69c0d032d180e4dc728d4809 # v10.2.9
+        uses: ansys/actions/doc-build@73fa84c704bb6691f254cfe4d4b928c338b0d4da # v10.3.0
         with:
           add-pdf-html-docs-as-assets: true
           check-links: false
@@ -211,7 +211,7 @@ jobs:
       contents: read        # Required to read repository content for building
       id-token: write       # Required for OIDC token generation (for provenance signing)
     steps:
-      - uses: ansys/actions/build-wheelhouse@2a2b198b65c63adb69c0d032d180e4dc728d4809 # v10.2.9
+      - uses: ansys/actions/build-wheelhouse@73fa84c704bb6691f254cfe4d4b928c338b0d4da # v10.3.0
         with:
           library-name: ${{ env.LIBRARY_NAME }}
           operating-system: ${{ matrix.os }}
@@ -339,7 +339,7 @@ jobs:
       id-token: write       # Required for OIDC token generation (for provenance signing)
     steps:
       - name: Build library source and wheel artifacts
-        uses: ansys/actions/build-library@2a2b198b65c63adb69c0d032d180e4dc728d4809 # v10.2.9
+        uses: ansys/actions/build-library@73fa84c704bb6691f254cfe4d4b928c338b0d4da # v10.3.0
         with:
           library-name: ${{ env.LIBRARY_NAME }}
           python-version: ${{ env.MAIN_PYTHON_VERSION }}
