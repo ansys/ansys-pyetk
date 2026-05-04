@@ -18,4 +18,15 @@
 
 """Electronic Transformer toolKit for Ansys AEDT."""
 
-__version__ = "0.4.dev1"
+try:
+    import tomllib
+except ModuleNotFoundError:
+    import tomli as tomllib
+
+from pathlib import Path
+
+_toml_path = Path(__file__).parent / "ui" / "frontend_properties.toml"
+with _toml_path.open("rb") as _f:
+    _config = tomllib.load(_f)
+
+__version__ = str(_config["defaults"]["version"])
