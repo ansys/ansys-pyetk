@@ -9,6 +9,45 @@ This document contains the release notes for the project.
 
 .. towncrier release notes start
 
+`0.4.1 <https://github.com/ansys/ansys-pyetk/releases/tag/v0.4.1>`_ - May 04, 2026
+==================================================================================
+
+.. tab-set::
+
+
+  .. tab-item:: Fixed
+
+    .. list-table::
+        :header-rows: 0
+        :widths: auto
+
+        * - Fix turn spacing
+          - `#190 <https://github.com/ansys/ansys-pyetk/pull/190>`_
+
+
+  .. tab-item:: Dependencies
+
+    .. list-table::
+        :header-rows: 0
+        :widths: auto
+
+        * - Bump ansys/actions from 10.2.9 to 10.3.0
+          - `#193 <https://github.com/ansys/ansys-pyetk/pull/193>`_
+
+
+  .. tab-item:: Maintenance
+
+    .. list-table::
+        :header-rows: 0
+        :widths: auto
+
+        * - Update CHANGELOG for v0.4.0
+          - `#192 <https://github.com/ansys/ansys-pyetk/pull/192>`_
+
+        * - Update main branch v0.4.dev1
+          - `#194 <https://github.com/ansys/ansys-pyetk/pull/194>`_
+
+
 `0.4.0 <https://github.com/ansys/ansys-pyetk/releases/tag/v0.4.0>`_ - April 30, 2026
 ====================================================================================
 
