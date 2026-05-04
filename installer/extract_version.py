@@ -17,17 +17,30 @@
 # limitations under the License.
 
 from pathlib import Path
-import re
+
+try:
+    import tomllib
+except ModuleNotFoundError:
+    import tomli as tomllib
 
 try:
     THIS_PATH = Path(__file__).parent
 except NameError:
     THIS_PATH = Path.cwd()
 
-with Path("src/ansys/aedt/toolkits/electronic_transformer/__init__.py").open(mode="r") as f:
-    content = f.read()
+toml_path = (
+    THIS_PATH.parent
+    / "src"
+    / "ansys"
+    / "aedt"
+    / "toolkits"
+    / "electronic_transformer"
+    / "ui"
+    / "frontend_properties.toml"
+)
+with toml_path.open("rb") as f:
+    config = tomllib.load(f)
 
-match = re.search(r'__version__\s*=\s*["\']([^"\']+)["\']', content)
-if match:
-    with (Path(THIS_PATH) / "VERSION").open(mode="w") as v:
-        v.write(match.group(1))
+version = config["defaults"]["version"]
+with (Path(THIS_PATH) / "VERSION").open(mode="w") as v:
+    v.write(version)
