@@ -18,4 +18,4 @@
 
 """Electronic Transformer toolKit for Ansys AEDT."""
 
-__version__ = "0.4.0"
+__version__ = "0.4.1"

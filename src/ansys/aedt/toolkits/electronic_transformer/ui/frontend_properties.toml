@@ -6,7 +6,7 @@
 "app_name" = "Electronic Transformer toolKit, PyETK"
 "main_title" = "Electronic Transformer toolKit"
 "welcome_message" = "Welcome to the Electronic Transformer toolKit (PyETK)"
-"version" = "0.4.dev0"
+"version" = "0.4.1"
 "copyright" = ""
 "year" = 2026
 "theme" = "synopsys_light.json"
