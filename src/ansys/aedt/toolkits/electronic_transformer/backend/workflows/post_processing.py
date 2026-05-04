@@ -72,49 +72,51 @@ class PostProcessing:
 
     def __creat_3d_field_plot(self):
         """Create a 3D field plot."""
-        intrinsic_dict = {
-            "Freq": str(self.__setup.definitions.analysis_setup.adaptive_frequency) + "Hz",
-            "Phase": "0deg",
-        }
-
         # Windings
         surface_list = self.__get_objects_surfaces(self.__winding.objects_list)
 
         self.__aedt.post.create_fieldplot_surface(
             assignment=surface_list,
             quantity="Mag_J",
-            intrinsics=intrinsic_dict,
             plot_name="J",
         )
 
-        self.__aedt.post.create_fieldplot_surface(
+        ohmic_plot = self.__aedt.post.create_fieldplot_surface(
             assignment=surface_list,
             quantity="Ohmic_Loss",
-            intrinsics=intrinsic_dict,
             plot_name="Ohmic_Loss",
         )
 
         # Core
+        self.__aedt.set_core_losses(assignment=self.__core.objects_list, core_loss_on_field=True)
         surface_list = self.__get_objects_surfaces(self.__core.objects_list)
 
         self.__aedt.post.create_fieldplot_surface(
             assignment=surface_list,
             quantity="Mag_B",
-            intrinsics=intrinsic_dict,
             plot_name="B",
         )
 
         self.__aedt.post.create_fieldplot_surface(
             assignment=surface_list,
             quantity="Core_Loss",
-            intrinsics=intrinsic_dict,
             plot_name="Core_Loss",
         )
+
+        # Save project first before applying log scale to Ohmic_Loss plot from folder_settings.
+        self.__aedt.save_project()
+        ohmic_plot.folder_settings.scale_settings.log = True
+        ohmic_plot.folder_settings.update()
 
     def create_post_processing(self):
         """Create the post-processing."""
         self.__creat_3d_field_plot()
-        self.__create_leakage_plot()
+        self.__create_loss_report()
+
+        # Create leakage plot, only if there are at least 2 sides.
+        # For a single side, there is no leakage inductance to calculate.
+        if len(self.__circuit_properties.connections) > 1:
+            self.__create_leakage_plot()
 
     def __create_leakage_plot(self):
         """Create equations to calculate leakage inductance.
@@ -142,16 +144,10 @@ class PostProcessing:
                     connection_str_y = "Layer"
                     y = next_key
 
-                if int(x) <= int(y):
-                    coupling_coef = "CplCoef({0}_{1},{2}_{3})".format(
-                        connection_str_x, str(x), connection_str_y, str(y)
-                    )
-                    equation = "L({0}_{1},{2}_{3})*(1-sqr({4}))".format(
-                        connection_str_x, x, connection_str_y, y, coupling_coef
-                    )
-                    all_leakages[
-                        "Leakage_Inductance_{0}_{1},{2}_{3}".format(connection_str_x, x, connection_str_y, y)
-                    ] = equation
+                if int(x) < int(y):
+                    coupling_coef = f"CplCoef({connection_str_x}_{x},{connection_str_y}_{y})"
+                    equation = f"L({connection_str_x}_{x},{connection_str_x}_{x})*(1-({coupling_coef})^2)"
+                    all_leakages[f"Leakage_Inductance_{connection_str_x}_{x},{connection_str_y}_{y}"] = equation
 
         plot_name = "PyETK Leakage_Inductance"
         report = self.aedt_test.post.create_report(
@@ -168,3 +164,11 @@ class PostProcessing:
                 if each_trace.name == val:
                     each_trace.curve_properties["Number Format"] = "Scientific"
                     each_trace.name = key
+
+    def __create_loss_report(self):
+        """Create the loss report."""
+        self.__aedt.post.create_report(
+            plot_name="Loss Table",
+            expressions=["CoreLoss", "SolidLoss"],
+            plot_type="Data Table",
+        )

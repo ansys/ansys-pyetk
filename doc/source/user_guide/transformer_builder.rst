@@ -5,7 +5,7 @@
 
 In the UI's upper left corner, click the cube icon to display the **Transformer Builder** tab.
 
-.. image:: ../_static/pyetk-toolkit-builder.png
+.. image:: ../_static/pyetk-toolkit-builder.svg
     :width: 800
     :alt: Transformer Builder tab
 

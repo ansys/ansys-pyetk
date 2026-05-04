@@ -80,10 +80,16 @@ class Setup:
                 stop_sweep_freq=stop_frequency,
                 samples=samples,
                 sweep_type=sweep_scale,
+                frequency_sweep=sweep.frequency_sweep,
             )
 
         else:
-            self.insert_setup(max_num_passes=max_num_passes, percent_error=percent_error, frequency=adapt_freq)
+            self.insert_setup(
+                max_num_passes=max_num_passes,
+                percent_error=percent_error,
+                frequency=adapt_freq,
+                frequency_sweep=sweep.frequency_sweep,
+            )
 
         return adapt_freq
 
@@ -96,6 +102,7 @@ class Setup:
         start_sweep_freq=None,
         stop_sweep_freq=None,
         samples=None,
+        frequency_sweep=False,
     ):
         """Create and configure an analysis setup in AEDT.
 
@@ -115,6 +122,8 @@ class Setup:
             Stop frequency for the sweep. The default is ``None``.
         samples : int, optional
             Number of samples. The default is ``None``.
+         frequency_sweep: bool, optional,
+          Whether the setup has a frequency sweep. The default is ``False``.
         """
         setup = self.__aedt.create_setup(name="Setup1")
         setup.props["MinimumPasses"] = 2
@@ -127,16 +136,17 @@ class Setup:
         setup.props["SolveMatrixAtLast"] = True
         setup.props["UseIterativeSolver"] = False
         setup.props["RelativeResidual"] = 0.0001
-        setup.props["HasSweepSetup"] = True
+        setup.props["HasSweepSetup"] = frequency_sweep
 
-        setup.add_eddy_current_sweep(
-            sweep_type=sweep_type,
-            start_frequency=start_sweep_freq,
-            stop_frequency=stop_sweep_freq,
-            step_size=samples,
-            units="Hz",
-            save_all_fields=True,
-        )
+        if frequency_sweep:
+            setup.add_eddy_current_sweep(
+                sweep_type=sweep_type,
+                start_frequency=start_sweep_freq,
+                stop_frequency=stop_sweep_freq,
+                step_size=samples,
+                units="Hz",
+                save_all_fields=True,
+            )
 
     def assign_matrix_winding(self):
         """Assign an RL matrix to a winding group."""
@@ -277,7 +287,10 @@ class Setup:
                 self.__aedt.modeler.mirror(assignment=winding.terminals_list, origin=[0, 0, 0], vector=[-1, 0, 0])
 
             self.__aedt.change_symmetry_multiplier(value=2)
-            self.__aedt.modeler.split(assignment=obs_list, plane="YZ", sides="NegativeOnly", tool=None)
+            if core.properties.type not in ["U", "UI"]:
+                self.__aedt.modeler.split(assignment=obs_list, plane="YZ", sides="NegativeOnly", tool=None)
+            else:
+                self.__aedt.modeler.split(assignment=obs_list, plane="XZ", sides="NegativeOnly", tool=None)
 
             self.__aedt.modeler.change_region_padding("0", padding_type="Percentage Offset", direction="+X")
 
@@ -298,7 +311,9 @@ class Setup:
             dimension_list.append(float(each_dim_val))
         mesh_op_sz = max(dimension_list) / 20.0
 
-        self.__aedt.mesh.assign_length_mesh(assignment=core.objects_list, maximum_length=mesh_op_sz, name="Core")
+        self.__aedt.mesh.assign_length_mesh(
+            assignment=core.objects_list, maximum_length=mesh_op_sz, maximum_elements=None, name="Core"
+        )
         self.__aedt.mesh.assign_length_mesh(
             assignment=winding.objects_list, maximum_length=mesh_op_sz / 2, name="Layers"
         )

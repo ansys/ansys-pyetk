@@ -180,16 +180,25 @@ class DataManager:
                 self._set_layers_from_json(data["winding"]["layers"])
                 self.gui_properties.winding.side_loads = data["circuit"]["side_loads"]
 
-                msg = "Working with version: " + str(data["json_version"])
+                msg = "Working with .json version: " + str(data["json_version"])
                 return msg
             else:
-                return "Version " + str(data["json_version"]) + " Not Supported"
+                return ".json version " + str(data["json_version"]) + " Not Supported"
 
         else:
             self.gui_properties.core.supplier = data["core_dimensions"]["supplier"]
             self.gui_properties.core.type = data["core_dimensions"]["core_type"]
             self.gui_properties.core.model = data["core_dimensions"]["core_model"]
-            self.gui_properties.core.dimensions = data["core_dimensions"]["dimensions"]
+            self.gui_properties.core.dimensions = {
+                "D_1": data["core_dimensions"]["D_1"],
+                "D_2": data["core_dimensions"]["D_2"],
+                "D_3": data["core_dimensions"]["D_3"],
+                "D_4": data["core_dimensions"]["D_4"],
+                "D_5": data["core_dimensions"]["D_5"],
+                "D_6": data["core_dimensions"]["D_6"],
+                "D_7": data["core_dimensions"]["D_7"],
+                "D_8": data["core_dimensions"]["D_8"],
+            }
 
             _airgap = AirGapConfig()
             _airgap.enabled = data["core_dimensions"]["airgap"].get("define_airgap", False)
@@ -198,8 +207,8 @@ class DataManager:
             self.gui_properties.core.airgap = _airgap
 
             self.gui_properties.settings.segmentation_angle = data["core_dimensions"]["segmentation_angle"]
-            self.gui_properties.winding.conductor_material = data["winding_definition"]["material_name"]
-            self.gui_properties.settings.draw_skin_layers = data["winding_definition"]["draw_skin_layers"]
+            self.gui_properties.winding.conductor_material = data["setup_definition"]["coil_material"]
+            self.gui_properties.settings.draw_skin_layers = data["setup_definition"]["draw_skin_layers"]
             self.gui_properties.winding.layer_type = data["winding_definition"]["layer_type"]
             self.gui_properties.winding.number_of_layers = data["winding_definition"]["number_of_layers"]
             self.gui_properties.winding.layer_spacing = data["winding_definition"]["layer_spacing"]
@@ -340,20 +349,18 @@ class DataManager:
                 "turns": {
                     "quantity": layers[f"layer_{n}"]["turns_number"],
                     "spacing": "top",
-                    "distance": layers[f"layer_{n}"].get("turn_spacing", 0.0),
+                    "distance": layers[f"layer_{n}"].get(
+                        "turn_spacing", layers[f"layer_{n}"].get("insulation_thickness", 0.0)
+                    ),
                 },
             }
 
             # update insulation only if available in model
-            if self.gui_properties.winding.conductor_type.lower() == "wound":
-                layers[f"layer_{n}"].update(
-                    {
-                        "insulation": {
-                            "thickness": layers[f"layer_{n}"].get("insulation_thickness", 0.0),
-                            "material": self.gui_properties.winding.insulation_material,
-                        }
-                    }
-                )
+            if self.gui_properties.winding.layer_type.lower() == "wound":
+                be_layers[f"layer_{n}"]["insulation"] = {
+                    "thickness": be_layers[f"layer_{n}"]["turns"]["distance"],
+                    "material": self.gui_properties.winding.insulation_material,
+                }
 
             # depending on conductor cross section populate dimensions
             if self.gui_properties.winding.conductor_type.lower() == "circular":

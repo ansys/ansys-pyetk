@@ -20,8 +20,11 @@
 from pathlib import Path
 import sys
 
+from ansys.aedt.core import Maxwell3d
+
 sys.path.append(str(Path(__file__).parent))
 
+from datetime import datetime
 import json
 
 from ansys.aedt.toolkits.common.backend.api import AEDTCommon
@@ -34,8 +37,8 @@ from ansys.aedt.toolkits.electronic_transformer.backend.models import properties
 from ansys.aedt.toolkits.electronic_transformer.backend.workflows.bobbin import Bobbin
 from ansys.aedt.toolkits.electronic_transformer.backend.workflows.core import Core
 from ansys.aedt.toolkits.electronic_transformer.backend.workflows.etk import ETK
-from ansys.aedt.toolkits.electronic_transformer.backend.workflows.validation import Validation
 from ansys.aedt.toolkits.electronic_transformer.backend.workflows.winding import Winding
+from ansys.aedt.toolkits.electronic_transformer.common.validation import Validation
 
 
 class ToolkitBackend(AEDTCommon):
@@ -433,6 +436,7 @@ class ToolkitBackend(AEDTCommon):
         if not validated:
             return False
 
+        self.__create_maxwell_design()
         self.connect_design("Maxwell3D")
         if self.aedtapp is None:
             logger.error("Not connected.")
@@ -466,3 +470,20 @@ class ToolkitBackend(AEDTCommon):
         """
         validator = Validation()
         validator.validate_json(data)
+
+    def __create_maxwell_design(self):
+        """Create a Maxwell design.
+
+        Creates a Maxwell design in running AEDT instance.
+        """
+        core_type = self.__input_props["core"]["type"]
+        build_type = self.__input_props["winding"]["layer_type"]
+
+        self.properties.active_project = "PyETK Project"
+        self.properties.project_list = [self.properties.active_project]
+
+        # update active design and add it to the list
+        self.properties.active_design = f"{core_type}_{build_type}_{datetime.now().strftime('%Y%m%d%H%M%S')}"
+        self.properties.design_list.setdefault(self.properties.active_project, []).append(self.properties.active_design)
+
+        Maxwell3d(project=self.properties.active_project, design=self.properties.active_design)

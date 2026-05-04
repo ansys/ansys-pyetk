@@ -9,6 +9,229 @@ This document contains the release notes for the project.
 
 .. towncrier release notes start
 
+`0.4.0 <https://github.com/ansys/ansys-pyetk/releases/tag/v0.4.0>`_ - April 30, 2026
+====================================================================================
+
+.. tab-set::
+
+
+  .. tab-item:: Added
+
+    .. list-table::
+        :header-rows: 0
+        :widths: auto
+
+        * - Create multiple designs in same pyetk project
+          - `#110 <https://github.com/ansys/ansys-pyetk/pull/110>`_
+
+        * - Modify Navigation Buttons
+          - `#134 <https://github.com/ansys/ansys-pyetk/pull/134>`_
+
+        * - Core Dimension Check
+          - `#164 <https://github.com/ansys/ansys-pyetk/pull/164>`_
+
+        * - Add Current Version Number and Product Name to Splash Screen
+          - `#165 <https://github.com/ansys/ansys-pyetk/pull/165>`_
+
+
+  .. tab-item:: Documentation
+
+    .. list-table::
+        :header-rows: 0
+        :widths: auto
+
+        * - Improve language regarding material database
+          - `#152 <https://github.com/ansys/ansys-pyetk/pull/152>`_
+
+        * - Update documentation images and use .svg instead of .png
+          - `#161 <https://github.com/ansys/ansys-pyetk/pull/161>`_
+
+        * - Upload .svg files to repo
+          - `#163 <https://github.com/ansys/ansys-pyetk/pull/163>`_
+
+        * - Remove expected behavior section in README
+          - `#170 <https://github.com/ansys/ansys-pyetk/pull/170>`_
+
+        * - Regenerate some of the documentation images to remove corporate logos
+          - `#174 <https://github.com/ansys/ansys-pyetk/pull/174>`_
+
+
+  .. tab-item:: Fixed
+
+    .. list-table::
+        :header-rows: 0
+        :widths: auto
+
+        * - Removed mesh count limitation for core mesh refinement
+          - `#146 <https://github.com/ansys/ansys-pyetk/pull/146>`_
+
+        * - Fixed frequency sweep
+          - `#150 <https://github.com/ansys/ansys-pyetk/pull/150>`_
+
+        * - Add log scale plot to Ohmic_Loss plot
+          - `#154 <https://github.com/ansys/ansys-pyetk/pull/154>`_
+
+        * - Leakage inductance calculation
+          - `#158 <https://github.com/ansys/ansys-pyetk/pull/158>`_
+
+        * - Update UI message using .json version not just version
+          - `#167 <https://github.com/ansys/ansys-pyetk/pull/167>`_
+
+        * - Symmetry in U and UI cores
+          - `#175 <https://github.com/ansys/ansys-pyetk/pull/175>`_
+
+        * - Set core losses
+          - `#176 <https://github.com/ansys/ansys-pyetk/pull/176>`_
+
+        * - Create loss table
+          - `#177 <https://github.com/ansys/ansys-pyetk/pull/177>`_
+
+        * - Deleted folder old_json_files_delete
+          - `#183 <https://github.com/ansys/ansys-pyetk/pull/183>`_
+
+        * - Read ACT files
+          - `#185 <https://github.com/ansys/ansys-pyetk/pull/185>`_
+
+
+  .. tab-item:: Maintenance
+
+    .. list-table::
+        :header-rows: 0
+        :widths: auto
+
+        * - Update CHANGELOG for v0.3.0
+          - `#149 <https://github.com/ansys/ansys-pyetk/pull/149>`_
+
+        * - Bump version 0.4.0dev
+          - `#153 <https://github.com/ansys/ansys-pyetk/pull/153>`_
+
+        * - Apply changes to ensure smooth deployment in PyPI
+          - `#157 <https://github.com/ansys/ansys-pyetk/pull/157>`_
+
+
+  .. tab-item:: Miscellaneous
+
+    .. list-table::
+        :header-rows: 0
+        :widths: auto
+
+        * - Update AEDT version to 2026R1
+          - `#180 <https://github.com/ansys/ansys-pyetk/pull/180>`_
+
+
+`0.3.0 <https://github.com/ansys/ansys-pyetk/releases/tag/v0.3.0>`_ - April 17, 2026
+====================================================================================
+
+.. tab-set::
+
+
+  .. tab-item:: Added
+
+    .. list-table::
+        :header-rows: 0
+        :widths: auto
+
+        * - Included model validation
+          - `#73 <https://github.com/ansys/ansys-pyetk/pull/73>`_
+
+        * - General tidy up of UI inputs for QLineEdit and QTreeWidget.
+          - `#130 <https://github.com/ansys/ansys-pyetk/pull/130>`_
+
+
+  .. tab-item:: Documentation
+
+    .. list-table::
+        :header-rows: 0
+        :widths: auto
+
+        * - Add example link in landing page
+          - `#97 <https://github.com/ansys/ansys-pyetk/pull/97>`_
+
+        * - Update main README.rst
+          - `#102 <https://github.com/ansys/ansys-pyetk/pull/102>`_
+
+        * - Add missing image of versioned json in documentation
+          - `#104 <https://github.com/ansys/ansys-pyetk/pull/104>`_
+
+        * - Overall review
+          - `#106 <https://github.com/ansys/ansys-pyetk/pull/106>`_
+
+        * - Use windows machine to build documentation
+          - `#115 <https://github.com/ansys/ansys-pyetk/pull/115>`_
+
+        * - Fix numbering in second example
+          - `#118 <https://github.com/ansys/ansys-pyetk/pull/118>`_
+
+        * - Add Ferroxcube material data link to help menu
+          - `#136 <https://github.com/ansys/ansys-pyetk/pull/136>`_
+
+
+  .. tab-item:: Fixed
+
+    .. list-table::
+        :header-rows: 0
+        :widths: auto
+
+        * - Custom Core Dimensions
+          - `#109 <https://github.com/ansys/ansys-pyetk/pull/109>`_
+
+        * - Fix/logo
+          - `#131 <https://github.com/ansys/ansys-pyetk/pull/131>`_
+
+
+  .. tab-item:: Maintenance
+
+    .. list-table::
+        :header-rows: 0
+        :widths: auto
+
+        * - Update CHANGELOG for v0.2.0
+          - `#94 <https://github.com/ansys/ansys-pyetk/pull/94>`_
+
+        * - Bump dev version into v0.3.dev0
+          - `#95 <https://github.com/ansys/ansys-pyetk/pull/95>`_
+
+        * - Update dependabot.yml configuration
+          - `#98 <https://github.com/ansys/ansys-pyetk/pull/98>`_
+
+        * - Run doc-build in self-hosted runner for examples
+          - `#99 <https://github.com/ansys/ansys-pyetk/pull/99>`_
+
+        * - Fix doc build for main and release workflows
+          - `#101 <https://github.com/ansys/ansys-pyetk/pull/101>`_
+
+        * - Add missing env variables to fix doc build
+          - `#111 <https://github.com/ansys/ansys-pyetk/pull/111>`_
+
+        * - Fix path to upload artifact
+          - `#112 <https://github.com/ansys/ansys-pyetk/pull/112>`_
+
+        * - Bump ansys actions to v10.2.9 to fix doc style
+          - `#113 <https://github.com/ansys/ansys-pyetk/pull/113>`_
+
+        * - Cleanup and use windows for doc-build jobs
+          - `#116 <https://github.com/ansys/ansys-pyetk/pull/116>`_
+
+        * - Fix generated artifacts in PR workflows
+          - `#117 <https://github.com/ansys/ansys-pyetk/pull/117>`_
+
+        * - Update PR workflow to rerun on title edit
+          - `#120 <https://github.com/ansys/ansys-pyetk/pull/120>`_
+
+        * - Add missing ansys license env var
+          - `#128 <https://github.com/ansys/ansys-pyetk/pull/128>`_
+
+
+  .. tab-item:: Miscellaneous
+
+    .. list-table::
+        :header-rows: 0
+        :widths: auto
+
+        * - Rename mu(freq) and eps_r to match backend data model
+          - `#105 <https://github.com/ansys/ansys-pyetk/pull/105>`_
+
+
 `0.2.0 <https://github.com/ansys/ansys-pyetk/releases/tag/v0.2.0>`_ - March 03, 2026
 ====================================================================================
 

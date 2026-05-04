@@ -178,7 +178,7 @@ class TestDataManager:
 
         result = dm._format_input_version(data)
 
-        assert "Working with version" in result
+        assert "Working with .json version" in result
         assert dm.gui_properties.core.supplier == "TDK"
         assert dm.gui_properties.core.type == "EI"
         assert dm.gui_properties.core.model == "EI30"
@@ -302,13 +302,18 @@ class TestDataManager:
                 "supplier": "TDK",
                 "core_type": "EI",
                 "core_model": "EI30",
-                "dimensions": {"D_1": 30.0},
+                "D_1": 30.0,
+                "D_2": 15.0,
+                "D_3": 10.0,
+                "D_4": 5.0,
+                "D_5": 3.0,
+                "D_6": 0.0,
+                "D_7": 12.0,
+                "D_8": 8.0,
                 "airgap": {"define_airgap": False},
                 "segmentation_angle": 13.0,
             },
             "winding_definition": {
-                "material_name": "Copper",
-                "draw_skin_layers": True,
                 "layer_type": "Wound",
                 "number_of_layers": 2,
                 "layer_spacing": 0.5,
@@ -320,6 +325,8 @@ class TestDataManager:
                 "layers_definition": {},
             },
             "setup_definition": {
+                "coil_material": "Copper",
+                "draw_skin_layers": True,
                 "core_material": "N87",
                 "adaptive_frequency": 100000.0,
                 "percentage_error": 1.0,
@@ -493,7 +500,7 @@ class TestDataManager:
             data = json.load(f)
         result = dm._format_input_version(data)
 
-        assert "Version 0.0.1 Not Supported" == result
+        assert ".json version 0.0.1 Not Supported" == result
 
     def test_format_input_version_legacy_act(self):
         """Test branch: if "json_version" not in data.keys()."""
@@ -515,7 +522,7 @@ class TestDataManager:
             data = json.load(f)
 
         result = dm._format_input_version(data)
-        assert result == "Working with version: 0.1.0"
+        assert result == "Working with .json version: 0.1.0"
 
     def test_import_data_from_json(self):
         """Import data only if valid."""
@@ -525,7 +532,7 @@ class TestDataManager:
 
         msg, is_valid = dm._import_data_from_json(versioned_json_model)
         assert is_valid is True
-        assert msg == "Working with version: 0.1.0"
+        assert msg == "Working with .json version: 0.1.0"
 
         msg, is_valid = dm._import_data_from_json(not_supported_json)
         assert is_valid is False

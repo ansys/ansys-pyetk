@@ -70,7 +70,7 @@ class TestBackendAPI:
         # Verify first setup properties
         if setups_count > 0:
             assert setups[0].name == "Setup1"
-            assert setups[0].properties["Max. Number of Passes"] == 5
+            assert int(setups[0].properties["Max. Number of Passes"]) == 5
 
         # Verify solution type is AC Magnetic
         assert solution_type == "AC Magnetic", f"Solution type is {solution_type}, expected 'AC Magnetic'"
@@ -79,8 +79,7 @@ class TestBackendAPI:
         aedt_common_fixture_class.connect_design("Maxwell3D")
         aedtapp = aedt_common_fixture_class.aedtapp
         assert aedtapp.post.field_plot_names == ["B", "Core_Loss", "J", "Ohmic_Loss"]
-        assert aedtapp.post.plots[0].plot_name == "PyETK Leakage_Inductance"
-        assert aedtapp.post.plots[0].expressions == ["L(Layer_1,Layer_1)*(1-sqr(CplCoef(Layer_1,Layer_1)))"]
+        assert str(aedtapp.post.plots[0]) == "Loss Table"
 
     def test_05_circut(self, aedt_common_fixture_class):
         aedt_common_fixture_class.connect_design("Maxwell3D")

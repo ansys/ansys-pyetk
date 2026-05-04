@@ -36,10 +36,13 @@ from ansys.aedt.toolkits.electronic_transformer.ui.common.database_manager impor
 from ansys.aedt.toolkits.electronic_transformer.ui.models import fe_properties
 from ansys.aedt.toolkits.electronic_transformer.ui.models import gui_properties
 from ansys.aedt.toolkits.electronic_transformer.ui.models import AirGapConfig
+from ansys.aedt.toolkits.electronic_transformer.ui.models import GUIProperties
 from ansys.aedt.toolkits.electronic_transformer.ui.common.data_manager import data_manager
 from ansys.aedt.toolkits.electronic_transformer.ui.common.units_and_scales import freq_units
 from ansys.aedt.toolkits.electronic_transformer.ui.common.units_and_scales import freq_scale
 from ansys.aedt.toolkits.electronic_transformer.ui.common.units_and_scales import scale_units
+# from ansys.aedt.toolkits.electronic_transformer.ui.workflows.ui_validation import Validation
+from ansys.aedt.toolkits.electronic_transformer.common.validation import Validation
 
 from ansys.aedt.toolkits.electronic_transformer.ui.windows.main.main_column import Ui_LeftColumn
 from ansys.aedt.toolkits.electronic_transformer.ui.windows.main.main_page import Ui_Geometry
@@ -184,6 +187,7 @@ class GeometryMenu(object):
             getattr(self, key).setReadOnly(True)
             line_edit = getattr(self,key)
             line_edit.editingFinished.connect(lambda k=key, le=line_edit:self._update_core_dimensions({"dimensions":{k:le.text()}}))
+            line_edit.editingFinished.connect(self._validate_core_dimensions_live)
 
         # Initialize last airgap value
         self._last_valid_airgap_value = "0.0"
@@ -199,6 +203,7 @@ class GeometryMenu(object):
         self.model_combo.currentIndexChanged.connect(self._update_core_dimensions)
         self.airgap_combo.currentTextChanged.connect(self._update_airgap_type)
         self.custom_core.toggled.connect(self._update_core_dimensions)
+        self.custom_core.toggled.connect(self._validate_core_dimensions_live)
 
         # ───────────────────────────────
         # Bobbin and Margin
@@ -403,8 +408,12 @@ class GeometryMenu(object):
         self.example_button.clicked.connect(self.example_button_clicked)
         self.next_example_button = self.geometry_menu_widget.findChild(QPushButton, "next_example_button")
         self.previous_example_button = self.geometry_menu_widget.findChild(QPushButton, "previous_example_button")
+        self.reset_examples_button = self.geometry_menu_widget.findChild(QPushButton, "reset_examples")
         self.example_name = self.geometry_menu_widget.findChild(QLineEdit, "example_name")
         self.save_etk = self.geometry_menu_widget.findChild(QPushButton, "save_etk")
+
+        # Active directory drives Next/Previous navigation — starts at default examples location
+        self._active_dir = example_files
 
         # Load all example files from directory and add placeholder [None] for "Start New design"
         self.example_files = sorted(example_files.glob("*.json")) + [None]
@@ -413,6 +422,7 @@ class GeometryMenu(object):
         # Connect signals
         self.next_example_button.clicked.connect(lambda: self.load_example(direction="Forwards"))
         self.previous_example_button.clicked.connect(lambda: self.load_example(direction="Backwards"))
+        self.reset_examples_button.clicked.connect(self._reset_example_dir)
         self.save_etk.clicked.connect(self.save_button_clicked)
 
         # Populate UI widgets before signals are assigned to avoid misfires
@@ -440,6 +450,51 @@ class GeometryMenu(object):
         style.polish(widget)
         widget.update()
 
+    @property
+    def _dim_keys(self):
+        """Generate a list of core dimension keys."""
+        return list(self.properties.core.dimensions.keys())
+
+    def _validate_core_dimensions_live(self):
+        """Validate core dimensions live as the user edits and highlight errors in red.
+
+        Only active when custom core is enabled — dimensions are read-only otherwise.
+        Clears all highlights first, then re-applies based on current validation result.
+        Error messages are also written to the UI logger.
+        """
+        # Dimensions are read-only when not in custom core mode — nothing to validate
+        if self.custom_core.isChecked():
+            validator = Validation()
+            errors = validator._Validation__validate_core(self.gui_properties.core)
+            self._clear_core_dimension_errors()
+
+            if errors:
+                self._highlight_core_dimension_errors(errors)
+                for message in errors:
+                    self.ui.update_logger(message)
+        else:
+            self._clear_core_dimension_errors()
+
+    def _highlight_core_dimension_errors(self, error_messages):
+        """Set a red border on core dimension QLineEdits referenced in error messages.
+
+        Args:
+            error_messages (list[str]): List of validation error strings.
+        """
+        for message in error_messages:
+            for dim_key in self._dim_keys:
+                if dim_key in message:
+                    widget = getattr(self, dim_key, None)
+                    if widget is not None:
+                        self._set_invalid(widget, True, message)
+
+    def _clear_core_dimension_errors(self):
+        """Remove red border from all core dimension QLineEdits."""
+        for dim_key in self._dim_keys:
+            widget = getattr(self, dim_key, None)
+            if widget is not None:
+                self._set_invalid(widget, False)
+
     def load_example(self, direction):
         """Load an example file by stepping forwards or backwards.
 
@@ -462,14 +517,14 @@ class GeometryMenu(object):
         """
         # Reset UI defaults
         if path is None:
-            self.example_name.setText(self.new_filename)
-        else:
-            msg, is_valid = self.data_manager._import_data_from_json(path)
-            self.ui.update_logger(msg)
+            return
 
-            if is_valid:
-                self._write_ui_data()
-                self.example_name.setText(path.name)
+        msg, is_valid = self.data_manager._import_data_from_json(path)
+        self.ui.update_logger(msg)
+
+        if is_valid:
+            self._write_ui_data()
+            self.example_name.setText(path.name)
 
     def setup(self):
         """Set up the geometry menu."""
@@ -1833,7 +1888,7 @@ class GeometryMenu(object):
         """Handle the example button click event."""
         file_name_tuple = QFileDialog.getOpenFileName(
             caption="Open ETK file",
-            dir=str(example_files),
+            dir=str(self._active_dir),
             filter="ETK files (*.json)",
         )
 
@@ -1842,12 +1897,37 @@ class GeometryMenu(object):
             return
 
         file_name = Path(file_name_tuple[0])
+
+        # Update active directory and rebuild Next/Previous list from the new location
+        self._active_dir = file_name.parent
+        self.example_files = sorted(self._active_dir.glob("*.json")) + [None]
+
+        # Set index to the opened file so Next/Previous continues from here
+        try:
+            self.current_example_index = self.example_files.index(file_name)
+        except ValueError:
+            self.current_example_index = 0
+
         msg, is_valid = self.data_manager._import_data_from_json(file_name)
         self.ui.update_logger(msg)
         if is_valid:
             self._write_ui_data()
             self.example_name.setText(file_name.name)
 
+    def _reset_example_dir(self):
+        """Reset navigation to default examples directory and revert displayed design to 'New Design'."""
+        self._active_dir = example_files
+        self.example_files = sorted(self._active_dir.glob("*.json")) + [None]
+        self.current_example_index = 0
+
+        # Reset gui_properties to factory defaults in-place so all holders stay in sync
+        defaults = GUIProperties()
+        for field_name in defaults.model_fields:
+            setattr(self.gui_properties, field_name, getattr(defaults, field_name))
+
+        self._write_ui_data()
+        self.example_name.setText(self.new_filename)
+        self.ui.update_logger("Example directory reset to default.")
 
     def _clear_connection_state(self):
         "Clears Connections tree UI, conn_saved and conn_wip form UI UserData"
@@ -1964,7 +2044,6 @@ class GeometryMenu(object):
             self.start_frequency_unit.setCurrentText(freq_sweep.get("start_frequency_unit", self.gui_properties.settings.frequency_sweep_definition.start_frequency_unit))
             self.stop_frequency.setText(str(freq_sweep.get("stop_frequency", self.gui_properties.settings.frequency_sweep_definition.stop_frequency)))
             self.stop_frequency_unit.setCurrentText(freq_sweep.get("stop_frequency_unit", self.gui_properties.settings.frequency_sweep_definition.stop_frequency_unit))
-
             self.samples.setText(str(freq_sweep.get("samples", self.gui_properties.settings.frequency_sweep_definition.samples)))
             self.scale.setCurrentText(freq_sweep.get("scale", self.gui_properties.settings.frequency_sweep_definition.scale))
 
@@ -2188,13 +2267,16 @@ class GeometryMenu(object):
     def save_button_clicked(self):
         """Save the UI state to a JSON file."""
         file_name_tuple = QFileDialog.getSaveFileName(
-            caption="Save ETK file", dir=str(example_files), filter="ETK files (*.json)"
+            caption="Save ETK file", dir=str(self._active_dir), filter="ETK files (*.json)"
         )
         file_name = Path(file_name_tuple[0])
 
         # handle the event where the user cancels the option to save
         if file_name != Path("."):
             self._save_model(file=file_name)
+            self._active_dir = file_name.parent
+            self.example_files = sorted(self._active_dir.glob("*.json")) + [None]
+            self.example_name.setText(file_name.name)
         else:
             self.ui.update_logger("Save As operation cancelled by user")
 

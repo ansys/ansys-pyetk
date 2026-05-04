@@ -40,7 +40,7 @@ toolkit_api = ToolkitBackend()
 
 # ## Set common properties
 toolkit_api.properties.non_graphical = False
-toolkit_api.properties.aedt_version = "2025.2"
+toolkit_api.properties.aedt_version = "2026.1"
 
 # ## Define the JSON path
 json_file_name = "RM_wound_circular.json"
