@@ -12,3 +12,5 @@
 * [Jorge Martínez](https://github.com/jorgepiloto)
 * [Samuel Lopez](https://github.com/Samuelopez-ansys)
 * [Sébastien Morais](https://github.com/SMoraisAnsys)
+* [Maksim Beliaev](https://github.com/beliaev-maksim)
+* [Mark Christini](https://github.com/jmarkc01)
