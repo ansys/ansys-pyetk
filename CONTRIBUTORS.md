@@ -10,5 +10,6 @@
 
 * [Giulia Malinverno](https://github.com/gmalinve)
 * [Jorge Martínez](https://github.com/jorgepiloto)
+* [Kathy Pippert](https://github.com/PipKat)
 * [Samuel Lopez](https://github.com/Samuelopez-ansys)
 * [Sébastien Morais](https://github.com/SMoraisAnsys)
