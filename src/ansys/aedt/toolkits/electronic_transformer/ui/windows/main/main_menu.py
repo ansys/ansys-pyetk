@@ -311,7 +311,8 @@ class GeometryMenu(object):
 
         self.number_passes = self.geometry_column_widget.findChild(QLineEdit, "number_passes")
         self.percentage_error = self.geometry_column_widget.findChild(QLineEdit, "percentage_error")
-        self.segmentation_angle = self.geometry_column_widget.findChild(QLineEdit, "segmentation_angle")
+        self.conductor_segments = self.geometry_column_widget.findChild(QLineEdit, "conductor_segments")
+        self.core_segments = self.geometry_column_widget.findChild(QLineEdit, "core_segments")
         self.offset = self.geometry_column_widget.findChild(QLineEdit, "offset")
 
         self.frequency_sweep = self.geometry_column_widget.findChild(QCheckBox, "frequency_sweep")
@@ -333,7 +334,8 @@ class GeometryMenu(object):
 
         self.number_passes.setText(str(self.gui_properties.settings.number_passes))
         self.percentage_error.setText(str(self.gui_properties.settings.percentage_error))
-        self.segmentation_angle.setText(str(self.gui_properties.settings.segmentation_angle))
+        self.conductor_segments.setText(str(self.gui_properties.settings.conductor_segments))
+        self.core_segments.setText(str(self.gui_properties.settings.core_segments))
         self.offset.setText(str(self.gui_properties.settings.offset))
 
         self.frequency_sweep.setChecked(self.gui_properties.settings.frequency_sweep_definition.frequency_sweep)
@@ -378,6 +380,8 @@ class GeometryMenu(object):
         # Integer fields override the float validator
         self.number_passes.setValidator(QIntValidator(1, 10))
         self.samples.setValidator(QIntValidator(1, 99))
+        self.conductor_segments.setValidator(QIntValidator(3, 360))
+        self.core_segments.setValidator(QIntValidator(3, 360))
 
         # Normalise float display on focus-out: ".25" → "0.25"
         def _normalise_float(line):
@@ -395,6 +399,14 @@ class GeometryMenu(object):
         )
         self.samples.editingFinished.connect(
             lambda: self.samples.setText(str(int(self.samples.text()))) if self.samples.text() else None
+        )
+        self.conductor_segments.editingFinished.connect(
+            lambda: self.conductor_segments.setText(str(int(self.conductor_segments.text())))
+            if self.conductor_segments.text() else None
+        )
+        self.core_segments.editingFinished.connect(
+            lambda: self.core_segments.setText(str(int(self.core_segments.text())))
+            if self.core_segments.text() else None
         )
 
         self.connections_tree_widget.setHeaderLabels(["Connections"])
@@ -625,10 +637,12 @@ class GeometryMenu(object):
 
         self.type_combo.blockSignals(False)
         self._update_core_models()
+        self._update_core_segments_display()
 
     def _update_core_models(self):
         """Extract core models from ``cores_database`` and populate the core model combo box."""
         self._update_core_info()
+        self._update_core_segments_display()
 
         self.model_combo.blockSignals(True)
         self.model_combo.clear()
@@ -933,8 +947,15 @@ class GeometryMenu(object):
 
         if cond_text == "Circular":
             header_item.setText(2, "Conductor_Size\n(Diameter)")
+            if hasattr(self, "conductor_segments") and self.conductor_segments is not None:
+                self.conductor_segments.setEnabled(True)
+                self.conductor_segments.setText(str(self.gui_properties.settings.conductor_segments))
+
         else:
             header_item.setText(2, "Conductor_Size\n(Width x Height)")
+            if hasattr(self, "conductor_segments") and self.conductor_segments is not None:
+                self.conductor_segments.setEnabled(False)
+                self.conductor_segments.setText("--")
 
         # Then retrieve values for that conductor from UserRole
         tree = self.winding_tree_widget
@@ -964,6 +985,17 @@ class GeometryMenu(object):
 
         tree.blockSignals(False)
         self.gui_properties.winding.conductor_type = cond_text
+
+    def _update_core_segments_display(self):
+        core_type = self.gui_properties.core.type or ""
+        no_segments_types = {"E", "EFD", "EI", "U", "UI"}
+
+        if core_type in no_segments_types:
+            self.core_segments.setEnabled(False)
+            self.core_segments.setText("--")
+        else:
+            self.core_segments.setEnabled(True)
+            self.core_segments.setText(str(self.gui_properties.settings.core_segments))
 
     def _winding_item_changed(self, item, column):
         """Update ``UserRole`` with modified winding tree entries and correct formatting of inputted values in UI
@@ -1797,7 +1829,7 @@ class GeometryMenu(object):
                 if self.cond_type.currentText() == "Circular":
                     layers_def[layer_key] = {
                         "conductor_diameter": cond.get("diameter"),
-                        "segments_number": self._segments_number,
+                        "segments_number": int(self.conductor_segments.text()) if self.conductor_segments.text() not in ("","--") else self._segments_number,
                         "insulation_thickness": insulation,
                         "turns_number": turns,
                     }
@@ -1816,7 +1848,7 @@ class GeometryMenu(object):
                             "conductor_height": cond.get("height"),
                             "turn_spacing": insulation,
                             "turns_number": turns,
-                            "segments_number": self._segments_number,
+                            "segments_number": int(self.conductor_segments.text()) if self.conductor_segments.text() not in ("","--") else self._segments_number,
                         }
         # self.gui_properties.winding.turn_spacing = insulation
         return layers_def
@@ -1999,7 +2031,14 @@ class GeometryMenu(object):
         # 'Skip Check Windings' is in UI only, JSON does not store this.
         self.number_passes.setText(str(self.gui_properties.settings.number_passes))
         self.percentage_error.setText(str(self.gui_properties.settings.percentage_error))
-        self.segmentation_angle.setText(str(self.gui_properties.settings.segmentation_angle))
+
+        if self.cond_type.currentText() == "Circular":
+            self.conductor_segments.setEnabled(True)
+            self.conductor_segments.setText(str(self.gui_properties.settings.conductor_segments))
+        else:
+            self.conductor_segments.setEnabled(False)
+            self.conductor_segments.setText("--")
+        self.core_segments.setText(str(self.gui_properties.settings.core_segments))
         self.offset.setText(str(self.gui_properties.settings.offset))
         self._update_frequency_sweep(dict(self.gui_properties.settings.frequency_sweep_definition))
 
@@ -2015,6 +2054,9 @@ class GeometryMenu(object):
         self.supplier_combo.setCurrentText(core_def["supplier"])
         self.type_combo.setCurrentText(core_def["type"])
         self.model_combo.setCurrentText(core_def["model"])
+
+        # Refresh segments display after applying core type from JSON
+        self._update_core_segments_display()
 
         # # # Handle case where core has custom dimensions
         self.gui_properties.core.supplier = core_def["supplier"]
@@ -2262,7 +2304,21 @@ class GeometryMenu(object):
 
         self.gui_properties.settings.frequency_sweep_definition = self._update_frequency_sweep()
         self.gui_properties.winding.layer_side_definition = self._update_layer_side_definition()
-        self.gui_properties.settings.segmentation_angle = self.segmentation_angle.text()
+
+        raw_conductor_segments = self.conductor_segments.text().strip()
+        if raw_conductor_segments == "--" or not raw_conductor_segments:
+            self.gui_properties.settings.conductor_segments = 0
+        else:
+            self.gui_properties.settings.conductor_segments = int(raw_conductor_segments)
+
+        raw_core_segments = self.core_segments.text().strip()
+        if raw_core_segments == "--" or not raw_core_segments:
+            self.gui_properties.settings.core_segments = 0
+        else:
+            self.gui_properties.settings.core_segments = int(raw_core_segments)
+
+        # Keep legacy segmentation_angle populated for backend compatibility
+        self.gui_properties.settings.segmentation_angle = (0.0 if self.gui_properties.settings.conductor_segments == 0 else 360.0 / float(self.gui_properties.settings.conductor_segments))
 
     def save_button_clicked(self):
         """Save the UI state to a JSON file."""

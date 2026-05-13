@@ -129,6 +129,8 @@ class SettingsProperties(BaseModel, validate_assignment=True):
     full_model: bool = False
     offset: float = 0.0
     segmentation_angle: float = 0.0
+    core_segments: int = 0
+    conductor_segments: int = 0
     adaptive_frequency: float = 0.0
     percentage_error: float = 0.0
     number_passes: int = 0
@@ -228,6 +230,9 @@ class SettingsGUIProperties(BaseModel, validate_assignment=True):
     segmentation_angle: float = 10.0
     offset: float = 50
     project_path: str = ""
+    core_segments: int = 36
+    conductor_segments: int = 8
+    # Legacy fallback used for old ACT JSON import
     segments_number: int = 8
     frequency_sweep_definition: FrequencySweepProperties = FrequencySweepProperties()
 

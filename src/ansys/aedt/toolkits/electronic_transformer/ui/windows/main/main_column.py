@@ -3,7 +3,7 @@
 ################################################################################
 ## Form generated from reading UI file 'main_column.ui'
 ##
-## Created by: Qt User Interface Compiler version 6.9.2
+## Created by: Qt User Interface Compiler version 6.10.0
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
@@ -60,9 +60,10 @@ class Ui_LeftColumn(object):
         self.gridLayout_2.setSpacing(5)
         self.gridLayout_2.setObjectName(u"gridLayout_2")
         self.gridLayout_2.setContentsMargins(5, 5, 5, 5)
-        self.verticalSpacer_4 = QSpacerItem(12, 25, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed)
+        self.label_9 = QLabel(self.File_2)
+        self.label_9.setObjectName(u"label_9")
 
-        self.gridLayout_2.addItem(self.verticalSpacer_4, 4, 0, 1, 1)
+        self.gridLayout_2.addWidget(self.label_9, 13, 0, 1, 1)
 
         self.percentage_error = QLineEdit(self.File_2)
         self.percentage_error.setObjectName(u"percentage_error")
@@ -73,58 +74,21 @@ class Ui_LeftColumn(object):
         self.percentage_error.setSizePolicy(sizePolicy2)
         self.percentage_error.setMaximumSize(QSize(50, 16777215))
 
-        self.gridLayout_2.addWidget(self.percentage_error, 7, 1, 1, 1)
+        self.gridLayout_2.addWidget(self.percentage_error, 8, 1, 1, 1)
 
-        self.number_passes = QLineEdit(self.File_2)
-        self.number_passes.setObjectName(u"number_passes")
-        sizePolicy2.setHeightForWidth(self.number_passes.sizePolicy().hasHeightForWidth())
-        self.number_passes.setSizePolicy(sizePolicy2)
-        self.number_passes.setMaximumSize(QSize(50, 16777215))
+        self.offset = QLineEdit(self.File_2)
+        self.offset.setObjectName(u"offset")
+        sizePolicy2.setHeightForWidth(self.offset.sizePolicy().hasHeightForWidth())
+        self.offset.setSizePolicy(sizePolicy2)
+        self.offset.setMaximumSize(QSize(50, 16777215))
 
-        self.gridLayout_2.addWidget(self.number_passes, 6, 1, 1, 1)
+        self.gridLayout_2.addWidget(self.offset, 14, 1, 1, 1)
 
-        self.label_2 = QLabel(self.File_2)
-        self.label_2.setObjectName(u"label_2")
+        self.core_segments = QLineEdit(self.File_2)
+        self.core_segments.setObjectName(u"core_segments")
+        self.core_segments.setMaximumSize(QSize(50, 16777215))
 
-        self.gridLayout_2.addWidget(self.label_2, 7, 0, 1, 1)
-
-        self.verticalSpacer_2 = QSpacerItem(20, 25, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed)
-
-        self.gridLayout_2.addItem(self.verticalSpacer_2, 10, 0, 1, 1)
-
-        self.segmentation_angle = QLineEdit(self.File_2)
-        self.segmentation_angle.setObjectName(u"segmentation_angle")
-        sizePolicy2.setHeightForWidth(self.segmentation_angle.sizePolicy().hasHeightForWidth())
-        self.segmentation_angle.setSizePolicy(sizePolicy2)
-        self.segmentation_angle.setMaximumSize(QSize(50, 16777215))
-        self.segmentation_angle.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignVCenter)
-
-        self.gridLayout_2.addWidget(self.segmentation_angle, 11, 1, 1, 1)
-
-        self.skip_check = QCheckBox(self.File_2)
-        self.skip_check.setObjectName(u"skip_check")
-
-        self.gridLayout_2.addWidget(self.skip_check, 2, 0, 1, 2)
-
-        self.label_4 = QLabel(self.File_2)
-        self.label_4.setObjectName(u"label_4")
-
-        self.gridLayout_2.addWidget(self.label_4, 12, 0, 1, 1)
-
-        self.label_3 = QLabel(self.File_2)
-        self.label_3.setObjectName(u"label_3")
-
-        self.gridLayout_2.addWidget(self.label_3, 6, 0, 1, 1)
-
-        self.label = QLabel(self.File_2)
-        self.label.setObjectName(u"label")
-
-        self.gridLayout_2.addWidget(self.label, 11, 0, 1, 1)
-
-        self.draw_skin_layers = QCheckBox(self.File_2)
-        self.draw_skin_layers.setObjectName(u"draw_skin_layers")
-
-        self.gridLayout_2.addWidget(self.draw_skin_layers, 0, 0, 1, 2)
+        self.gridLayout_2.addWidget(self.core_segments, 13, 1, 1, 1)
 
         self.full_model = QCheckBox(self.File_2)
         self.full_model.setObjectName(u"full_model")
@@ -136,18 +100,65 @@ class Ui_LeftColumn(object):
 
         self.gridLayout_2.addWidget(self.full_model, 1, 0, 1, 2)
 
-        self.offset = QLineEdit(self.File_2)
-        self.offset.setObjectName(u"offset")
-        sizePolicy2.setHeightForWidth(self.offset.sizePolicy().hasHeightForWidth())
-        self.offset.setSizePolicy(sizePolicy2)
-        self.offset.setMaximumSize(QSize(50, 16777215))
-
-        self.gridLayout_2.addWidget(self.offset, 12, 1, 1, 1)
-
         self.bobbin_checkbox = QCheckBox(self.File_2)
         self.bobbin_checkbox.setObjectName(u"bobbin_checkbox")
 
-        self.gridLayout_2.addWidget(self.bobbin_checkbox, 3, 0, 1, 1)
+        self.gridLayout_2.addWidget(self.bobbin_checkbox, 4, 0, 1, 1)
+
+        self.label_2 = QLabel(self.File_2)
+        self.label_2.setObjectName(u"label_2")
+
+        self.gridLayout_2.addWidget(self.label_2, 8, 0, 1, 1)
+
+        self.label_4 = QLabel(self.File_2)
+        self.label_4.setObjectName(u"label_4")
+
+        self.gridLayout_2.addWidget(self.label_4, 14, 0, 1, 1)
+
+        self.number_passes = QLineEdit(self.File_2)
+        self.number_passes.setObjectName(u"number_passes")
+        sizePolicy2.setHeightForWidth(self.number_passes.sizePolicy().hasHeightForWidth())
+        self.number_passes.setSizePolicy(sizePolicy2)
+        self.number_passes.setMaximumSize(QSize(50, 16777215))
+
+        self.gridLayout_2.addWidget(self.number_passes, 7, 1, 1, 1)
+
+        self.verticalSpacer_4 = QSpacerItem(12, 25, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed)
+
+        self.gridLayout_2.addItem(self.verticalSpacer_4, 5, 0, 1, 1)
+
+        self.verticalSpacer_2 = QSpacerItem(20, 25, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed)
+
+        self.gridLayout_2.addItem(self.verticalSpacer_2, 11, 0, 1, 1)
+
+        self.draw_skin_layers = QCheckBox(self.File_2)
+        self.draw_skin_layers.setObjectName(u"draw_skin_layers")
+
+        self.gridLayout_2.addWidget(self.draw_skin_layers, 0, 0, 1, 2)
+
+        self.label_3 = QLabel(self.File_2)
+        self.label_3.setObjectName(u"label_3")
+
+        self.gridLayout_2.addWidget(self.label_3, 7, 0, 1, 1)
+
+        self.conductor_segments = QLineEdit(self.File_2)
+        self.conductor_segments.setObjectName(u"conductor_segments")
+        sizePolicy2.setHeightForWidth(self.conductor_segments.sizePolicy().hasHeightForWidth())
+        self.conductor_segments.setSizePolicy(sizePolicy2)
+        self.conductor_segments.setMaximumSize(QSize(50, 16777215))
+        self.conductor_segments.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignVCenter)
+
+        self.gridLayout_2.addWidget(self.conductor_segments, 12, 1, 1, 1)
+
+        self.label = QLabel(self.File_2)
+        self.label.setObjectName(u"label")
+
+        self.gridLayout_2.addWidget(self.label, 12, 0, 1, 1)
+
+        self.skip_check = QCheckBox(self.File_2)
+        self.skip_check.setObjectName(u"skip_check")
+
+        self.gridLayout_2.addWidget(self.skip_check, 2, 0, 1, 1)
 
 
         self.gridLayout_3.addLayout(self.gridLayout_2, 0, 0, 1, 1)
@@ -242,11 +253,10 @@ class Ui_LeftColumn(object):
         self.verticalLayout.addWidget(self.menus)
 
         QWidget.setTabOrder(self.draw_skin_layers, self.full_model)
-        QWidget.setTabOrder(self.full_model, self.skip_check)
-        QWidget.setTabOrder(self.skip_check, self.number_passes)
+        QWidget.setTabOrder(self.full_model, self.number_passes)
         QWidget.setTabOrder(self.number_passes, self.percentage_error)
-        QWidget.setTabOrder(self.percentage_error, self.segmentation_angle)
-        QWidget.setTabOrder(self.segmentation_angle, self.offset)
+        QWidget.setTabOrder(self.percentage_error, self.conductor_segments)
+        QWidget.setTabOrder(self.conductor_segments, self.offset)
         QWidget.setTabOrder(self.offset, self.frequency_sweep)
         QWidget.setTabOrder(self.frequency_sweep, self.start_frequency)
         QWidget.setTabOrder(self.start_frequency, self.start_frequency_unit)
@@ -266,14 +276,15 @@ class Ui_LeftColumn(object):
     def retranslateUi(self, LeftColumn):
         LeftColumn.setWindowTitle(QCoreApplication.translate("LeftColumn", u"Form", None))
         self.File_2.setTitle(QCoreApplication.translate("LeftColumn", u"Settings", None))
-        self.label_2.setText(QCoreApplication.translate("LeftColumn", u"Percentage Error", None))
-        self.skip_check.setText(QCoreApplication.translate("LeftColumn", u"Skip Check Windings", None))
-        self.label_4.setText(QCoreApplication.translate("LeftColumn", u"Region Offset", None))
-        self.label_3.setText(QCoreApplication.translate("LeftColumn", u"Number of Passes", None))
-        self.label.setText(QCoreApplication.translate("LeftColumn", u"Segmentation Angle", None))
-        self.draw_skin_layers.setText(QCoreApplication.translate("LeftColumn", u"Draw Skin Layers", None))
+        self.label_9.setText(QCoreApplication.translate("LeftColumn", u"Core Segments", None))
         self.full_model.setText(QCoreApplication.translate("LeftColumn", u"Make Full Model", None))
         self.bobbin_checkbox.setText(QCoreApplication.translate("LeftColumn", u"Draw Bobbin", None))
+        self.label_2.setText(QCoreApplication.translate("LeftColumn", u"Percentage Error", None))
+        self.label_4.setText(QCoreApplication.translate("LeftColumn", u"Region Offset", None))
+        self.draw_skin_layers.setText(QCoreApplication.translate("LeftColumn", u"Draw Skin Layers", None))
+        self.label_3.setText(QCoreApplication.translate("LeftColumn", u"Number of Passes", None))
+        self.label.setText(QCoreApplication.translate("LeftColumn", u"Conductor Segments", None))
+        self.skip_check.setText(QCoreApplication.translate("LeftColumn", u"Skip Check Windings", None))
         self.label_6.setText(QCoreApplication.translate("LeftColumn", u"Stop", None))
         self.label_5.setText(QCoreApplication.translate("LeftColumn", u"Start", None))
         self.label_7.setText(QCoreApplication.translate("LeftColumn", u"Samples", None))

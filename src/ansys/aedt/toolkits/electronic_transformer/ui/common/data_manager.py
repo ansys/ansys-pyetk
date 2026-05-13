@@ -101,6 +101,8 @@ class DataManager:
                 "full_model": self.properties.settings.full_model,
                 "region_offset": self.properties.settings.offset,
                 "segmentation_angle": self.properties.settings.segmentation_angle,
+                "core_segments": self.properties.settings.core_segments,
+                "conductor_segments": self.properties.settings.conductor_segments,
             }
         }
 
@@ -152,6 +154,15 @@ class DataManager:
                 self.gui_properties.settings.full_model = data["settings"]["full_model"]
                 self.gui_properties.settings.offset = data["settings"]["region_offset"]
                 self.gui_properties.settings.segmentation_angle = data["settings"]["segmentation_angle"]
+                self.gui_properties.settings.core_segments = data["settings"].get("core_segments", 0)
+                self.gui_properties.settings.conductor_segments = data["settings"].get("conductor_segments", 0)
+
+                # Catch ACT JSON files which used angle instead of segments for core
+                if not self.gui_properties.settings.core_segments:
+                    seg_angle = self.gui_properties.settings.segmentation_angle
+                    if seg_angle:
+                        self.gui_properties.settings.core_segments = int(360 / seg_angle)
+
                 self.gui_properties.electrical.adaptive_frequency = data["settings"]["analysis_setup"][
                     "adaptive_frequency"
                 ]
@@ -207,6 +218,12 @@ class DataManager:
             self.gui_properties.core.airgap = _airgap
 
             self.gui_properties.settings.segmentation_angle = data["core_dimensions"]["segmentation_angle"]
+            # Fallback for old JSON missing core_segments
+            if not self.gui_properties.settings.core_segments:
+                seg_angle = self.gui_properties.settings.segmentation_angle
+                if seg_angle:
+                    self.gui_properties.settings.core_segments = int(360 / seg_angle)
+
             self.gui_properties.winding.conductor_material = data["setup_definition"]["coil_material"]
             self.gui_properties.settings.draw_skin_layers = data["setup_definition"]["draw_skin_layers"]
             self.gui_properties.winding.layer_type = data["winding_definition"]["layer_type"]
@@ -224,6 +241,16 @@ class DataManager:
             self.gui_properties.settings.percentage_error = data["setup_definition"]["percentage_error"]
             self.gui_properties.settings.number_passes = data["setup_definition"]["number_passes"]
             self.gui_properties.winding.side_loads = data["setup_definition"]["side_loads"]
+            self.gui_properties.winding.layers_definition = data["winding_definition"]["layers_definition"]
+
+            # Derive conductor_segments from the first layer's segments_number
+            _layers = data["winding_definition"]["layers_definition"]
+            if _layers:
+                _first_layer = next(iter(_layers.values()))
+                _layer_segments = _first_layer.get("segments_number", 0)
+                if _layer_segments:
+                    self.gui_properties.settings.conductor_segments = _layer_segments
+
             self.gui_properties.electrical.excitation_strategy = data["setup_definition"]["excitation_strategy"]
             if self.gui_properties.electrical.excitation_strategy.lower() == "voltage":
                 self.gui_properties.electrical.voltage = data["setup_definition"]["voltage"]
@@ -254,10 +281,14 @@ class DataManager:
         """
         # Layers
         layers = {}
+        segments_seen = []
         for i, (key_layer, value_layer) in enumerate(data.items()):
+            layer_segments = value_layer.get("segments_number", self.gui_properties.settings.segments_number)
+            segments_seen.append(layer_segments)
+
             layers[key_layer] = {
                 "turns_number": value_layer["turns"]["quantity"],
-                "segments_number": self.gui_properties.settings.segments_number,
+                "segments_number": layer_segments,
             }
 
             if self.gui_properties.winding.layer_type.lower() == "wound":
@@ -278,6 +309,19 @@ class DataManager:
                 self.gui_properties.settings.draw_skin_layers = value_layer["conductor"]["draw_skin_layers"]
                 self.gui_properties.winding.conductor_material = value_layer["conductor"]["material"]
                 self.gui_properties.winding.insulation_material = value_layer.get("insulation", {}).get("material", "")
+
+        # Normalize segments_number across layers if inconsistent
+        if segments_seen:
+            first_value = segments_seen[0]
+            if any(seg != first_value for seg in segments_seen[1:]):
+                self.gui_properties._segments_warning = (
+                    "Warning: Imported layers have different segments_number values. "
+                    "Using the first layer value for all layers."
+                )
+                layers = {k: {**v, "segments_number": first_value} for k, v in layers.items()}
+            self.gui_properties.settings.conductor_segments = first_value
+            self.gui_properties.settings.segments_number = first_value
+
         self.gui_properties.winding.layers_definition = layers
 
     def _flatten_connections(self, connections_def):
@@ -319,6 +363,10 @@ class DataManager:
             with file.open("r") as f:
                 data = json.load(f)
                 msg = self._format_input_version(data)
+                warning = getattr(self.gui_properties, "_segments_warning", "")
+                if warning:
+                    msg = msg + "\n" + warning
+                    self.gui_properties._segments_warning = ""
                 is_valid = True
 
         else:
@@ -341,6 +389,7 @@ class DataManager:
         nlayers = len(layers)
         for n in range(1, nlayers + 1):
             be_layers[f"layer_{n}"] = {
+                "segments_number": layers[f"layer_{n}"].get("segments_number", 0),
                 "conductor": {
                     "draw_skin_layers": self.gui_properties.settings.draw_skin_layers,
                     "material": self.gui_properties.winding.conductor_material,
@@ -439,6 +488,8 @@ class DataManager:
         self.properties.circuit.layer_side_definition = self.gui_properties.winding.layer_side_definition
         self.properties.circuit.connections_definition = self.gui_properties.winding.connections_definition
         self.properties.settings.segmentation_angle = self.gui_properties.settings.segmentation_angle
+        self.properties.settings.core_segments = self.gui_properties.settings.core_segments
+        self.properties.settings.conductor_segments = self.gui_properties.settings.conductor_segments
 
         # Materials
         if self.gui_properties.winding.insulation_material:

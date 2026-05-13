@@ -331,6 +331,11 @@
         "segmentation_angle": {
           "type": "number"
         },
+        "core_segments": {
+          "type": "integer"
+        },
+        "conductor_segments": {
+          "type": "integer" },
         "analysis_setup": {
           "$ref": "#/definitions/AnalysisSetup"
         }
@@ -452,7 +457,10 @@
         },
         "turns": {
           "$ref": "#/definitions/Turns"
-        }
+        },
+          "segments_number": {
+            "type": "integer"
+          }
       },
       "required": [
         "conductor",

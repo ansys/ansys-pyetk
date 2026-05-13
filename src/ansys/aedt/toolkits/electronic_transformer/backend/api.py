@@ -170,6 +170,7 @@ class ToolkitBackend(AEDTCommon):
             this_layer.turns.quantity = value_layer["turns"]["quantity"]
             this_layer.turns.spacing = value_layer["turns"]["spacing"]
             this_layer.turns.distance = value_layer["turns"]["distance"]
+            this_layer.segments_number = value_layer.get("segments_number", 0)
 
             self.properties.winding.layers[key_layer] = this_layer
 
@@ -187,7 +188,12 @@ class ToolkitBackend(AEDTCommon):
 
         self.properties.settings.full_model = setup_props["full_model"]
         self.properties.settings.region_offset = setup_props["region_offset"]
-        self.properties.settings.segmentation_angle = setup_props["segmentation_angle"]
+
+        # Handle ACT JSON which uses segmentation 'angle' and PyETK which uses segmentation 'number' for core
+        self.properties.settings.segmentation_angle = setup_props.get("segmentation_angle", 0)
+        self.properties.settings.core_segments = setup_props.get("core_segments", 0)
+        self.properties.settings.conductor_segments = setup_props.get("conductor_segments", 0)
+
         self.properties.settings.analysis_setup.adaptive_frequency = setup_props["analysis_setup"]["adaptive_frequency"]
         self.properties.settings.analysis_setup.percentage_error = setup_props["analysis_setup"]["percentage_error"]
         self.properties.settings.analysis_setup.number_passes = setup_props["analysis_setup"]["number_passes"]

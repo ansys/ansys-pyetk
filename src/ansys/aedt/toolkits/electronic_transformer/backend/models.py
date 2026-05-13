@@ -108,6 +108,7 @@ class Layer(BaseModel, validate_assignment=True):
     conductor: Conductor = Conductor()
     insulation: Insulation = Insulation()
     turns: Turns = Turns()
+    segments_number: int = 0
 
 
 class Winding(BaseModel, validate_assignment=True):
@@ -162,6 +163,8 @@ class Settings(BaseModel, validate_assignment=True):
     full_model: bool = False
     region_offset: float = 0.0
     segmentation_angle: int = 0
+    core_segments: int = 0
+    conductor_segments: int = 0
     analysis_setup: AnalysisSetup = AnalysisSetup()
 
 
