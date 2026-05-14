@@ -76,8 +76,7 @@
       "percentage_error": 1.0
     },
     "full_model": false,
-    "region_offset": 50.0,
-    "core_segments": 36
+    "region_offset": 50.0
   },
   "materials": {
     "material_insulation": {
