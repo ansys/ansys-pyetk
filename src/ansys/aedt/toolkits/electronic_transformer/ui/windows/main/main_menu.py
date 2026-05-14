@@ -308,9 +308,13 @@ class GeometryMenu(object):
         # Core/Coil Validation Check
         # ───────────────────────────────
         # Update winding fit summary text when relevant fields change
+        self.bobbin_board_thickness.editingFinished.connect(self._sync_bobbin_thickness)
         self.bobbin_board_thickness.editingFinished.connect(self._update_core_validation_text)
+        self.top_margin.editingFinished.connect(self._sync_top_margin)
         self.top_margin.editingFinished.connect(self._update_core_validation_text)
+        self.side_margin.editingFinished.connect(self._sync_side_margin)
         self.side_margin.editingFinished.connect(self._update_core_validation_text)
+        self.layer_spacing.editingFinished.connect(self._sync_layer_spacing)
         self.layer_spacing.editingFinished.connect(self._update_core_validation_text)
 
         # When winding tree values change, update summary after edits are committed
@@ -592,6 +596,34 @@ class GeometryMenu(object):
             for widget in (self.winding_width, self.winding_height):
                 if widget is not None:
                     self._set_invalid(widget, False, "")
+
+    def _sync_bobbin_thickness(self):
+        """Sync bobbin thickness widget value into gui_properties before validation update."""
+        try:
+            self.gui_properties.bobbin_board_and_margin.thickness = float(self.bobbin_board_thickness.text())
+        except ValueError:
+            pass
+
+    def _sync_top_margin(self):
+        """Sync top margin widget value into gui_properties before validation update."""
+        try:
+            self.gui_properties.bobbin_board_and_margin.top_margin = float(self.top_margin.text())
+        except ValueError:
+            pass
+
+    def _sync_side_margin(self):
+        """Sync side margin widget value into gui_properties before validation update."""
+        try:
+            self.gui_properties.bobbin_board_and_margin.side_margin = float(self.side_margin.text())
+        except ValueError:
+            pass
+
+    def _sync_layer_spacing(self):
+        """Sync layer spacing widget value into gui_properties before validation update."""
+        try:
+            self.gui_properties.winding.layer_spacing = float(self.layer_spacing.text())
+        except ValueError:
+            pass
 
     def load_example(self, direction):
         """Load an example file by stepping forwards or backwards.
