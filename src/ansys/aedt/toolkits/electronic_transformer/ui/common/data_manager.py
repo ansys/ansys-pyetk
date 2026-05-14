@@ -47,6 +47,7 @@ class DataManager:
                 "model": self.properties.core.model,
                 "material": self.properties.core.material,
                 "dimensions": self.properties.core.dimensions,
+                "core_segments": self.properties.core.core_segments,
                 "airgap": {
                     "define_airgap": self.properties.core.airgap.enabled,
                     "airgap_on_leg": self.properties.core.airgap.location,
@@ -100,8 +101,6 @@ class DataManager:
                 },
                 "full_model": self.properties.settings.full_model,
                 "region_offset": self.properties.settings.offset,
-                "segmentation_angle": self.properties.settings.segmentation_angle,
-                "core_segments": self.properties.settings.core_segments,
                 "conductor_segments": self.properties.settings.conductor_segments,
             }
         }
@@ -153,11 +152,11 @@ class DataManager:
 
                 self.gui_properties.settings.full_model = data["settings"]["full_model"]
                 self.gui_properties.settings.offset = data["settings"]["region_offset"]
-                self.gui_properties.settings.segmentation_angle = data["settings"]["segmentation_angle"]
+                self.gui_properties.settings.segmentation_angle = data["settings"].get("segmentation_angle", 0)
                 self.gui_properties.settings.core_segments = data["settings"].get("core_segments", 0)
                 self.gui_properties.settings.conductor_segments = data["settings"].get("conductor_segments", 0)
 
-                # Catch ACT JSON files which used angle instead of segments for core
+                # Catch for files that have segmentation_angle but not core_segments
                 if not self.gui_properties.settings.core_segments:
                     seg_angle = self.gui_properties.settings.segmentation_angle
                     if seg_angle:
@@ -487,8 +486,7 @@ class DataManager:
         self.properties.settings.frequency_sweep_definition["stop_frequency"] *= scale_factor_stop_freq
         self.properties.circuit.layer_side_definition = self.gui_properties.winding.layer_side_definition
         self.properties.circuit.connections_definition = self.gui_properties.winding.connections_definition
-        self.properties.settings.segmentation_angle = self.gui_properties.settings.segmentation_angle
-        self.properties.settings.core_segments = self.gui_properties.settings.core_segments
+        self.properties.core.core_segments = self.gui_properties.settings.core_segments
         self.properties.settings.conductor_segments = self.gui_properties.settings.conductor_segments
 
         # Materials

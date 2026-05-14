@@ -168,6 +168,9 @@
         "material": {
           "type": "string"
         },
+        "core_segments": {
+          "type": "integer"
+        },
         "dimensions": {
           "$ref": "#/definitions/Dimensions"
         },
@@ -328,12 +331,6 @@
         "region_offset": {
           "type": "number"
         },
-        "segmentation_angle": {
-          "type": "number"
-        },
-        "core_segments": {
-          "type": "integer"
-        },
         "conductor_segments": {
           "type": "integer" },
         "analysis_setup": {
@@ -343,8 +340,7 @@
       "required": [
         "analysis_setup",
         "full_model",
-        "region_offset",
-        "segmentation_angle"
+        "region_offset"
       ],
       "title": "Settings"
     },

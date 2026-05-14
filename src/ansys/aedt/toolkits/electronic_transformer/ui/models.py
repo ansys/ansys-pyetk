@@ -52,6 +52,7 @@ class CoreProperties(BaseModel, validate_assignment=True):
     type: str = ""
     model: str = ""
     material: str = ""
+    core_segments: int = 0
     airgap: AirGapConfig = AirGapConfig()
     dimensions: dict[str, float] = {
         "D_1": 0.0,

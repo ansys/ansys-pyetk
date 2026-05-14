@@ -518,7 +518,8 @@ class Winding(GeometryCommon):
             dim_d5 = self.__core_properties.dimensions["D_4"] + airgap_both
             dim_d6 = self.__core_properties.dimensions["D_5"]
 
-        segmentation_angle = self.__settings_properties.segmentation_angle
+        # segmentation_angle = self.__settings_properties.segmentation_angle
+        segmentation_angle = 0
         winding_parameters_dict = winding_parameters_dict
 
         if layer_type == "Planar":
@@ -582,13 +583,7 @@ class Winding(GeometryCommon):
                     conductor_full_size = 2 * margin + conductor_width + 2 * insulation_thickness
                 else:
                     conductor_diameter = layer.conductor.diameter
-
-                    # Prefer per-layer segments_number, then global conductor_segments, then legacy segmentation_angle
-                    segments_number = getattr(layer, "segments_number", 0) or 0
-                    if not segments_number:
-                        segments_number = getattr(self.__settings_properties, "conductor_segments", 0) or 0
-                    if not segments_number:
-                        segments_number = self.segmentation_angle(self.__settings_properties.segmentation_angle)
+                    segments_number = layer.segments_number
 
                     # factor of 2 is applied due to existence of margin and insulation on both sides
                     conductor_full_size = 2 * margin + conductor_diameter + 2 * insulation_thickness

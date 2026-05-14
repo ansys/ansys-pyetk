@@ -53,13 +53,7 @@ class Bobbin(GeometryCommon):
         # If this class requires more properties, those should be private property
         self.__core_properties = core_properties
         self.__winding_properties = winding_properties
-
-        # Handle ACT JSON which uses segmentation angle and PyETK which uses segmentation number for core
-        self.__segments_number = (
-            settings_properties.core_segments
-            if settings_properties.core_segments
-            else self.segmentation_angle(settings_properties.segmentation_angle)
-        )
+        self.__segments_number = core_properties.core_segments
 
     def create_geometry(self):
         """Create the bobbin geometry."""
