@@ -2317,9 +2317,6 @@ class GeometryMenu(object):
         else:
             self.gui_properties.settings.core_segments = int(raw_core_segments)
 
-        # Keep legacy segmentation_angle populated for backend compatibility
-        self.gui_properties.settings.segmentation_angle = (0.0 if self.gui_properties.settings.conductor_segments == 0 else 360.0 / float(self.gui_properties.settings.conductor_segments))
-
     def save_button_clicked(self):
         """Save the UI state to a JSON file."""
         file_name_tuple = QFileDialog.getSaveFileName(

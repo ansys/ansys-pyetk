@@ -19,7 +19,8 @@
       "define_airgap": false,
       "airgap_on_leg": "None",
       "airgap_value": 0.0
-    }
+    },
+    "core_segments": 0
   },
   "winding": {
     "layer_type": "Planar",
@@ -39,7 +40,8 @@
           "quantity": 7,
           "spacing": "top",
           "distance": 0.3
-        }
+        },
+        "segments_number": 8
       },
       "layer_2": {
         "conductor": {
@@ -53,7 +55,8 @@
           "quantity": 7,
           "spacing": "top",
           "distance": 0.3
-        }
+        },
+        "segments_number": 8
       },
       "layer_3": {
         "conductor": {
@@ -67,7 +70,8 @@
           "quantity": 3,
           "spacing": "top",
           "distance": 0.3
-        }
+        },
+        "segments_number": 8
       },
       "layer_4": {
         "conductor": {
@@ -81,7 +85,8 @@
           "quantity": 2,
           "spacing": "top",
           "distance": 0.3
-        }
+        },
+        "segments_number": 8
       },
       "layer_5": {
         "conductor": {
@@ -95,7 +100,8 @@
           "quantity": 2,
           "spacing": "top",
           "distance": 0.3
-        }
+        },
+        "segments_number": 8
       },
       "layer_6": {
         "conductor": {
@@ -109,7 +115,8 @@
           "quantity": 3,
           "spacing": "top",
           "distance": 0.3
-        }
+        },
+        "segments_number": 8
       },
       "layer_7": {
         "conductor": {
@@ -123,7 +130,8 @@
           "quantity": 7,
           "spacing": "top",
           "distance": 0.3
-        }
+        },
+        "segments_number": 8
       },
       "layer_8": {
         "conductor": {
@@ -137,7 +145,8 @@
           "quantity": 7,
           "spacing": "top",
           "distance": 0.3
-        }
+        },
+        "segments_number": 8
       }
     }
   },

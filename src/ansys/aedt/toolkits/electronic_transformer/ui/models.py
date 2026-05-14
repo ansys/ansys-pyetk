@@ -52,6 +52,7 @@ class CoreProperties(BaseModel, validate_assignment=True):
     type: str = ""
     model: str = ""
     material: str = ""
+    core_segments: int = 0
     airgap: AirGapConfig = AirGapConfig()
     dimensions: dict[str, float] = {
         "D_1": 0.0,
@@ -196,6 +197,7 @@ class CoreGUIProperties(BaseModel, validate_assignment=True):
     type: str = "E"
     model: str = "E5.3/2.7/2"
     material: str = "3C81"
+    core_segments: int = 36
     dimensions: dict = {"D_1": 5.25, "D_2": 3.8, "D_3": 1.4, "D_4": 2.65, "D_5": 1.9, "D_6": 2, "D_7": 0, "D_8": 0}
     airgap: AirGapConfig = AirGapConfig()
 
