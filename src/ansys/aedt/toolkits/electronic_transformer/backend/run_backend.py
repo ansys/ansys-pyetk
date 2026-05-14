@@ -27,6 +27,7 @@ from ansys.aedt.toolkits.common.backend.multithreading_server import Multithread
 from ansys.aedt.toolkits.common.backend.rest_api import app
 from ansys.aedt.toolkits.common.backend.rest_api import jsonify
 from ansys.aedt.toolkits.common.backend.rest_api import logger
+from flask import request
 
 # isort: on
 
@@ -110,11 +111,10 @@ def create_model():
         Message indicating if the model was created.
     """
     logger.info("[POST] /create_model (creates PyETK Model).")
+    skip_validation = request.args.get("skip_validation", "false").lower() == "true"
 
-    # Get properties from frontend
     properties_frontend = toolkit_api.get_properties()
-
-    region = toolkit_api.create_model(properties_frontend)
+    region = toolkit_api.create_model(properties_frontend, skip_validation=skip_validation)
     if region:
         return jsonify("PyETK model created"), 200
     else:

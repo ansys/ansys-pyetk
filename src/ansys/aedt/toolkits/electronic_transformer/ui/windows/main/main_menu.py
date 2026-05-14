@@ -97,7 +97,7 @@ class CreateGeometryThread(QThread):
 
     finished_signal = Signal(bool)
 
-    def __init__(self, app, selected_project, selected_design):
+    def __init__(self, app, selected_project, selected_design, skip_validation=False):
         """Initialize the geometry creation thread.
         Args:
             app: The main application instance.
@@ -110,10 +110,11 @@ class CreateGeometryThread(QThread):
         self.main_window = app.main_window
         self.selected_project = selected_project
         self.selected_design = selected_design
+        self.skip_validation = skip_validation
 
     def run(self):
         """Run the geometry creation thread."""
-        success = self.main_window.create_model(self.selected_project, self.selected_design)
+        success = self.main_window.create_model(self.selected_project, self.selected_design,skip_validation=self.skip_validation)
         self.finished_signal.emit(success)
 
 
@@ -352,7 +353,9 @@ class GeometryMenu(object):
         self.scale = self.geometry_column_widget.findChild(QComboBox, "scale_combo")
 
         # Checks
-        self._skip_check = True
+        self._skip_check = False
+        self._core_valid = True
+        self._winding_fits = True
 
         # Populate UI with Default values
         self.draw_skin_layers.setChecked(self.gui_properties.settings.draw_skin_layers)
@@ -500,8 +503,11 @@ class GeometryMenu(object):
                 self._highlight_core_dimension_errors(errors)
                 for message in errors:
                     self.ui.update_logger(message)
+            self._core_valid = len(errors) == 0
         else:
             self._clear_core_dimension_errors()
+            self._core_valid = True
+        self._update_create_button_state()
 
     def _highlight_core_dimension_errors(self, error_messages):
         """Set a red border on core dimension QLineEdits referenced in error messages.
@@ -587,6 +593,8 @@ class GeometryMenu(object):
                     if height_exceeds
                     else "",
                 )
+            self._winding_fits = not (width_exceeds or height_exceeds)
+            self._update_create_button_state()
 
         except Exception:
             # Keep UI stable if the model is temporarily inconsistent during edits
@@ -655,12 +663,14 @@ class GeometryMenu(object):
         if is_valid:
             self._write_ui_data()
             self.example_name.setText(path.name)
+            self._run_core_checks_on_load()
 
     def setup(self):
         """Set up the geometry menu."""
 
         self.new_button = self.geometry_menu_widget.findChild(QPushButton, "New_button")
         self.new_button.clicked.connect(self.geometry_button_clicked)
+        self.skip_check.stateChanged.connect(self._update_create_button_state)
 
     def geometry_button_clicked(self):
         """Handle the geometry button click event."""
@@ -692,6 +702,7 @@ class GeometryMenu(object):
                 app=self,
                 selected_project=selected_project,
                 selected_design=selected_design,
+                skip_validation=self.skip_check.isChecked(),
             )
             self.geometry_thread.finished_signal.connect(self.geometry_created_finished)
 
@@ -2061,6 +2072,7 @@ class GeometryMenu(object):
         if is_valid:
             self._write_ui_data()
             self.example_name.setText(file_name.name)
+            self._run_core_checks_on_load()
 
     def _reset_example_dir(self):
         """Reset navigation to default examples directory and revert displayed design to 'New Design'."""
@@ -2169,6 +2181,21 @@ class GeometryMenu(object):
         self.gui_properties.core.type = core_def["type"]
         self.gui_properties.core.model = core_def["model"]
         self._update_core_dimensions(core_data=core_def) # check custom core
+
+    def _run_core_checks_on_load(self):
+        """Run core geometry validation after a JSON file is loaded and log any errors."""
+        self._validate_core_dimensions_live()
+        self._update_core_validation_text()
+        self._update_create_button_state()
+
+    def _update_create_button_state(self):
+        """Enable Create Transformer button only when validation conditions are met."""
+        if not self._core_valid:
+            self.new_button.setEnabled(False)
+        elif not self._winding_fits and not self.skip_check.isChecked():
+            self.new_button.setEnabled(False)
+        else:
+            self.new_button.setEnabled(True)
 
     def _update_frequency_sweep(self, freq_sweep=None):
         """Manage frequency sweep population and formatting upon UI and JSON import.

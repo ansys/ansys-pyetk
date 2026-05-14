@@ -281,7 +281,9 @@ class Validation:
         error_message = []
 
         side_margin = winding_properties.side_margin
-        bobbin_board_thickness = bobbin_properties.board_thickness
+        bobbin_board_thickness = getattr(bobbin_properties, "board_thickness", None) or getattr(
+            bobbin_properties, "thickness", 0.0
+        )
         top_margin = winding_properties.top_margin
         layer_spacing = winding_properties.layer_spacing
 
