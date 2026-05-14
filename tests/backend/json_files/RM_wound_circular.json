@@ -19,7 +19,8 @@
       "define_airgap": true,
       "airgap_on_leg": "Center",
       "airgap_value": 2.561
-    }
+    },
+    "core_segments": 36
   },
   "winding": {
     "layer_type": "Wound",
@@ -76,7 +77,7 @@
     },
     "full_model": false,
     "region_offset": 50.0,
-    "segmentation_angle": 10.0
+    "core_segments": 36
   },
   "materials": {
     "material_insulation": {

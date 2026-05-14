@@ -19,7 +19,8 @@
       "define_airgap": false,
       "airgap_on_leg": "None",
       "airgap_value": 0.0
-    }
+    },
+    "core_segments": 0
   },
   "winding": {
     "layer_type": "Planar",
@@ -199,7 +200,7 @@
     },
     "full_model": false,
     "region_offset": 50.0,
-    "segmentation_angle": 0.0
+    "core_segments": 0
   },
   "materials": {
     "material_insulation": {
