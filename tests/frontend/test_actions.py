@@ -75,7 +75,7 @@ class TestFrontend:
         result = frontend.create_model("Test_Project", "Test_Design")
 
         assert result is True
-        mock_post.assert_called_once_with("http://localhost:5000/create_model")
+        mock_post.assert_called_once_with("http://localhost:5000/create_model", params={"skip_validation": False})
 
     @patch("ansys.aedt.toolkits.electronic_transformer.ui.actions.requests.get")
     @patch("ansys.aedt.toolkits.electronic_transformer.ui.actions.requests.post")

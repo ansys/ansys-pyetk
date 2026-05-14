@@ -414,7 +414,7 @@ class ToolkitBackend(AEDTCommon):
 
         return self.__validate_model()
 
-    def create_model(self, frontend_properties=None):
+    def create_model(self, frontend_properties=None, skip_validation=False):
         """Create the complete model.
 
         Parameters
@@ -431,10 +431,18 @@ class ToolkitBackend(AEDTCommon):
         if frontend_properties:
             self.__update_props_from_frontend(frontend_properties)
 
-        # Validates the model
-        validated, error_messages = self.__validate_model()
-        if not validated:
-            return False
+        # Validates the model — core always checked; winding fit skipped if skip_validation=True
+        if not skip_validation:
+            validated, error_messages = self.__validate_model()
+            if not validated:
+                return False
+        else:
+            # Always validate core geometry even when winding check is skipped
+            core_errors = self.__validator._Validation__validate_core(properties.core)
+            if core_errors:
+                for msg in core_errors:
+                    logger.error(msg)
+                return False
 
         self.__create_maxwell_design()
         self.connect_design("Maxwell3D")
