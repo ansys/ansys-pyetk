@@ -634,7 +634,13 @@ class Winding(GeometryCommon):
         if "CentralLegCS" in self.aedtapp.modeler.coordinate_systems:  # TODO: Check CS system usage for EFD core
             self.aedtapp.modeler.set_working_coordinate_system("CentralLegCS")
 
-        self.aedtapp.modeler.section(assignment=self.objects_list, plane="ZX")
+        # U and UI cores need terminals in YZ plane since they have to be sectioned in XZ
+        if self.__core_properties.type in ["U", "UI"]:
+            terminal_plane = "YZ"
+        else:
+            terminal_plane = "ZX"
+
+        self.aedtapp.modeler.section(assignment=self.objects_list, plane=terminal_plane)
 
         for each_object in self.objects_list:
             self.aedtapp.modeler.separate_bodies(assignment=each_object.name + "_Section1")
