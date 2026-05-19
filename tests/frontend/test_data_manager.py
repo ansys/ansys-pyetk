@@ -417,13 +417,13 @@ class TestDataManager:
 
         dm.properties.settings.full_model = True
         dm.properties.settings.offset = 75.0
-        dm.properties.settings.segmentation_angle = 15.0
+        dm.properties.settings.conductor_segments = 15.0
 
         result = dm.create_backend_data()
 
         assert result["settings"]["full_model"] is True
         assert result["settings"]["region_offset"] == 75.0
-        assert result["settings"]["segmentation_angle"] == 15.0
+        assert result["settings"]["conductor_segments"] == 15.0
 
     def test_create_backend_data_with_materials(self):
         """Test backend data creation with material definitions."""
