@@ -266,11 +266,11 @@ class GeometryMenu(object):
         self.winding_label = self.geometry_menu_widget.findChild(QLabel, "winding_label")
 
         # # Default Winding and Layer values
-        self._conductor_width = 0.2
-        self._conductor_height = 2.2
+        self._conductor_width = 0.4
+        self._conductor_height = 0.1
         self._conductor_diameter = 1.0
         self._insulation_thickness = 0.05
-        self._turn_number = 10
+        self._turn_number = 15
         self._default_side_load = 1e-6
         self._segments_number = 8
 
