@@ -99,6 +99,17 @@ class ApplicationWindow(QMainWindow, Frontend):
         self.settings_menu.show_widgets()
         self.ui.toggle_right_column()
         self.ui.set_right_column_menu(title="Settings")
+        # Hide the Browse/file open row in PyETK instead of removing from toolkit framework
+        _orig_show_widgets = self.settings_menu.show_widgets
+
+        def _show_widgets_no_browse():
+            _orig_show_widgets()
+            self.settings_menu.browse.setVisible(False)
+            self.settings_menu.file.setVisible(False)
+            self.settings_menu.line3.setVisible(False)
+            self.settings_menu.line4.setVisible(False)
+
+        self.settings_menu.show_widgets = _show_widgets_no_browse
 
         # Check backend connection
         success = self.check_connection()
