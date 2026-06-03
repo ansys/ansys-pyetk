@@ -63,8 +63,18 @@ os.environ["QT_FONT_DPI"] = "96"
 properties.high_resolution = (
     os.getenv("AEDT_TOOLKIT_HIGH_RESOLUTION", "false").lower() in ("true", "1", "t") or properties.high_resolution
 )
-if properties.high_resolution:
-    os.environ["QT_SCALE_FACTOR"] = "2"
+
+# Determine the UI scale factor.
+# Priority: AEDT_TOOLKIT_SCALE_FACTOR env var > high_resolution flag (→ 2) > scale_factor from toml (default 1.0)
+_env_scale = os.getenv("AEDT_TOOLKIT_SCALE_FACTOR")
+if _env_scale is not None:
+    _scale_factor = float(_env_scale)
+elif properties.high_resolution:
+    _scale_factor = 2.0
+else:
+    _scale_factor = float(getattr(properties, "scale_factor", 1.0))
+
+os.environ["QT_SCALE_FACTOR"] = str(_scale_factor)
 
 properties.version = __version__
 

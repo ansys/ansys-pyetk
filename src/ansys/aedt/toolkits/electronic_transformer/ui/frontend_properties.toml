@@ -11,6 +11,7 @@
 "year" = 2026
 "theme" = "synopsys_light.json"
 "high_resolution" = false
+"scale_factor" = 1.0
 
 [[defaults.add_left_menus]]
 btn_icon= "icon_plot_3d.svg"
