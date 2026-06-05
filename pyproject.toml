@@ -34,12 +34,35 @@ dependencies = [
     'ansys-aedt-toolkits-common[all]',
 ]
 
-[project.optional-dependencies]
+[dependency-groups]
+dev = [
+  "prek==0.4.3",
+  { include-group = "doc" },
+  { include-group = "tests" },
+]
 tests = [
-    'ansys-aedt-toolkits-common[tests]'
+    "flask",
+    "pytest",
+    "pytest-cov",
+    "pytest-qt",
+    "pyside6",
 ]
 doc = [
-    'ansys-aedt-toolkits-common[doc]'
+    "ansys-sphinx-theme>=1.8.2",
+    "ipython",
+    "ipywidgets",
+    "jupyterlab",
+    "jupytext",
+    "nbsphinx",
+    "numpydoc",
+    "pypandoc",
+    "pyside6",
+    "recommonmark",
+    "Sphinx",
+    "sphinx-autobuild",
+    "sphinx-copybutton",
+    "sphinx_design",
+    "pyvista[jupyter]",
 ]
 freeze = [
     "pyinstaller"

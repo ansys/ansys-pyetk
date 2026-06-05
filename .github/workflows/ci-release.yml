@@ -128,6 +128,7 @@ jobs:
           python-version: ${{ env.MAIN_PYTHON_VERSION }}
           sphinxopts: '-j auto --color -w build_errors.txt'
           use-python-cache: false
+          group-dependencies-name: 'doc'
 
   build-library:
     name: Build library artifacts
