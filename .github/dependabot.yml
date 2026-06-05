@@ -12,7 +12,9 @@ updates:
       include:
         - "*"  # Include all dependencies in cooldown
     assignees:
-      - "pyansys-ci-bot"
+      - "DaveTwyman"
+      - "jvela018"
+      - "nunesanderson"
     labels:
       - "maintenance"
       - "dependencies"
@@ -33,7 +35,9 @@ updates:
       exclude:
         - "ansys/actions"
     assignees:
-      - "pyansys-ci-bot"
+      - "DaveTwyman"
+      - "jvela018"
+      - "nunesanderson"
     labels:
       - "maintenance"
       - "dependencies"
@@ -54,7 +58,9 @@ updates:
       exclude:
         - "ansys/pre-commit-hooks"
     assignees:
-      - "pyansys-ci-bot"
+      - "DaveTwyman"
+      - "jvela018"
+      - "nunesanderson"
     labels:
       - "maintenance"
       - "dependencies"
