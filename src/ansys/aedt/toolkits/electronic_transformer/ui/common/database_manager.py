@@ -20,6 +20,7 @@ import json
 from pathlib import Path
 
 from ansys.aedt.toolkits.common.ui.logger_handler import logger
+
 from ansys.aedt.toolkits.electronic_transformer.ui.common.utils import extract_sort_key
 
 # data and example directory location
