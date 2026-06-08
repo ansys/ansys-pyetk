@@ -11,6 +11,9 @@ updates:
       default-days: 7
       include:
         - "*"  # Include all dependencies in cooldown
+      exclude:
+        - "ansys-aedt-toolkits-common"
+        - "ansys-sphinx-theme"
     reviewers:
       - "DaveTwyman"
       - "jvela018"
