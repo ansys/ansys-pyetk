@@ -246,7 +246,7 @@ jobs:
           prune-cache: true
 
       - name: Install packages for testing
-        run: uv sync --frozen --group tests
+        run: uv sync --frozen --group tests --no-dev
 
       - name: Toolkit REST API testing
         timeout-minutes: 30
