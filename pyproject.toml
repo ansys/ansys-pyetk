@@ -34,6 +34,11 @@ dependencies = [
     'ansys-aedt-toolkits-common[all]',
 ]
 
+[project.optional-dependencies]
+freeze = [
+    "pyinstaller"
+]
+
 [dependency-groups]
 dev = [
   "prek==0.4.3",
@@ -63,9 +68,6 @@ doc = [
     "sphinx-copybutton",
     "sphinx_design",
     "pyvista[jupyter]",
-]
-freeze = [
-    "pyinstaller"
 ]
 
 [tool.flit.module]
