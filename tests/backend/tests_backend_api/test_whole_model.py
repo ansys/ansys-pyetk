@@ -25,9 +25,8 @@ including mesh operations, design setups, ports, and circuit creation functional
 
 from pathlib import Path
 
-import pytest
-
 from ansys.aedt.core.generic.general_methods import is_linux
+import pytest
 
 json_files_path = Path(__file__).parents[1] / "json_files"
 vol_limit = 1e-5
