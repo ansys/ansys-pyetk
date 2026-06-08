@@ -13,6 +13,7 @@ updates:
         - "*"  # Include all dependencies in cooldown
       exclude:
         - "ansys-aedt-toolkits-common"
+        - "pyaedt"
         - "ansys-sphinx-theme"
     reviewers:
       - "DaveTwyman"
