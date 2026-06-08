@@ -15,12 +15,10 @@ updates:
         - "ansys-aedt-toolkits-common"
         - "pyaedt"
         - "ansys-sphinx-theme"
-    reviewers:
+    assignees:
       - "DaveTwyman"
       - "jvela018"
       - "nunesanderson"
-    assignees:
-      - "pyansys-ci-bot"
     labels:
       - "maintenance"
       - "dependencies"
@@ -40,14 +38,35 @@ updates:
         - "*"
       exclude:
         - "ansys/actions"
-    reviewers:
+    assignees:
       - "DaveTwyman"
       - "jvela018"
       - "nunesanderson"
-    assignees:
-      - "pyansys-ci-bot"
     labels:
       - "maintenance"
       - "dependencies"
     commit-message:
       prefix: "BUILD(actions)"
+
+  - package-ecosystem: "pre-commit"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "saturday"
+      time: "06:00"
+      timezone: "Europe/Paris"
+    cooldown:
+      default-days: 7
+      include:
+        - "*"  # Include all dependencies in cooldown
+      exclude:
+        - "ansys/pre-commit-hooks"
+    assignees:
+      - "DaveTwyman"
+      - "jvela018"
+      - "nunesanderson"
+    labels:
+      - "maintenance"
+      - "dependencies"
+    commit-message:
+      prefix: "BUILD(pre-commit)"
