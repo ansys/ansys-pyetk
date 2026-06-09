@@ -29,9 +29,6 @@ from ansys.aedt.toolkits.electronic_transformer.ui.models import fe_properties a
 # isort: on
 
 # PySide6 Widgets
-from PySide6.QtWidgets import QApplication
-from PySide6.QtWidgets import QMainWindow
-
 from ansys.aedt.toolkits.common.ui.common_windows.home_menu import HomeMenu
 from ansys.aedt.toolkits.common.ui.common_windows.settings_column import SettingsMenu
 
@@ -40,6 +37,8 @@ from ansys.aedt.toolkits.common.ui.logger_handler import logger
 
 # Common windows
 from ansys.aedt.toolkits.common.ui.main_window.main_window_layout import MainWindowLayout
+from PySide6.QtWidgets import QApplication
+from PySide6.QtWidgets import QMainWindow
 
 # Toolkit frontend API
 from ansys.aedt.toolkits.electronic_transformer.ui.actions import Frontend

@@ -6,7 +6,8 @@ on:
 
 env:
   ANSYSLMD_LICENSE_FILE: ${{ format('1055@{0}', secrets.LICENSE_SERVER) }}
-  MAIN_PYTHON_VERSION: '3.10'
+  MAIN_PYTHON_VERSION: '3.14'
+  TESTS_PYTHON_VERSION: '3.10'
   DOCUMENTATION_CNAME: 'etk.docs.pyansys.com'
   LIBRARY_NAME: 'ansys-pyetk'
   ON_CI: true
@@ -34,21 +35,9 @@ jobs:
           bot-email: ${{ secrets.PYANSYS_CI_BOT_EMAIL }}
           use-upper-case: true
 
-  code-style:
-    name: Code style check
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read   # Required to read code files for style checking
-    steps:
-      - uses: ansys/actions/code-style@73fa84c704bb6691f254cfe4d4b928c338b0d4da # v10.3.0
-        with:
-          python-version: ${{ env.MAIN_PYTHON_VERSION }}
-          use-python-cache: false
-
   build-application-windows:
     name: Build Windows application
     runs-on: windows-latest
-    needs: code-style
     permissions:
       contents: read
     steps:
@@ -63,7 +52,6 @@ jobs:
   build-application-linux-debian:
     name: Build Linux application - Ubuntu ${{ matrix.os }}
     runs-on: ubuntu-${{ matrix.os }}
-    needs: code-style
     strategy:
       matrix:
         os: [ "22.04", "24.04" ]
@@ -94,13 +82,12 @@ jobs:
 
   smoke-tests:
     name: Build and smoke tests
-    needs: code-style
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
       matrix:
         os : [windows-latest, ubuntu-latest]
-        python-version: ['3.10', '3.11', '3.12', '3.13']
+        python-version: ['3.10', '3.11', '3.12', '3.13', '3.14']
     permissions:
       attestations: write   # Required to create and publish build attestations (SLSA provenance)
       contents: read        # Required to read repository content for building
@@ -128,10 +115,122 @@ jobs:
           python-version: ${{ env.MAIN_PYTHON_VERSION }}
           sphinxopts: '-j auto --color -w build_errors.txt'
           use-python-cache: false
+          group-dependencies-name: 'doc'
+
+# # =================================================================================================
+# # vvvvvvvvvvvvvvvvvvvvvvvvvvvvvv    RUNNING ON SELF-HOSTED RUNNER    vvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
+# # =================================================================================================
+
+  tests-windows:
+    name: Windows tests
+    needs: smoke-tests
+    runs-on: [self-hosted, Windows, pyaedt-toolkit]
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
+
+      - name: Set up Python
+        uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6.2.0
+        with:
+          python-version: ${{ env.TESTS_PYTHON_VERSION }}
+
+      - name: Create Python venv
+        run: |
+          python -m venv .venv
+          .\.venv\Scripts\Activate.ps1
+
+      - name: Install packages for testing
+        run: |
+          .\.venv\Scripts\Activate.ps1
+          python -m pip install --upgrade pip
+          pip install .[tests]
+
+      - name: Toolkit REST API testing
+        timeout-minutes: 30
+        run: |
+          .\.venv\Scripts\Activate.ps1
+          pytest -v -m rest --cov=ansys.aedt.toolkits.electronic_transformer --cov-append
+
+      - name: Toolkit Backend API testing
+        timeout-minutes: 30
+        run: |
+          .\.venv\Scripts\Activate.ps1
+          pytest -v -m backend --cov=ansys.aedt.toolkits.electronic_transformer --cov-append
+
+      - name: Toolkit Frontend testing
+        timeout-minutes: 30
+        run: |
+          .\.venv\Scripts\Activate.ps1
+          pytest -v -m frontend --cov=ansys.aedt.toolkits.electronic_transformer --cov-append
+
+      - name: Combine coverage files
+        run: |
+          .\.venv\Scripts\Activate.ps1
+          python -m coverage html -d .cov\total-html
+          python -m coverage xml -o .cov\total.xml
+
+      - name: Upload coverage results
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
+        with:
+          path: .cov/total-html
+          name: html-total-coverage
+
+# # =================================================================================================
+# # vvvvvvvvvvvvvvvvvvvvvvvvvvvvvv    RUNNING ON SELF-HOSTED RUNNER    vvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
+# # =================================================================================================
+
+  tests-linux:
+    name: Linux tests
+    needs: smoke-tests
+    runs-on: [ self-hosted, Linux, pyaedt-toolkit ]
+    permissions:
+      contents: read
+    env:
+      ANSYSEM_ROOT261: '/usr/ansys_inc/v261/AnsysEM'
+      ANS_NODEPCHECK: '1'
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
+
+      - name: Set up Python
+        uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6.2.0
+        with:
+          python-version: ${{ env.TESTS_PYTHON_VERSION }}
+
+      - name: Create Python venv
+        run: |
+          python -m venv .venv
+
+      - name: Install packages for testing
+        run: |
+          source .venv/bin/activate
+          pip install .[tests]
+
+      - name: Toolkit REST API testing
+        timeout-minutes: 30
+        run: |
+          source .venv/bin/activate
+          pytest -v -m rest
+
+      - name: Toolkit backend API testing
+        timeout-minutes: 30
+        run: |
+          source .venv/bin/activate
+          pytest -v -m backend
+
+      - name: Toolkit frontend testing
+        timeout-minutes: 30
+        run: |
+          source .venv/bin/activate
+          pytest -v -m frontend
 
   build-library:
     name: Build library artifacts
-    needs: doc-build
+    needs: [ doc-build, tests-windows, tests-linux ]
     runs-on: ubuntu-latest
     permissions:
       attestations: write   # Required to create and publish package attestations (SLSA provenance)

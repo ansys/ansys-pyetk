@@ -11,7 +11,7 @@ Electronic Transformer ToolKit (PyETK)
    :target: https://www.python.org/downloads/
 
 .. |GH-CI| image:: https://github.com/ansys/ansys-pyetk/actions/workflows/ci-main.yml/badge.svg
-   :target: https://github.com/ansys/ansys-pyetk/actions/workflows/ci_cd.yml
+   :target: https://github.com/ansys/ansys-pyetk/actions/workflows/ci-main.yml
 
 .. |Apache| image:: https://img.shields.io/badge/License-Apache%202.0-blue.svg
    :target: https://opensource.org/licenses/Apache-2.0

@@ -1,6 +1,6 @@
 version: 2
 updates:
-  - package-ecosystem: "pip" # See documentation for possible values
+  - package-ecosystem: "uv" # See documentation for possible values
     directory: "/" # Location of package manifests
     schedule:
       interval: "weekly"
@@ -11,17 +11,19 @@ updates:
       default-days: 7
       include:
         - "*"  # Include all dependencies in cooldown
-    reviewers:
+      exclude:
+        - "ansys-aedt-toolkits-common"
+        - "pyaedt"
+        - "ansys-sphinx-theme"
+    assignees:
       - "DaveTwyman"
       - "jvela018"
       - "nunesanderson"
-    assignees:
-      - "pyansys-ci-bot"
     labels:
       - "maintenance"
       - "dependencies"
     commit-message:
-      prefix: "BUILD(pip)"
+      prefix: "BUILD(uv)"
 
   - package-ecosystem: "github-actions"
     directory: "/"
@@ -36,14 +38,35 @@ updates:
         - "*"
       exclude:
         - "ansys/actions"
-    reviewers:
+    assignees:
       - "DaveTwyman"
       - "jvela018"
       - "nunesanderson"
-    assignees:
-      - "pyansys-ci-bot"
     labels:
       - "maintenance"
       - "dependencies"
     commit-message:
       prefix: "BUILD(actions)"
+
+  - package-ecosystem: "pre-commit"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "saturday"
+      time: "06:00"
+      timezone: "Europe/Paris"
+    cooldown:
+      default-days: 7
+      include:
+        - "*"  # Include all dependencies in cooldown
+      exclude:
+        - "ansys/pre-commit-hooks"
+    assignees:
+      - "DaveTwyman"
+      - "jvela018"
+      - "nunesanderson"
+    labels:
+      - "maintenance"
+      - "dependencies"
+    commit-message:
+      prefix: "BUILD(pre-commit)"

@@ -20,6 +20,7 @@ import copy
 
 from ansys.aedt.core.modules.boundary.maxwell_boundary import MatrixACMagnetic
 from ansys.aedt.core.modules.boundary.maxwell_boundary import SourceACMagnetic
+
 from ansys.aedt.toolkits.electronic_transformer.backend.workflows.bobbin import Bobbin
 from ansys.aedt.toolkits.electronic_transformer.backend.workflows.core import Core
 from ansys.aedt.toolkits.electronic_transformer.backend.workflows.winding import Winding

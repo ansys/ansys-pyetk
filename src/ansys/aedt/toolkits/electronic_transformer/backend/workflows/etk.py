@@ -17,6 +17,7 @@
 # limitations under the License.
 
 from ansys.aedt.toolkits.common.backend.logger_handler import logger
+
 from ansys.aedt.toolkits.electronic_transformer.backend.workflows.bobbin import Bobbin
 from ansys.aedt.toolkits.electronic_transformer.backend.workflows.circuit import Circuit
 from ansys.aedt.toolkits.electronic_transformer.backend.workflows.core import Core

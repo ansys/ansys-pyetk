@@ -19,6 +19,7 @@
 from pathlib import PurePath
 
 from ansys.aedt.core import MaxwellCircuit
+
 from ansys.aedt.toolkits.electronic_transformer.backend.models import ExcitationType
 
 
