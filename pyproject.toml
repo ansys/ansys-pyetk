@@ -33,9 +33,20 @@ classifiers = [
 ]
 dependencies = [
     'ansys-aedt-toolkits-common[all]',
+    "pyaedt",
 ]
 
 [project.optional-dependencies]
+freeze = [
+    "pyinstaller"
+]
+
+[dependency-groups]
+dev = [
+  "prek==0.4.3",
+  { include-group = "doc" },
+  { include-group = "tests" },
+]
 tests = [
     "flask",
     "pytest",
@@ -59,9 +70,6 @@ doc = [
     "sphinx-copybutton",
     "sphinx_design",
     "pyvista[jupyter]",
-]
-freeze = [
-    "pyinstaller"
 ]
 
 [tool.flit.module]

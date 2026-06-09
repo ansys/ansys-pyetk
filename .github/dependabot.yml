@@ -1,6 +1,6 @@
 version: 2
 updates:
-  - package-ecosystem: "pip" # See documentation for possible values
+  - package-ecosystem: "uv" # See documentation for possible values
     directory: "/" # Location of package manifests
     schedule:
       interval: "weekly"
@@ -11,6 +11,10 @@ updates:
       default-days: 7
       include:
         - "*"  # Include all dependencies in cooldown
+      exclude:
+        - "ansys-aedt-toolkits-common"
+        - "pyaedt"
+        - "ansys-sphinx-theme"
     assignees:
       - "DaveTwyman"
       - "jvela018"
@@ -19,7 +23,7 @@ updates:
       - "maintenance"
       - "dependencies"
     commit-message:
-      prefix: "BUILD(pip)"
+      prefix: "BUILD(uv)"
 
   - package-ecosystem: "github-actions"
     directory: "/"

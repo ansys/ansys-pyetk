@@ -184,6 +184,7 @@ jobs:
           python-version: ${{ env.MAIN_PYTHON_VERSION }}
           sphinxopts: '-j auto --color -w build_errors.txt'
           use-python-cache: false
+          group-dependencies-name: 'doc'
 
   smoke-tests:
     name: Build and smoke tests
@@ -226,16 +227,14 @@ jobs:
         with:
           python-version: ${{ env.TESTS_PYTHON_VERSION }}
 
-      - name: Create Python venv
-        run: |
-          python -m venv .venv
-          .\.venv\Scripts\Activate.ps1
+      - name: Set up uv
+        uses: astral-sh/setup-uv@08807647e7069bb48b6ef5acd8ec9567f424441b # v8.1.0
+        with:
+          enable-cache: false
+          prune-cache: true
 
       - name: Install packages for testing
-        run: |
-          .\.venv\Scripts\Activate.ps1
-          python -m pip install --upgrade pip
-          pip install .[tests]
+        run: uv sync --frozen --group tests --no-dev
 
       - name: Toolkit REST API testing
         timeout-minutes: 30
@@ -290,14 +289,14 @@ jobs:
         with:
           python-version: ${{ env.TESTS_PYTHON_VERSION }}
 
-      - name: Create Python venv
-        run: |
-          python -m venv .venv
+      - name: Set up uv
+        uses: astral-sh/setup-uv@08807647e7069bb48b6ef5acd8ec9567f424441b # v8.1.0
+        with:
+          enable-cache: false
+          prune-cache: true
 
       - name: Install packages for testing
-        run: |
-          source .venv/bin/activate
-          pip install .[tests]
+        run: uv sync --frozen --group tests --no-dev
 
       - name: Toolkit REST API testing
         timeout-minutes: 30
