@@ -27,22 +27,49 @@ classifiers = [
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
     "Topic :: Software Development :: Libraries :: Application Frameworks",
     "Topic :: Scientific/Engineering",
 ]
 dependencies = [
     'ansys-aedt-toolkits-common[all]',
+    "pyaedt",
 ]
 
 [project.optional-dependencies]
-tests = [
-    'ansys-aedt-toolkits-common[tests]'
-]
-doc = [
-    'ansys-aedt-toolkits-common[doc]'
-]
 freeze = [
     "pyinstaller"
+]
+
+[dependency-groups]
+dev = [
+  "prek==0.4.3",
+  { include-group = "doc" },
+  { include-group = "tests" },
+]
+tests = [
+    "flask",
+    "pytest",
+    "pytest-cov",
+    "pytest-qt",
+    "pyside6",
+]
+doc = [
+    "ansys-sphinx-theme>=1.8.2",
+    "ipython",
+    "ipywidgets",
+    "jupyterlab",
+    "jupytext",
+    "nbsphinx",
+    "numpydoc",
+    "pypandoc",
+    "pyside6",
+    "recommonmark",
+    "Sphinx",
+    "sphinx-autobuild",
+    "sphinx-copybutton",
+    "sphinx_design",
+    "pyvista[jupyter]",
 ]
 
 [tool.flit.module]

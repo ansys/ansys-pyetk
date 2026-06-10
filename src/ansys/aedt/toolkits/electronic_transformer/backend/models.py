@@ -22,10 +22,9 @@ from typing import Any
 from typing import Dict
 from typing import List
 
+from ansys.aedt.toolkits.common.backend.models import CommonProperties
 from pydantic import BaseModel
 from pydantic import ConfigDict
-
-from ansys.aedt.toolkits.common.backend.models import CommonProperties
 
 
 # Supported source types
