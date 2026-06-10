@@ -29,6 +29,7 @@ import json
 
 from ansys.aedt.toolkits.common.backend.api import AEDTCommon
 from ansys.aedt.toolkits.common.backend.logger_handler import logger
+
 from ansys.aedt.toolkits.electronic_transformer.backend.models import BackendResetProperties
 from ansys.aedt.toolkits.electronic_transformer.backend.models import ExcitationType
 from ansys.aedt.toolkits.electronic_transformer.backend.models import Layer

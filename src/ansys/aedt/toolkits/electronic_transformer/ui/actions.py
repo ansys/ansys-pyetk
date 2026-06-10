@@ -18,11 +18,11 @@
 
 import tempfile
 
-import requests
-
 from ansys.aedt.core.generic.file_utils import generate_unique_project_name
 from ansys.aedt.toolkits.common.ui.actions_generic import FrontendGeneric
 from ansys.aedt.toolkits.common.ui.logger_handler import logger
+import requests
+
 from ansys.aedt.toolkits.electronic_transformer.ui.common.data_manager import data_manager
 
 # Default user interface properties
