@@ -14,6 +14,15 @@ This section provides examples that show how to use PyETK.
 
         Use the PyETK API to create a class instance, set common properties, and define where to read transformer properties.
 
+ .. grid-item-card:: Create, edit and visualize parts of a transformer model in AEDT using the PyETK API
+        :padding: 2 2 2 2
+        :link: api_example_parts
+        :link-type: doc
+
+        Use the PyETK API to create a class instance, set common properties, create, edit and visualize parts of a transformer model.
+
+
+
     .. grid-item-card:: Create a transformer model in AEDT using the PyETK UI
         :padding: 2 2 2 2
         :link: ui_example

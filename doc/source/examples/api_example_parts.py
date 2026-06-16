@@ -16,16 +16,18 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# # Create a transformer model in AEDT using the PyETK API
-#
-# This example shows how to use the ``ToolkitBackend`` class in the PyEDT API to
-# create a transformer model in AEDT. More specifically, it does the following:
-# - Initializes the ``ToolkitBackend`` class.
-# - Sets common properties like ``non_graphical`` and ``aedt_version``.
-# - Defines the path to the JSON file with the transformer properties.
-# - Reads the transformer properties from the JSON file.
-# - Launches AEDT.
-# - Creates the transformer model.
+"""Create parts of transformer model and edit them in AEDT using the PyETK API.
+
+This example uses :class:`ToolkitBackend` to:
+
+- Initialize the backend.
+- Set common properties such as ``non_graphical`` and ``aedt_version``.
+- Load transformer properties from a JSON file.
+- Launch AEDT.
+- Create core and winding geometries.
+- Update their properties
+- Create updated geometries.
+"""
 
 # ## Perform required imports
 from pathlib import Path
@@ -62,5 +64,17 @@ if not idle:
     print("AEDT not initialized.")
     sys.exit()
 
-# ## Create the model
-setup = toolkit_api.create_model()
+# ## Create and update the geometry
+
+
+# Create an example of a possible core
+core = toolkit_api.create_core_geometry()
+
+# Create an example of a possible winding
+winding = toolkit_api.create_winding_geometry()
+
+# Modify the diameter of the conductor in the winding properties
+winding.properties.layers["layer_1"].conductor.diameter = 5.0
+
+# Generate the new model.
+winding = toolkit_api.create_winding_geometry()

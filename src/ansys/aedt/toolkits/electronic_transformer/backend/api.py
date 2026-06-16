@@ -290,6 +290,7 @@ class ToolkitBackend(AEDTCommon):
         if frontend_properties:
             self.__update_props_from_frontend(frontend_properties)
 
+        self.__create_maxwell_design()
         self.connect_design("Maxwell3D")
         if self.aedtapp is None:
             logger.error("Not connected.")
@@ -321,6 +322,7 @@ class ToolkitBackend(AEDTCommon):
         if frontend_properties:
             self.__update_props_from_frontend(frontend_properties)
 
+        self.__create_maxwell_design()
         self.connect_design("Maxwell3D")
         if self.aedtapp is None:
             logger.error("Not connected.")
@@ -360,6 +362,7 @@ class ToolkitBackend(AEDTCommon):
         if frontend_properties:
             self.__update_props_from_frontend(frontend_properties)
 
+        self.__create_maxwell_design()
         self.connect_design("Maxwell3D")
         if self.aedtapp is None:
             logger.error("Not connected.")
@@ -477,14 +480,24 @@ class ToolkitBackend(AEDTCommon):
 
         Creates a Maxwell design in running AEDT instance.
         """
-        core_type = self.__input_props["core"]["type"]
-        build_type = self.__input_props["winding"]["layer_type"]
+        # Project naming
+        if not self.properties.active_project:
+            self.properties.active_project = "PyETK Project"
 
-        self.properties.active_project = "PyETK Project"
+        # Design naming
+        design_name = "design"
+        if self.__input_props["core"]["type"]:
+            design_name = design_name + "_" + self.__input_props["core"]["type"]
+
+        if self.__input_props["winding"]["layer_type"]:
+            design_name = design_name + "_" + self.__input_props["winding"]["layer_type"]
+
+        design_name = design_name + "_" + datetime.now().strftime("%Y%m%d%H%M%S")
+
+        # Update properties
         self.properties.project_list = [self.properties.active_project]
-
-        # update active design and add it to the list
-        self.properties.active_design = f"{core_type}_{build_type}_{datetime.now().strftime('%Y%m%d%H%M%S')}"
+        self.properties.active_design = design_name
         self.properties.design_list.setdefault(self.properties.active_project, []).append(self.properties.active_design)
 
+        # Create Maxwell3D design
         Maxwell3d(project=self.properties.active_project, design=self.properties.active_design)
