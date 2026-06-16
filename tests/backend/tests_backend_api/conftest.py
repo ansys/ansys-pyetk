@@ -16,11 +16,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from ansys.aedt.core import generate_unique_project_name
 import pytest
 
 from ansys.aedt.toolkits.electronic_transformer.backend.api import ToolkitBackend
-from ansys.aedt.toolkits.electronic_transformer.backend.models import properties
 from tests.backend.conftest import DEFAULT_CONFIG
 from tests.backend.conftest import read_local_config
 from tests.backend.conftest import setup_aedt_settings
@@ -46,12 +44,6 @@ def _initialize_aedt_common(logger, common_temp_dir):
 
     aedt_common.launch_thread(aedt_common.launch_aedt)
     is_aedt_launched = aedt_common.wait_to_be_idle()
-
-    aedt_common.active_project = generate_unique_project_name(common_temp_dir)
-    properties.active_project = aedt_common.active_project
-
-    properties.active_design = "No Design"
-    aedt_common.connect_design("Maxwell3D")
 
     return aedt_common, is_aedt_launched
 
