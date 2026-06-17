@@ -22,14 +22,14 @@ import multiprocessing
 import os
 import sys
 
-from PySide6.QtCore import QTimer
-from PySide6.QtWidgets import QApplication
-
 from ansys.aedt.toolkits.common.utils import check_backend_communication
 from ansys.aedt.toolkits.common.utils import clean_python_processes
 from ansys.aedt.toolkits.common.utils import find_free_port
 from ansys.aedt.toolkits.common.utils import is_server_running
 from ansys.aedt.toolkits.common.utils import process_desktop_properties
+from PySide6.QtCore import QTimer
+from PySide6.QtWidgets import QApplication
+
 from ansys.aedt.toolkits.electronic_transformer.backend.models import properties as backend_properties
 from ansys.aedt.toolkits.electronic_transformer.ui.models import fe_properties as frontend_properties
 from ansys.aedt.toolkits.electronic_transformer.ui.splash import show_splash_screen

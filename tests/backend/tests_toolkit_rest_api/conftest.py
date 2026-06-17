@@ -37,9 +37,9 @@ You can enable the API log file in the backend_properties.json.
 import json
 from pathlib import Path
 
+from ansys.aedt.core import generate_unique_project_name
 import pytest
 
-from ansys.aedt.core import generate_unique_project_name
 from ansys.aedt.toolkits.electronic_transformer.backend.api import ToolkitBackend
 from ansys.aedt.toolkits.electronic_transformer.backend.models import properties
 from ansys.aedt.toolkits.electronic_transformer.backend.run_backend import app

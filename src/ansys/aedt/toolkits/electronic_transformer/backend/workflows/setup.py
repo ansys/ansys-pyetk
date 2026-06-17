@@ -20,6 +20,7 @@ import copy
 
 from ansys.aedt.core.modules.boundary.maxwell_boundary import MatrixACMagnetic
 from ansys.aedt.core.modules.boundary.maxwell_boundary import SourceACMagnetic
+
 from ansys.aedt.toolkits.electronic_transformer.backend.workflows.bobbin import Bobbin
 from ansys.aedt.toolkits.electronic_transformer.backend.workflows.core import Core
 from ansys.aedt.toolkits.electronic_transformer.backend.workflows.winding import Winding
@@ -289,10 +290,14 @@ class Setup:
             self.__aedt.change_symmetry_multiplier(value=2)
             if core.properties.type not in ["U", "UI"]:
                 self.__aedt.modeler.split(assignment=obs_list, plane="YZ", sides="NegativeOnly", tool=None)
+                self.__aedt.modeler.change_region_padding(
+                    padding_data="0", padding_type="Percentage Offset", direction="+X"
+                )
             else:
                 self.__aedt.modeler.split(assignment=obs_list, plane="XZ", sides="NegativeOnly", tool=None)
-
-            self.__aedt.modeler.change_region_padding("0", padding_type="Percentage Offset", direction="+X")
+                self.__aedt.modeler.change_region_padding(
+                    padding_data="0", padding_type="Percentage Offset", direction="+Y"
+                )
 
             self.__aedt.modeler.fit_all()
 
