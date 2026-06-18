@@ -462,7 +462,7 @@ class Validation:
         error_messages.extend(core_errors)
 
         # Validate winding
-        if winding_properties.validation:
+        if not winding_properties.validation:
             winding_errors = self.__validate_winding(core_properties, winding_properties, bobbin_properties)
             error_messages.extend(winding_errors)
 
