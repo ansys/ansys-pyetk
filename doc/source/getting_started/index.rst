@@ -23,9 +23,17 @@ dimensions in two main build topologies, the wound and planar build types.
 
         Understand transformer dimensions in wound and planar build types.
 
+    .. grid-item-card:: Command line interface :fa:`terminal`
+        :padding: 2 2 2 2
+        :link: cli
+        :link-type: doc
+
+        Validate configurations and create models from the terminal.
+
 .. toctree::
    :hidden:
    :maxdepth: 2
 
    installation
    dimensioning
+   cli
