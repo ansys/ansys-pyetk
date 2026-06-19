@@ -62,6 +62,7 @@ class DataManager:
                 "top_margin": self.properties.winding.top_margin,
                 "side_margin": self.properties.winding.side_margin,
                 "layers": self.properties.winding.layers.definition_per_layer,
+                "validation": self.properties.settings.validation.winding,
             }
         }
 
@@ -441,6 +442,7 @@ class DataManager:
         self.properties.circuit.layer_side_definition = self.gui_properties.winding.layer_side_definition
         self.properties.circuit.connections_definition = self.gui_properties.winding.connections_definition
         self.properties.settings.segmentation_angle = self.gui_properties.settings.segmentation_angle
+        self.properties.settings.validation.winding = self.gui_properties.settings.validation.winding
 
         # Materials
         if self.gui_properties.winding.insulation_material:
