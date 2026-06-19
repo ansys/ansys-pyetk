@@ -1,9 +1,9 @@
-.. _cli:
+.. _command line interface:
 
 Command line interface
 ======================
 
-PyETK provides a command line interface (CLI) as a sub-command of the ``pyaedt`` CLI,
+PyETK provides a command line interface (command line interface) as a sub-command of the ``pyaedt`` command line interface,
 enabling you to validate transformer configurations and create transformer models
 in running AEDT instances without leaving the terminal.
 
@@ -30,7 +30,7 @@ All commands can be run with ``--json`` to output results in JSON format for eas
 Main commands
 -------------
 
-The PyETK CLI provides these commands:
+The PyETK command line interface provides these commands:
 
 * ``validate`` - Validate one or more transformer JSON configuration files (no AEDT required)
 * ``create`` - Create a transformer model in a running AEDT instance
@@ -76,7 +76,7 @@ Before running the ``create`` command, you must start an AEDT session:
 
     pyaedt session start --version 2026.1
 
-This displays the gRPC port (e.g., ``50051``) that the session is using.
+This displays the gRPC port (for example, ``50051``) that the session is using.
 
 **Create a full model**
 
