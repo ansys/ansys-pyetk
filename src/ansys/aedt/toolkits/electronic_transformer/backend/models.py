@@ -117,6 +117,7 @@ class Winding(BaseModel, validate_assignment=True):
     top_margin: float = 0.0
     side_margin: float = 0.0
     layers: Dict[str, Layer] = {}
+    validation: bool = False
 
 
 class Excitation(BaseModel, validate_assignment=True):
@@ -195,9 +196,6 @@ class BackendResetProperties:
         self.settings: Settings = Settings()
         self.circuit: Circuit = Circuit()
         self.json_version: str = ""
-
-
-test = 12
 
 
 # All properties
