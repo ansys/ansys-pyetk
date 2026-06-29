@@ -147,7 +147,7 @@ class Ui_LeftColumn(object):
         self.conductor_segments.setSizePolicy(sizePolicy2)
         self.conductor_segments.setMaximumSize(QSize(50, 16777215))
         self.conductor_segments.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignVCenter)
-
+        self.gridLayout_2.addWidget(self.bobbin_checkbox, 3, 0, 1, 1)
         self.gridLayout_2.addWidget(self.conductor_segments, 12, 1, 1, 1)
 
         self.label = QLabel(self.File_2)
