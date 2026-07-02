@@ -325,12 +325,12 @@ class GeometryMenu(object):
         self.scale = self.geometry_column_widget.findChild(QComboBox, "scale_combo")
 
         # Checks
-        self._skip_check = True
+        # self._skip_check = True
 
         # Populate UI with Default values
         self.draw_skin_layers.setChecked(self.gui_properties.settings.draw_skin_layers)
         self.full_model.setChecked(self.gui_properties.settings.full_model)
-        self.skip_check.setChecked(self._skip_check)
+        self.skip_check.setChecked(self.gui_properties.settings.validation.winding)
 
         self.number_passes.setText(str(self.gui_properties.settings.number_passes))
         self.percentage_error.setText(str(self.gui_properties.settings.percentage_error))
@@ -2301,6 +2301,7 @@ class GeometryMenu(object):
         self.gui_properties.settings.offset = float(self.offset.text())
         self.gui_properties.settings.full_model = self.full_model.isChecked()
         self.gui_properties.settings.project_path = "C:/Files/"
+        self.gui_properties.settings.validation.winding = self.skip_check.isChecked()
 
         self.gui_properties.settings.frequency_sweep_definition = self._update_frequency_sweep()
         self.gui_properties.winding.layer_side_definition = self._update_layer_side_definition()

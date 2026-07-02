@@ -124,6 +124,10 @@ class ConnectionDefinitionProperties(BaseModel, validate_assignment=True):
     RootModel: Dict[str, Dict[str, Any]] = Field(default_factory=dict)
 
 
+class ModelValidation(BaseModel, validate_assignment=True):
+    winding: bool = False
+
+
 class SettingsProperties(BaseModel, validate_assignment=True):
     """Manages FE settings properties."""
 
@@ -136,6 +140,7 @@ class SettingsProperties(BaseModel, validate_assignment=True):
     number_passes: int = 0
     project_path: str = ""
     frequency_sweep_definition: Dict[str, Any] = FrequencySweepProperties()
+    validation: ModelValidation = ModelValidation()
 
 
 class ExcitationProperties(BaseModel, validate_assignment=True):
@@ -225,6 +230,7 @@ class SettingsGUIProperties(BaseModel, validate_assignment=True):
 
     draw_skin_layers: bool = True
     full_model: bool = False
+    validation: ModelValidation = ModelValidation()
     include_bobbin: bool = True
     number_passes: int = 5
     percentage_error: float = 1.0

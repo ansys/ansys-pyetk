@@ -419,6 +419,9 @@
         },
         "layers": {
           "$ref": "#/definitions/Layers"
+        },
+        "validation": {
+          "type": "boolean"
         }
       },
       "required": [

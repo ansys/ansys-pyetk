@@ -63,6 +63,7 @@ class DataManager:
                 "top_margin": self.properties.winding.top_margin,
                 "side_margin": self.properties.winding.side_margin,
                 "layers": self.properties.winding.layers.definition_per_layer,
+                "validation": self.properties.settings.validation.winding,
             }
         }
 
