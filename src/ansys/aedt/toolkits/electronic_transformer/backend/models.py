@@ -61,6 +61,7 @@ class Core(BaseModel, validate_assignment=True):
     type: str = ""
     model: str = ""
     material: str = ""
+    number_segments: int = 0
     airgap: AirGap = AirGap()
     dimensions: dict[str, float] = {
         "D_1": 0.0,
@@ -99,6 +100,7 @@ class Conductor(BaseModel, validate_assignment=True):
     diameter: float = 0.0
     height: float = 0.0
     type: str = ""
+    number_segments: int = 0
 
 
 class Layer(BaseModel, validate_assignment=True):
@@ -107,6 +109,7 @@ class Layer(BaseModel, validate_assignment=True):
     conductor: Conductor = Conductor()
     insulation: Insulation = Insulation()
     turns: Turns = Turns()
+    segments_number: int = 0
 
 
 class Winding(BaseModel, validate_assignment=True):
@@ -161,7 +164,7 @@ class Settings(BaseModel, validate_assignment=True):
 
     full_model: bool = False
     region_offset: float = 0.0
-    segmentation_angle: int = 0
+    number_segments: int = 0
     analysis_setup: AnalysisSetup = AnalysisSetup()
 
 

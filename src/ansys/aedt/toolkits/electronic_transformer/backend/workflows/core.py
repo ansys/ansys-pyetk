@@ -43,8 +43,7 @@ class Core(GeometryCommon):
             Settings properties.
         """
         super().__init__(name, aedtapp, core_properties)
-
-        self.__segments_number = self.segmentation_angle(settings_properties.segmentation_angle)
+        self.__segments_number = core_properties.number_segments
 
     def create_geometry(self):
         """Create the core geometry.
