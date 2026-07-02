@@ -47,7 +47,7 @@ class DataManager:
                 "model": self.properties.core.model,
                 "material": self.properties.core.material,
                 "dimensions": self.properties.core.dimensions,
-                "core_segments": self.properties.core.core_segments,
+                "number_segments": self.properties.core.number_segments,
                 "airgap": {
                     "define_airgap": self.properties.core.airgap.enabled,
                     "airgap_on_leg": self.properties.core.airgap.location,
@@ -101,7 +101,7 @@ class DataManager:
                 },
                 "full_model": self.properties.settings.full_model,
                 "region_offset": self.properties.settings.offset,
-                "conductor_segments": self.properties.settings.conductor_segments,
+                "number_segments": self.properties.settings.number_segments,
             }
         }
 
@@ -141,7 +141,7 @@ class DataManager:
                 self.gui_properties.core.airgap.enabled = data["core"]["airgap"]["define_airgap"]
                 self.gui_properties.core.airgap.height = data["core"]["airgap"]["airgap_value"]
                 self.gui_properties.core.airgap.location = data["core"]["airgap"]["airgap_on_leg"]
-                self.gui_properties.core.core_segments = data["core"].get("core_segments", 0)
+                self.gui_properties.core.number_segments = data["core"].get("number_segments", 0)
 
                 self.gui_properties.settings.include_bobbin = data["bobbin"]["draw_bobbin"]
                 self.gui_properties.bobbin_board_and_margin.thickness = data["bobbin"]["board_thickness"]
@@ -153,7 +153,7 @@ class DataManager:
 
                 self.gui_properties.settings.full_model = data["settings"]["full_model"]
                 self.gui_properties.settings.offset = data["settings"]["region_offset"]
-                self.gui_properties.settings.conductor_segments = data["settings"].get("conductor_segments", 0)
+                self.gui_properties.settings.number_segments = data["settings"].get("number_segments", 0)
                 self.gui_properties.electrical.adaptive_frequency = data["settings"]["analysis_setup"][
                     "adaptive_frequency"
                 ]
@@ -209,11 +209,11 @@ class DataManager:
             self.gui_properties.core.airgap = _airgap
 
             self.gui_properties.settings.segmentation_angle = data["core_dimensions"]["segmentation_angle"]
-            # Fallback for old JSON missing core_segments
-            if not self.gui_properties.settings.core_segments:
+            # Fallback for old JSON missing number_segments
+            if not self.gui_properties.core.number_segments:
                 seg_angle = self.gui_properties.settings.segmentation_angle
                 if seg_angle:
-                    self.gui_properties.settings.core_segments = int(360 / seg_angle)
+                    self.gui_properties.core.number_segments = int(360 / seg_angle)
 
             self.gui_properties.winding.conductor_material = data["setup_definition"]["coil_material"]
             self.gui_properties.settings.draw_skin_layers = data["setup_definition"]["draw_skin_layers"]
@@ -242,7 +242,7 @@ class DataManager:
                 _first_layer = next(iter(_layers.values()))
                 _layer_segments = _first_layer.get("segments_number", 0)
                 if _layer_segments:
-                    self.gui_properties.settings.conductor_segments = _layer_segments
+                    self.gui_properties.settings.number_segments = _layer_segments
 
             self.gui_properties.electrical.excitation_strategy = data["setup_definition"]["excitation_strategy"]
             if self.gui_properties.electrical.excitation_strategy.lower() == "voltage":
@@ -312,7 +312,7 @@ class DataManager:
                     "Using the first layer value for all layers."
                 )
                 layers = {k: {**v, "segments_number": first_value} for k, v in layers.items()}
-            self.gui_properties.settings.conductor_segments = first_value
+            self.gui_properties.settings.number_segments = first_value
             self.gui_properties.settings.segments_number = first_value
 
         self.gui_properties.winding.layers_definition = layers
@@ -480,8 +480,8 @@ class DataManager:
         self.properties.settings.frequency_sweep_definition["stop_frequency"] *= scale_factor_stop_freq
         self.properties.circuit.layer_side_definition = self.gui_properties.winding.layer_side_definition
         self.properties.circuit.connections_definition = self.gui_properties.winding.connections_definition
-        self.properties.core.core_segments = self.gui_properties.core.core_segments
-        self.properties.settings.conductor_segments = self.gui_properties.settings.conductor_segments
+        self.properties.core.number_segments = self.gui_properties.core.number_segments
+        self.properties.settings.number_segments = self.gui_properties.settings.number_segments
 
         # Materials
         if self.gui_properties.winding.insulation_material:

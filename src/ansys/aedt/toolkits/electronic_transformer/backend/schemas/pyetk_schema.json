@@ -168,7 +168,7 @@
         "material": {
           "type": "string"
         },
-        "core_segments": {
+        "number_segments": {
           "type": "integer"
         },
         "dimensions": {
@@ -331,8 +331,9 @@
         "region_offset": {
           "type": "number"
         },
-        "conductor_segments": {
-          "type": "integer" },
+        "number_segments": {
+          "type": "integer"
+        },
         "analysis_setup": {
           "$ref": "#/definitions/AnalysisSetup"
         }
@@ -485,6 +486,9 @@
         },
         "type": {
           "type": "string"
+        },
+        "number_segments": {
+          "type": "integer"
         }
       },
       "required": [

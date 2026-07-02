@@ -20,7 +20,7 @@
       "airgap_on_leg": "None",
       "airgap_value": 0.0
     },
-    "core_segments": 36
+    "number_segments": 36
   },
   "winding": {
     "layer_type": "Planar",

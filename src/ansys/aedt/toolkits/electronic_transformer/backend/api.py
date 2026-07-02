@@ -100,7 +100,7 @@ class ToolkitBackend(AEDTCommon):
         self.properties.core.material = core_props["material"]
         self.properties.core.dimensions = core_props["dimensions"]
         self.properties.core.airgap.define_airgap = core_props["airgap"]["define_airgap"]
-        self.properties.core.core_segments = core_props.get("core_segments", 0)
+        self.properties.core.number_segments = core_props.get("number_segments", 0)
 
         if self.properties.core.airgap.define_airgap:
             self.properties.core.airgap.airgap_on_leg = core_props["airgap"]["airgap_on_leg"]
@@ -190,7 +190,7 @@ class ToolkitBackend(AEDTCommon):
 
         self.properties.settings.full_model = setup_props["full_model"]
         self.properties.settings.region_offset = setup_props["region_offset"]
-        self.properties.settings.conductor_segments = setup_props.get("conductor_segments", 0)
+        self.properties.settings.number_segments = setup_props.get("number_segments", 0)
         self.properties.settings.analysis_setup.adaptive_frequency = setup_props["analysis_setup"]["adaptive_frequency"]
         self.properties.settings.analysis_setup.percentage_error = setup_props["analysis_setup"]["percentage_error"]
         self.properties.settings.analysis_setup.number_passes = setup_props["analysis_setup"]["number_passes"]

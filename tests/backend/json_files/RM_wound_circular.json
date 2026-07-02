@@ -20,7 +20,7 @@
       "airgap_on_leg": "Center",
       "airgap_value": 2.561
     },
-    "core_segments": 36
+    "number_segments": 36
   },
   "winding": {
     "layer_type": "Wound",

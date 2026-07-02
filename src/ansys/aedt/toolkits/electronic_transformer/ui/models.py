@@ -52,7 +52,7 @@ class CoreProperties(BaseModel, validate_assignment=True):
     type: str = ""
     model: str = ""
     material: str = ""
-    core_segments: int = 0
+    number_segments: int = 0
     airgap: AirGapConfig = AirGapConfig()
     dimensions: dict[str, float] = {
         "D_1": 0.0,
@@ -130,8 +130,7 @@ class SettingsProperties(BaseModel, validate_assignment=True):
     full_model: bool = False
     offset: float = 0.0
     segmentation_angle: float = 0.0
-    core_segments: int = 0
-    conductor_segments: int = 0
+    number_segments: int = 0
     adaptive_frequency: float = 0.0
     percentage_error: float = 0.0
     number_passes: int = 0
@@ -197,7 +196,7 @@ class CoreGUIProperties(BaseModel, validate_assignment=True):
     type: str = "E"
     model: str = "E5.3/2.7/2"
     material: str = "3C81"
-    core_segments: int = 36
+    number_segments: int = 36
     dimensions: dict = {"D_1": 5.25, "D_2": 3.8, "D_3": 1.4, "D_4": 2.65, "D_5": 1.9, "D_6": 2, "D_7": 0, "D_8": 0}
     airgap: AirGapConfig = AirGapConfig()
 
@@ -232,8 +231,7 @@ class SettingsGUIProperties(BaseModel, validate_assignment=True):
     segmentation_angle: float = 10.0
     offset: float = 50
     project_path: str = ""
-    core_segments: int = 36
-    conductor_segments: int = 8
+    number_segments: int = 8
     # Legacy fallback used for old ACT JSON import
     segments_number: int = 8
     frequency_sweep_definition: FrequencySweepProperties = FrequencySweepProperties()

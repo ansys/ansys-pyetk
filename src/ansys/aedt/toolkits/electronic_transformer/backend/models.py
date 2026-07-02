@@ -61,7 +61,7 @@ class Core(BaseModel, validate_assignment=True):
     type: str = ""
     model: str = ""
     material: str = ""
-    core_segments: int = 0
+    number_segments: int = 0
     airgap: AirGap = AirGap()
     dimensions: dict[str, float] = {
         "D_1": 0.0,
@@ -100,6 +100,7 @@ class Conductor(BaseModel, validate_assignment=True):
     diameter: float = 0.0
     height: float = 0.0
     type: str = ""
+    number_segments: int = 0
 
 
 class Layer(BaseModel, validate_assignment=True):
@@ -162,7 +163,7 @@ class Settings(BaseModel, validate_assignment=True):
 
     full_model: bool = False
     region_offset: float = 0.0
-    conductor_segments: int = 0
+    number_segments: int = 0
     analysis_setup: AnalysisSetup = AnalysisSetup()
 
 

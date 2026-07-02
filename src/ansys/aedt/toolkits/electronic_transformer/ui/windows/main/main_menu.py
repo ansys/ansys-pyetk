@@ -334,8 +334,8 @@ class GeometryMenu(object):
 
         self.number_passes.setText(str(self.gui_properties.settings.number_passes))
         self.percentage_error.setText(str(self.gui_properties.settings.percentage_error))
-        self.conductor_segments.setText(str(self.gui_properties.settings.conductor_segments))
-        self.core_segments.setText(str(self.gui_properties.settings.core_segments))
+        self.conductor_segments.setText(str(self.gui_properties.settings.number_segments))
+        self.core_segments.setText(str(self.gui_properties.core.number_segments))
         self.offset.setText(str(self.gui_properties.settings.offset))
 
         self.frequency_sweep.setChecked(self.gui_properties.settings.frequency_sweep_definition.frequency_sweep)
@@ -949,7 +949,7 @@ class GeometryMenu(object):
             header_item.setText(2, "Conductor_Size\n(Diameter)")
             if hasattr(self, "conductor_segments") and self.conductor_segments is not None:
                 self.conductor_segments.setEnabled(True)
-                self.conductor_segments.setText(str(self.gui_properties.settings.conductor_segments))
+                self.conductor_segments.setText(str(self.gui_properties.settings.number_segments))
 
         else:
             header_item.setText(2, "Conductor_Size\n(Width x Height)")
@@ -995,7 +995,7 @@ class GeometryMenu(object):
             self.core_segments.setText("--")
         else:
             self.core_segments.setEnabled(True)
-            self.core_segments.setText(str(self.gui_properties.settings.core_segments))
+            self.core_segments.setText(str(self.gui_properties.core.number_segments))
 
     def _winding_item_changed(self, item, column):
         """Update ``UserRole`` with modified winding tree entries and correct formatting of inputted values in UI
@@ -2034,11 +2034,11 @@ class GeometryMenu(object):
 
         if self.cond_type.currentText() == "Circular":
             self.conductor_segments.setEnabled(True)
-            self.conductor_segments.setText(str(self.gui_properties.settings.conductor_segments))
+            self.conductor_segments.setText(str(self.gui_properties.settings.number_segments))
         else:
             self.conductor_segments.setEnabled(False)
             self.conductor_segments.setText("--")
-        self.core_segments.setText(str(self.gui_properties.settings.core_segments))
+        self.core_segments.setText(str(self.gui_properties.core.number_segments))
         self.offset.setText(str(self.gui_properties.settings.offset))
         self._update_frequency_sweep(dict(self.gui_properties.settings.frequency_sweep_definition))
 
@@ -2307,15 +2307,15 @@ class GeometryMenu(object):
 
         raw_conductor_segments = self.conductor_segments.text().strip()
         if raw_conductor_segments == "--" or not raw_conductor_segments:
-            self.gui_properties.settings.conductor_segments = 0
+            self.gui_properties.settings.number_segments = 0
         else:
-            self.gui_properties.settings.conductor_segments = int(raw_conductor_segments)
+            self.gui_properties.settings.number_segments = int(raw_conductor_segments)
 
         raw_core_segments = self.core_segments.text().strip()
         if raw_core_segments == "--" or not raw_core_segments:
-            self.gui_properties.settings.core_segments = 0
+            self.gui_properties.core.number_segments = 0
         else:
-            self.gui_properties.settings.core_segments = int(raw_core_segments)
+            self.gui_properties.core.number_segments = int(raw_core_segments)
 
     def save_button_clicked(self):
         """Save the UI state to a JSON file."""
