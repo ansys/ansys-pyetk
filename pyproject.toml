@@ -34,6 +34,7 @@ classifiers = [
 dependencies = [
     'ansys-aedt-toolkits-common[all]',
     "pyaedt",
+    "typer>=0.20.0",
 ]
 
 [project.optional-dependencies]
@@ -74,6 +75,9 @@ doc = [
 
 [tool.flit.module]
 name = "ansys.aedt.toolkits.electronic_transformer"
+
+[project.entry-points."pyaedt.cli"]
+etk = "ansys.aedt.toolkits.electronic_transformer.cli:etk_app"
 
 [project.urls]
 Source = "https://github.com/ansys/ansys-pyetk.git"
