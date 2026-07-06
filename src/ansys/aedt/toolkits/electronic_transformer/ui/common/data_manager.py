@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright (C) 2023 - 2026 ANSYS, Inc. and/or its affiliates.
+# Copyright (C) 2023 - 2026 Synopsys, Inc. and ANSYS, Inc. All rights reserved.
 # SPDX-License-Identifier: Apache-2.0
 #
 #
@@ -166,7 +166,7 @@ class DataManager:
                 self.gui_properties.settings.frequency_sweep_definition.start_frequency_unit = "Hz"
                 self.gui_properties.settings.frequency_sweep_definition.stop_frequency_unit = "Hz"
 
-                self.gui_properties.electrical.excitation_strategy = data["circuit"]["excitation"]["type"]
+                self.gui_properties.electrical.excitation_strategy = data["circuit"]["excitation"]["type"].capitalize()
                 if self.gui_properties.electrical.excitation_strategy.lower() == "voltage":
                     self.gui_properties.electrical.voltage = data["circuit"]["excitation"]["value"]
                     self.gui_properties.electrical.current = 0

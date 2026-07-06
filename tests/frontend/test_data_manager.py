@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright (C) 2023 - 2026 ANSYS, Inc. and/or its affiliates.
+# Copyright (C) 2023 - 2026 Synopsys, Inc. and ANSYS, Inc. All rights reserved.
 # SPDX-License-Identifier: Apache-2.0
 #
 #
@@ -235,7 +235,7 @@ class TestDataManager:
 
         _ = dm._format_input_version(data)
 
-        assert dm.gui_properties.electrical.excitation_strategy == "voltage"
+        assert dm.gui_properties.electrical.excitation_strategy == "Voltage"
         assert dm.gui_properties.electrical.voltage == 12.0
         assert dm.gui_properties.electrical.current == 0
         assert dm.gui_properties.electrical.excitation_value == 12.0
@@ -288,7 +288,7 @@ class TestDataManager:
 
         _ = dm._format_input_version(data)
 
-        assert dm.gui_properties.electrical.excitation_strategy == "current"
+        assert dm.gui_properties.electrical.excitation_strategy == "Current"
         assert dm.gui_properties.electrical.current == 5.0
         assert dm.gui_properties.electrical.voltage == 0
         assert dm.gui_properties.electrical.excitation_value == 5.0
