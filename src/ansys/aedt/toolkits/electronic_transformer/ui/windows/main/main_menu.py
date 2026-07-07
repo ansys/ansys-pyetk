@@ -2170,16 +2170,21 @@ class GeometryMenu(object):
 
                 turns = layer_def.get("turns_number", self._turn_number)
 
+                # Determine conductor display and data
                 if "conductor_diameter" in layer_def:
                     conductor_display = str(layer_def["conductor_diameter"])
                     conductor = {"diameter": layer_def["conductor_diameter"]}
-                    insulation = layer_def.get("insulation_thickness", self._insulation_thickness)
                 else:
                     w = layer_def.get("conductor_width", self._conductor_width)
                     h = layer_def.get("conductor_height", self._conductor_height)
                     conductor_display = str(w) + " x " + str(h)
                     conductor = {"width": w, "height": h}
+
+                # Insulation key depends on layer type (Wound vs Planar), not conductor type
+                if self.gui_properties.winding.layer_type.lower() == "planar":
                     insulation = layer_def.get("turn_spacing", self._insulation_thickness)
+                else:  # Wound or default
+                    insulation = layer_def.get("insulation_thickness", self._insulation_thickness)
 
                 layer_item = QTreeWidgetItem(
                     [
