@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright (C) 2023 - 2026 ANSYS, Inc. and/or its affiliates.
+# Copyright (C) 2023 - 2026 Synopsys, Inc. and ANSYS, Inc. All rights reserved.
 # SPDX-License-Identifier: Apache-2.0
 #
 #
@@ -36,7 +36,7 @@ class TestDataManager:
     def test_init(self):
         """Test DataManager initialization."""
         dm = DataManager()
-        assert dm.supported_json == "0.1.0"
+        assert dm.supported_json == "0.2.0"
         assert dm.properties is not None
         assert dm.gui_properties is not None
         assert dm.database_manager is not None
@@ -124,7 +124,7 @@ class TestDataManager:
         dm = DataManager()
 
         data = {
-            "json_version": "0.1.0",
+            "json_version": "0.2.0",
             "core": {
                 "supplier": "TDK",
                 "type": "EI",
@@ -192,7 +192,7 @@ class TestDataManager:
         dm = DataManager()
 
         data = {
-            "json_version": "0.1.0",
+            "json_version": "0.2.0",
             "core": {
                 "supplier": "TDK",
                 "type": "EI",
@@ -245,7 +245,7 @@ class TestDataManager:
         dm = DataManager()
 
         data = {
-            "json_version": "0.1.0",
+            "json_version": "0.2.0",
             "core": {
                 "supplier": "TDK",
                 "type": "EI",
@@ -492,7 +492,7 @@ class TestDataManager:
     def test_format_input_version_unsupported(self):
         """Test branch: if data["json_version"] < self.supported_json."""
         dm = DataManager()
-        # Version lower than 0.1.0
+        # Version lower than 0.2.0
         unsupported_json_model = (
             Path(__file__).parent / "versioned_json" / "not_supported" / "not_supported_version.json"
         )
@@ -517,22 +517,22 @@ class TestDataManager:
     def test_format_input_version_current_exact(self):
         """Ensure boundary condition for version comparison is covered."""
         dm = DataManager()
-        versioned_json_model = Path(__file__).parent / "versioned_json" / "v0_1_0" / "EI_planar_rectangular.json"
+        versioned_json_model = Path(__file__).parent / "versioned_json" / "v0_2_0" / "EI_planar_rectangular.json"
         with versioned_json_model.open("rb") as f:
             data = json.load(f)
 
         result = dm._format_input_version(data)
-        assert result == "Working with .json version: 0.1.0"
+        assert result == "Working with .json version: 0.2.0"
 
     def test_import_data_from_json(self):
         """Import data only if valid."""
         dm = DataManager()
-        versioned_json_model = Path(__file__).parent / "versioned_json" / "v0_1_0" / "EI_planar_rectangular.json"
+        versioned_json_model = Path(__file__).parent / "versioned_json" / "v0_2_0" / "EI_planar_rectangular.json"
         not_supported_json = Path(__file__).parent / "not_supported_json" / "not_supported_version.json"
 
         msg, is_valid = dm._import_data_from_json(versioned_json_model)
         assert is_valid is True
-        assert msg == "Working with .json version: 0.1.0"
+        assert msg == "Working with .json version: 0.2.0"
 
         msg, is_valid = dm._import_data_from_json(not_supported_json)
         assert is_valid is False
@@ -542,7 +542,7 @@ class TestDataManager:
         """Create layers in same data structure as backend needs it."""
         dm = DataManager()
 
-        versioned_json_model = Path(__file__).parent / "versioned_json" / "v0_1_0" / "EI_planar_rectangular.json"
+        versioned_json_model = Path(__file__).parent / "versioned_json" / "v0_2_0" / "EI_planar_rectangular.json"
         with versioned_json_model.open("rb") as f:
             versioned_json = json.load(f)
 
@@ -557,7 +557,7 @@ class TestDataManager:
     def test_update_frontend_properties(self):
         """Load model and ensure that the properties sent to the backend are the same as the UI."""
         dm = DataManager()
-        versioned_json_model = Path(__file__).parent / "versioned_json" / "v0_1_0" / "EI_planar_rectangular.json"
+        versioned_json_model = Path(__file__).parent / "versioned_json" / "v0_2_0" / "EI_planar_rectangular.json"
         _ = dm._import_data_from_json(versioned_json_model)
         dm._update_frontend_properties()
         assert fe_properties.core.type == gui_properties.core.type

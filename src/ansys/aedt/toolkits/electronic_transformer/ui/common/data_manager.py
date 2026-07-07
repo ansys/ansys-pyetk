@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright (C) 2023 - 2026 ANSYS, Inc. and/or its affiliates.
+# Copyright (C) 2023 - 2026 Synopsys, Inc. and ANSYS, Inc. All rights reserved.
 # SPDX-License-Identifier: Apache-2.0
 #
 #
@@ -29,7 +29,7 @@ class DataManager:
     def __init__(self):
         self.properties = fe_properties
         self.gui_properties = gui_properties
-        self.supported_json = "0.1.0"
+        self.supported_json = "0.2.0"
         self.database_manager = database_manager
 
     def create_backend_data(self):
