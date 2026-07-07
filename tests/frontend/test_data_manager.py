@@ -37,6 +37,7 @@ class TestDataManager:
         """Test DataManager initialization."""
         dm = DataManager()
         assert dm.supported_json == "0.2.0"
+        assert dm.minimum_json == "0.1.0"
         assert dm.properties is not None
         assert dm.gui_properties is not None
         assert dm.database_manager is not None
@@ -88,7 +89,7 @@ class TestDataManager:
 
         # Verify structure
         assert "json_version" in result
-        assert result["json_version"] == "0.1.0"
+        assert result["json_version"] == "0.2.0"
 
         assert "core" in result
         assert result["core"]["supplier"] == "TDK"
@@ -490,9 +491,9 @@ class TestDataManager:
         assert result["bobbin"]["draw_bobbin"] is False
 
     def test_format_input_version_unsupported(self):
-        """Test branch: if data["json_version"] < self.supported_json."""
+        """Test branch: if data["json_version"] < self.minimum_json."""
         dm = DataManager()
-        # Version lower than 0.2.0
+        # Version lower than minimum_json (0.1.0)
         unsupported_json_model = (
             Path(__file__).parent / "versioned_json" / "not_supported" / "not_supported_version.json"
         )

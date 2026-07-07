@@ -30,6 +30,7 @@ class DataManager:
         self.properties = fe_properties
         self.gui_properties = gui_properties
         self.supported_json = "0.2.0"
+        self.minimum_json = "0.1.0"
         self.database_manager = database_manager
 
     def create_backend_data(self):
@@ -133,7 +134,7 @@ class DataManager:
 
         """
         if "json_version" in data.keys():
-            if data["json_version"] >= self.supported_json:
+            if data["json_version"] >= self.minimum_json:
                 self.gui_properties.core.supplier = data["core"]["supplier"]
                 self.gui_properties.core.type = data["core"]["type"]
                 self.gui_properties.core.model = data["core"]["model"]
