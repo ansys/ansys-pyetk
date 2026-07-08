@@ -29,7 +29,9 @@ class DataManager:
     def __init__(self):
         self.properties = fe_properties
         self.gui_properties = gui_properties
+        # Version used when writing JSON files from UI
         self.supported_json = "0.2.0"
+        # Oldest version supported during import to UI
         self.minimum_json = "0.1.0"
         self.database_manager = database_manager
 
