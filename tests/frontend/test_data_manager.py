@@ -98,6 +98,8 @@ class TestDataManager:
         assert result["core"]["material"] == "N87"
         assert "airgap" in result["core"]
         assert result["core"]["airgap"]["define_airgap"] is False
+        assert "number_segments" in result["core"]
+        assert result["core"]["number_segments"] == 0
 
         assert "winding" in result
         assert result["winding"]["layer_type"] == "Wound"
@@ -524,6 +526,76 @@ class TestDataManager:
 
         result = dm._format_input_version(data)
         assert result == "Working with .json version: 0.2.0"
+
+    def test_format_input_version_with_number_segments(self):
+        """Test that number_segments in core and settings is read correctly from v0.2.0 JSON."""
+        dm = DataManager()
+
+        data = {
+            "json_version": "0.2.0",
+            "core": {
+                "supplier": "TDK",
+                "type": "EI",
+                "model": "EI30",
+                "material": "N87",
+                "dimensions": {},
+                "number_segments": 12,
+                "airgap": {"define_airgap": False, "airgap_on_leg": "None", "airgap_value": 0.0},
+            },
+            "bobbin": {"draw_bobbin": False, "board_thickness": 1.6, "material": "FR4"},
+            "winding": {
+                "layer_type": "Wound",
+                "layer_spacing": 0.5,
+                "top_margin": 1.0,
+                "side_margin": 1.0,
+                "layers": {},
+            },
+            "circuit": {
+                "connections": {},
+                "side_loads": [],
+                "excitation": {"type": "voltage", "value": 1.0},
+            },
+            "settings": {
+                "full_model": False,
+                "region_offset": 50.0,
+                "number_segments": 24,
+                "analysis_setup": {
+                    "adaptive_frequency": 100000.0,
+                    "percentage_error": 1.0,
+                    "number_passes": 5,
+                    "frequency_sweep": {
+                        "frequency_sweep": False,
+                        "samples": 1,
+                        "scale": "Linear",
+                        "start_frequency": 1000.0,
+                        "stop_frequency": 1000000.0,
+                    },
+                },
+            },
+        }
+
+        dm._format_input_version(data)
+
+        assert dm.gui_properties.core.number_segments == 12
+        assert dm.gui_properties.settings.number_segments == 24
+
+    def test_format_input_version_v0_1_0_backwards_compat(self):
+        """Ensure v0.1.0 JSON files (without number_segments) are still accepted.
+
+        This guards against regressions where raising minimum_json would break
+        users with JSON files from older installations of the toolkit.
+        """
+        dm = DataManager()
+        versioned_json_model = Path(__file__).parent / "versioned_json" / "v0_1_0" / "EI_planar_rectangular.json"
+        with versioned_json_model.open("rb") as f:
+            data = json.load(f)
+
+        result = dm._format_input_version(data)
+        assert result == "Working with .json version: 0.1.0"
+        # core.number_segments defaults to 0 when absent from v0.1.0 JSON
+        assert dm.gui_properties.core.number_segments == 0
+        # settings.number_segments is derived from the layers' segments_number when absent from v0.1.0 JSON
+        assert dm.gui_properties.settings.number_segments == 8
 
     def test_import_data_from_json(self):
         """Import data only if valid."""
