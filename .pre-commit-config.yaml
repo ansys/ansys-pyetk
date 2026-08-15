@@ -13,7 +13,7 @@ exclude: |
 repos:
 
 - repo: https://github.com/astral-sh/ruff-pre-commit
-  rev: 77039ccbba72c8aede339c5f8ae29b42aced0a2e  # frozen: v0.15.18
+  rev: 7c55798a78262d14b2074abf623d8a992ebb70d4  # frozen: v0.16.2
   hooks:
     - id: ruff-check
     - id: ruff-format
