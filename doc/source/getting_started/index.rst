@@ -5,7 +5,7 @@ Getting started
 ===============
 
 This section explains how to install PyETK. It also describes transformer
-dimensions in two main build topologies, the wound and planar build types.
+dimensions in two main build topologies: the wound and planar build types.
 
 .. grid:: 2
 

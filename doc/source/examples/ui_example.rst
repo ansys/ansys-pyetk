@@ -123,7 +123,7 @@ For simplicity, the example covers one submenu at a time, starting with the core
    .. note::
     Clicking **Save As** saves all information about the core, bobbin, winding, excitation, and Maxwell settings to a JSON file. You can later open this file and make modifications.
 
-The log displays information about the creation process, including any errors or warnings.
+The log displays information about the creation process, including any errors and warnings.
 
 Pre-packaged examples: Load a transformer model from a JSON file
 ----------------------------------------------------------------
