@@ -31,3 +31,4 @@ PyETK
 submenu
 Electronic Transformer ToolKit
 Python
+Synopsys
