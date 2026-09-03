@@ -265,8 +265,13 @@ class DataManager:
 
             if self.gui_properties.winding.layer_type.lower() == "wound":
                 layers[key_layer].update(
-                    {"insulation_thickness": value_layer.get("insulation", {}).get("thickness", 0.0)}
+                    {
+                        "insulation_thickness": value_layer.get("insulation", {}).get(
+                            "thickness", value_layer.get("turns", {}).get("distance", 0.0)
+                        )
+                    }
                 )
+
             if self.gui_properties.winding.layer_type.lower() == "planar":
                 layers[key_layer].update({"turn_spacing": value_layer["turns"].get("distance", 0.0)})
 
