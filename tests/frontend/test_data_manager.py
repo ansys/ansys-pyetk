@@ -611,6 +611,23 @@ class TestDataManager:
         assert is_valid is False
         assert msg == "Incompatible/Not Selected JSON file"
 
+    def test_import_data_from_json_v0_1_0_backwards_compat_whole_model(self):
+        """Import full v0.1.0 model and verify backward-compatible field mapping."""
+        dm = DataManager()
+        versioned_json_model = Path(__file__).parent / "versioned_json" / "v0_1_0" / "EI_planar_rectangular.json"
+
+        msg, is_valid = dm._import_data_from_json(versioned_json_model)
+
+        assert is_valid is True
+        assert msg == "Working with .json version: 0.1.0"
+        assert dm.gui_properties.core.type == "EI"
+        assert dm.gui_properties.core.model == "E14/3.5/5R"
+        # v0.1.0 has no core-level number_segments; default remains zero.
+        assert dm.gui_properties.core.number_segments == 0
+        # conductor segmentation is derived from legacy layer segments_number.
+        assert dm.gui_properties.settings.number_segments == 8
+        assert len(dm.gui_properties.winding.layers_definition) == 8
+
     def test_create_layers_for_backend(self):
         """Create layers in same data structure as backend needs it."""
         dm = DataManager()
