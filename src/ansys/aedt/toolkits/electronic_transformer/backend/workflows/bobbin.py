@@ -53,7 +53,7 @@ class Bobbin(GeometryCommon):
         # If this class requires more properties, those should be private property
         self.__core_properties = core_properties
         self.__winding_properties = winding_properties
-        self.__segments_number = self.segmentation_angle(settings_properties.segmentation_angle)
+        self.__segments_number = core_properties.number_segments
 
     def create_geometry(self):
         """Create the bobbin geometry."""
