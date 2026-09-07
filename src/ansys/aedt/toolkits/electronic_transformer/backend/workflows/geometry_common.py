@@ -296,23 +296,6 @@ class GeometryCommon(GeometryCreatable):
         return airgap_both, airgap_center, airgap_side
 
     @staticmethod
-    def segmentation_angle(segmentation_angle):
-        """Get the number of segments from the segmentation angle.
-
-        Parameters
-        ----------
-        segmentation_angle : float
-            Segmentation angle.
-
-        Returns
-        -------
-        int
-            Number of segments.
-        """
-        segments_number = 0 if segmentation_angle == 0 else int(360 / segmentation_angle)
-        return segments_number
-
-    @staticmethod
     def polyline_point(x=0, y=0, z=0):
         """Get the polyline point.
 

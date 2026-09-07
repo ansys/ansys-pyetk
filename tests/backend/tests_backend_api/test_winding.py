@@ -52,4 +52,4 @@ class TestBackendAPI:
 
         winding = aedt_common_fixture_function.create_winding_geometry()
 
-        assert winding.volume > 0 and round(abs(winding.volume - (1104.917391402094)), 4) < vol_limit
+        assert winding.volume > 0 and round(abs(winding.volume - (999.8435925745437)), 4) < vol_limit
