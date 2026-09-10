@@ -300,7 +300,7 @@ jobs:
     permissions:
       contents: write # Needed to update files on the gh-pages branch
     steps:
-      - uses: ansys/actions/doc-deploy-stable@73fa84c704bb6691f254cfe4d4b928c338b0d4da # v10.3.0
+      - uses: ansys/actions/doc-deploy-stable@21c78f8b27683ae8c93557345392abe39ab21d2f # v11.0.4
         with:
           cname: ${{ env.DOCUMENTATION_CNAME }}
           token: ${{ secrets.GITHUB_TOKEN }}
