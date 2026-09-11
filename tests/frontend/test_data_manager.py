@@ -628,6 +628,42 @@ class TestDataManager:
         assert dm.gui_properties.settings.number_segments == 8
         assert len(dm.gui_properties.winding.layers_definition) == 8
 
+    @pytest.mark.parametrize(
+        "relative_path, expected_spacing, expected_msg",
+        [
+            (("versioned_json", "v0_2_0", "EI_planar_rectangular.json"), 0.3, "Working with .json version: 0.2.0"),
+            (("versioned_json", "v0_1_0", "EI_planar_rectangular.json"), 0.3, "Working with .json version: 0.1.0"),
+            (("act_json", "demo_PlanarComponents.json"), 0.1, "Input in Legacy Format. Save data in new format."),
+        ],
+    )
+    def test_import_planar_json_populates_turn_spacing(self, relative_path, expected_spacing, expected_msg):
+        """Ensure planar imports always populate per-layer turn spacing used by the insulation UI column."""
+        dm = DataManager()
+        input_file = Path(__file__).parent.joinpath(*relative_path)
+
+        msg, is_valid = dm._import_data_from_json(input_file)
+
+        assert is_valid is True
+        assert msg == expected_msg
+        assert dm.gui_properties.winding.layer_type == "Planar"
+        assert dm.gui_properties.winding.layers_definition["layer_1"]["turn_spacing"] == pytest.approx(expected_spacing)
+        assert "insulation_thickness" not in dm.gui_properties.winding.layers_definition["layer_1"]
+
+    def test_import_wound_json_uses_default_insulation_when_missing(self):
+        """Wound JSON without explicit insulation should keep default wire insulation in the UI."""
+        dm = DataManager()
+        wound_json = Path(__file__).parents[1] / "backend" / "json_files" / "E_wound_rectangular.json"
+
+        msg, is_valid = dm._import_data_from_json(wound_json)
+
+        assert is_valid is True
+        assert msg == "Working with .json version: 0.2.0"
+        assert dm.gui_properties.winding.layer_type == "Wound"
+        # This input has no insulation object and uses turns.distance=0.0.
+        assert dm.gui_properties.winding.layers_definition["layer_1"]["insulation_thickness"] == pytest.approx(
+            dm.gui_properties.winding.layer.insulation.thickness
+        )
+
     def test_create_layers_for_backend(self):
         """Create layers in same data structure as backend needs it."""
         dm = DataManager()
