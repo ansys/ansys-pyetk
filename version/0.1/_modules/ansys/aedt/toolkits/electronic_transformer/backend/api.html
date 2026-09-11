@@ -1,0 +1,1119 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../../../../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ansys.aedt.toolkits.electronic_transformer.backend.api &#8212; ansys-pyetk</title>
+  
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../../../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../../../../../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../../../../../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../../../../../../_static/styles/ansys-sphinx-theme.css?v=300e4a82" />
+    <link rel="stylesheet" type="text/css" href="../../../../../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../../../../../_static/styles/ansys-sphinx-theme.css?v=300e4a82" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.23/css/jquery.dataTables.min.css" />
+    <link rel="stylesheet" type="text/css" href="https://www.nerdfonts.com/assets/css/webfont.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../../../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../../../../../../_static/custom.css" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../../../../../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../../../../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+
+  <!-- Include desired assets -->
+  <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+  
+
+  
+    <link href="../../../../../../_static/css/breadcrumbs.css" rel="stylesheet" />
+  
+    <script src="../../../../../../_static/documentation_options.js?v=01f34227"></script>
+    <script src="../../../../../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../../../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../../../../../_static/copybutton.js?v=f281be69"></script>
+    <script src="https://cdn.datatables.net/1.10.23/js/jquery.dataTables.min.js"></script>
+    <script src="../../../../../../_static/design-tabs.js?v=f930bc37"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/ansys/aedt/toolkits/electronic_transformer/backend/api';</script>
+    <script>
+        DOCUMENTATION_OPTIONS.theme_version = '0.16.1';
+        DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://etk.docs.pyansys.com/versions.json';
+        DOCUMENTATION_OPTIONS.theme_switcher_version_match = '0.1';
+        DOCUMENTATION_OPTIONS.show_version_warning_banner =
+            false;
+        </script>
+    <link rel="icon" href="../../../../../../_static/ansys-favicon.png"/>
+    <link rel="index" title="Index" href="../../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../../search.html" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="0.1.0" />
+  <link rel="canonical" href="https://etk.docs.pyansys.com/version/stable/_modules/ansys/aedt/toolkits/electronic_transformer/backend/api.html" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../../../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../../../../../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../../../../../_static/pyansys_logo_transparent_black.png" class="logo__image only-light" alt="ansys-pyetk - Home"/>
+    <img src="../../../../../../_static/pyansys_logo_transparent_white.png" class="logo__image only-dark pst-js-only" alt="ansys-pyetk - Home"/>
+  
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="index.html" title="ansys-pyetk home">
+    Home
+</a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../../../../getting_started/index.html">
+    Getting started
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../../../../toolkit/ui.html">
+    User Interface
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../../../../toolkit/api.html">
+    API reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../../../../examples/index.html">
+    Examples
+  </a>
+</li>
+
+            <li class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button"
+                data-bs-toggle="dropdown" aria-expanded="false"
+                aria-controls="pst-nav-more-links">
+                    More
+                </button>
+                <ul id="pst-nav-more-links" class="dropdown-menu">
+                    
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../../../../../../changelog.html">
+    Release notes
+  </a>
+</li>
+
+                </ul>
+            </li>
+            
+  </ul>
+</nav>
+</div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+      
+        <div class="navbar-item">
+<div class="search-bar pst-js-only" id="search-bar">
+  <form class="bd-search d-flex align-items-center" action="../../../../../../search.html" method="get">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <input type="search" class="form-control" name="q" placeholder="Search the docs ..."
+      aria-label="Search the docs ..." autocomplete="off" autocorrect="off"
+      autocapitalize="off" spellcheck="false" />
+    <span class="search-button__kbd-shortcut">
+      <kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd>
+    </span>
+  </form>
+  <div id="static-search-results" class="static-search-results" style="display:none;" tabindex="0"></div>
+</div></div>
+      
+        <div class="navbar-item">
+<div class="version-switcher__container dropdown pst-js-only">
+  <button id="pst-version-switcher-button-2"
+    type="button"
+    class="version-switcher__button btn btn-sm dropdown-toggle"
+    data-bs-toggle="dropdown"
+    aria-haspopup="listbox"
+    aria-controls="pst-version-switcher-list-2"
+    aria-label="Version switcher list"
+  >
+    Choose version  <!-- this text may get changed later by javascript -->
+    <span class="caret"></span>
+  </button>
+  <div id="pst-version-switcher-list-2"
+    class="version-switcher__menu dropdown-menu list-group-flush py-0"
+    role="listbox" aria-labelledby="pst-version-switcher-button-2">
+    <!-- dropdown will be populated by javascript on page load -->
+  </div>
+</div></div>
+      
+        <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/ansys/ansys-pyetk" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/ansys/ansys-pyetk/issues" title="Support" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa fa-comment fa-fw fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">Support</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://etk.docs.pyansys.com/version/0.1/_static/assets/download/ansys-pyetk.pdf" title="Download documentation in PDF" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa fa-file-pdf fa-fw fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">Download documentation in PDF</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+  
+    <div id="announcement_msg"></div>
+<script>
+  fetch("announcement.html")
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`HTTP error: ${response.status}`);
+      }
+      return response.text();
+    })
+    .then(
+      (text) => (document.getElementById("announcement_msg").innerHTML = text),
+    )
+    .catch((error) => console.error(`Fetch problem: ${error.message}`));
+</script>
+  
+
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar hide-on-wide">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="index.html" title="ansys-pyetk home">
+    Home
+</a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../../../../getting_started/index.html">
+    Getting started
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../../../../toolkit/ui.html">
+    User Interface
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../../../../toolkit/api.html">
+    API reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../../../../examples/index.html">
+    Examples
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../../../../changelog.html">
+    Release notes
+  </a>
+</li>
+
+  </ul>
+</nav>
+</div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+<div class="search-bar pst-js-only" id="search-bar">
+  <form class="bd-search d-flex align-items-center" action="../../../../../../search.html" method="get">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <input type="search" class="form-control" name="q" placeholder="Search the docs ..."
+      aria-label="Search the docs ..." autocomplete="off" autocorrect="off"
+      autocapitalize="off" spellcheck="false" />
+    <span class="search-button__kbd-shortcut">
+      <kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd>
+    </span>
+  </form>
+  <div id="static-search-results" class="static-search-results" style="display:none;" tabindex="0"></div>
+</div></div>
+        
+          <div class="navbar-item">
+<div class="version-switcher__container dropdown pst-js-only">
+  <button id="pst-version-switcher-button-3"
+    type="button"
+    class="version-switcher__button btn btn-sm dropdown-toggle"
+    data-bs-toggle="dropdown"
+    aria-haspopup="listbox"
+    aria-controls="pst-version-switcher-list-3"
+    aria-label="Version switcher list"
+  >
+    Choose version  <!-- this text may get changed later by javascript -->
+    <span class="caret"></span>
+  </button>
+  <div id="pst-version-switcher-list-3"
+    class="version-switcher__menu dropdown-menu list-group-flush py-0"
+    role="listbox" aria-labelledby="pst-version-switcher-button-3">
+    <!-- dropdown will be populated by javascript on page load -->
+  </div>
+</div></div>
+        
+          <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/ansys/ansys-pyetk" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/ansys/ansys-pyetk/issues" title="Support" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa fa-comment fa-fw fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">Support</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://etk.docs.pyansys.com/version/0.1/_static/assets/download/ansys-pyetk.pdf" title="Download documentation in PDF" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa fa-file-pdf fa-fw fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">Download documentation in PDF</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+<nav aria-label="Breadcrumb">
+  <ul class="bd-breadcrumbs">
+         
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="https://docs.pyansys.com/" class="nav-link">PyAnsys</a>
+    </li>
+     
+    <li class="breadcrumb-item">
+      <a
+        href="../../../../../../index.html"
+        class="nav-link"
+        aria-label="Home"
+      >
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+     
+    <li class="breadcrumb-item">
+      <a href="../../../../../index.html" class="nav-link">Module code</a>
+    </li>
+      
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">ansys.aedt.toolkits.electronic_transformer.backend.api</span></li>
+    
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <h1>Source code for ansys.aedt.toolkits.electronic_transformer.backend.api</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="c1">#</span>
+<span class="c1"># Copyright (C) 2023 - 2026 ANSYS, Inc. and/or its affiliates.</span>
+<span class="c1"># SPDX-License-Identifier: Apache-2.0</span>
+<span class="c1">#</span>
+<span class="c1">#</span>
+<span class="c1"># Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
+<span class="c1"># you may not use this file except in compliance with the License.</span>
+<span class="c1"># You may obtain a copy of the License at</span>
+<span class="c1">#</span>
+<span class="c1">#     http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="c1">#</span>
+<span class="c1"># Unless required by applicable law or agreed to in writing, software</span>
+<span class="c1"># distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span>
+<span class="c1"># WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="c1"># See the License for the specific language governing permissions and</span>
+<span class="c1"># limitations under the License.</span>
+
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span><span class="p">))</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">ansys.aedt.toolkits.common.backend.api</span><span class="w"> </span><span class="kn">import</span> <span class="n">AEDTCommon</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ansys.aedt.toolkits.common.backend.logger_handler</span><span class="w"> </span><span class="kn">import</span> <span class="n">logger</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ansys.aedt.toolkits.electronic_transformer.backend.models</span><span class="w"> </span><span class="kn">import</span> <span class="n">BackendResetProperties</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ansys.aedt.toolkits.electronic_transformer.backend.models</span><span class="w"> </span><span class="kn">import</span> <span class="n">ExcitationType</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ansys.aedt.toolkits.electronic_transformer.backend.models</span><span class="w"> </span><span class="kn">import</span> <span class="n">Layer</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ansys.aedt.toolkits.electronic_transformer.backend.models</span><span class="w"> </span><span class="kn">import</span> <span class="n">Material</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ansys.aedt.toolkits.electronic_transformer.backend.models</span><span class="w"> </span><span class="kn">import</span> <span class="n">properties</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ansys.aedt.toolkits.electronic_transformer.backend.workflows.bobbin</span><span class="w"> </span><span class="kn">import</span> <span class="n">Bobbin</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ansys.aedt.toolkits.electronic_transformer.backend.workflows.core</span><span class="w"> </span><span class="kn">import</span> <span class="n">Core</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ansys.aedt.toolkits.electronic_transformer.backend.workflows.etk</span><span class="w"> </span><span class="kn">import</span> <span class="n">ETK</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ansys.aedt.toolkits.electronic_transformer.backend.workflows.validation</span><span class="w"> </span><span class="kn">import</span> <span class="n">Validation</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ansys.aedt.toolkits.electronic_transformer.backend.workflows.winding</span><span class="w"> </span><span class="kn">import</span> <span class="n">Winding</span>
+
+
+<div class="viewcode-block" id="ToolkitBackend">
+<a class="viewcode-back" href="../../../../../../toolkit/api.html#ansys.aedt.toolkits.electronic_transformer.backend.api.ToolkitBackend">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">ToolkitBackend</span><span class="p">(</span><span class="n">AEDTCommon</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Control the toolkit workflow.</span>
+
+<span class="sd">    This class provides methods to connect to a selected design and create the model or the parts of the transformer.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; from ansys.aedt.toolkits.electronic_transformer.backend.api import ToolkitBackend</span>
+<span class="sd">    &gt;&gt;&gt; toolkit_api = ToolkitBackend()</span>
+<span class="sd">    &gt;&gt;&gt; toolkit_api.launch_aedt()</span>
+<span class="sd">    &gt;&gt;&gt; toolkit_api.wait_to_be_idle()</span>
+<span class="sd">    &gt;&gt;&gt; toolkit_api.create_core_geometry()</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize the ``ToolkitBackend`` class.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__reset_transformer_properties</span><span class="p">()</span>
+        <span class="n">AEDTCommon</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">properties</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__input_props</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__validator</span> <span class="o">=</span> <span class="n">Validation</span><span class="p">()</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">__reset_transformer_properties</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">be_properties</span> <span class="o">=</span> <span class="n">BackendResetProperties</span><span class="p">()</span>
+
+        <span class="n">properties</span><span class="o">.</span><span class="n">core</span> <span class="o">=</span> <span class="n">be_properties</span><span class="o">.</span><span class="n">core</span>
+        <span class="n">properties</span><span class="o">.</span><span class="n">winding</span> <span class="o">=</span> <span class="n">be_properties</span><span class="o">.</span><span class="n">winding</span>
+        <span class="n">properties</span><span class="o">.</span><span class="n">bobbin</span> <span class="o">=</span> <span class="n">be_properties</span><span class="o">.</span><span class="n">bobbin</span>
+        <span class="n">properties</span><span class="o">.</span><span class="n">settings</span> <span class="o">=</span> <span class="n">be_properties</span><span class="o">.</span><span class="n">settings</span>
+        <span class="n">properties</span><span class="o">.</span><span class="n">materials</span> <span class="o">=</span> <span class="n">be_properties</span><span class="o">.</span><span class="n">materials</span>
+        <span class="n">properties</span><span class="o">.</span><span class="n">circuit</span> <span class="o">=</span> <span class="n">be_properties</span><span class="o">.</span><span class="n">circuit</span>
+
+        <span class="c1"># properties.aedt_version: str = DEFAULT_AEDT_VERSION</span>
+        <span class="n">properties</span><span class="o">.</span><span class="n">non_graphical</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="n">properties</span><span class="o">.</span><span class="n">active_project</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="n">properties</span><span class="o">.</span><span class="n">active_design</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="n">properties</span><span class="o">.</span><span class="n">project_list</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">properties</span><span class="o">.</span><span class="n">design_list</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">properties</span><span class="o">.</span><span class="n">selected_process</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">properties</span><span class="o">.</span><span class="n">use_grpc</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="n">properties</span><span class="o">.</span><span class="n">is_toolkit_busy</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="n">properties</span><span class="o">.</span><span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;127.0.0.1&quot;</span>
+        <span class="n">properties</span><span class="o">.</span><span class="n">port</span> <span class="o">=</span> <span class="mi">5001</span>
+        <span class="n">properties</span><span class="o">.</span><span class="n">debug</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="n">properties</span><span class="o">.</span><span class="n">toolkit_name</span> <span class="o">=</span> <span class="s2">&quot;common&quot;</span>
+        <span class="n">properties</span><span class="o">.</span><span class="n">log_file</span> <span class="o">=</span> <span class="s2">&quot;common_backend.log&quot;</span>
+        <span class="n">properties</span><span class="o">.</span><span class="n">state</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="n">properties</span><span class="o">.</span><span class="n">progress</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">__read_core_properties</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Read core properties from the input data.&quot;&quot;&quot;</span>
+        <span class="n">core_props</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__input_props</span><span class="p">[</span><span class="s2">&quot;core&quot;</span><span class="p">]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">supplier</span> <span class="o">=</span> <span class="n">core_props</span><span class="p">[</span><span class="s2">&quot;supplier&quot;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">type</span> <span class="o">=</span> <span class="n">core_props</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="n">core_props</span><span class="p">[</span><span class="s2">&quot;model&quot;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">material</span> <span class="o">=</span> <span class="n">core_props</span><span class="p">[</span><span class="s2">&quot;material&quot;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">dimensions</span> <span class="o">=</span> <span class="n">core_props</span><span class="p">[</span><span class="s2">&quot;dimensions&quot;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">airgap</span><span class="o">.</span><span class="n">define_airgap</span> <span class="o">=</span> <span class="n">core_props</span><span class="p">[</span><span class="s2">&quot;airgap&quot;</span><span class="p">][</span><span class="s2">&quot;define_airgap&quot;</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">airgap</span><span class="o">.</span><span class="n">define_airgap</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">airgap</span><span class="o">.</span><span class="n">airgap_on_leg</span> <span class="o">=</span> <span class="n">core_props</span><span class="p">[</span><span class="s2">&quot;airgap&quot;</span><span class="p">][</span><span class="s2">&quot;airgap_on_leg&quot;</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">airgap</span><span class="o">.</span><span class="n">airgap_value</span> <span class="o">=</span> <span class="n">core_props</span><span class="p">[</span><span class="s2">&quot;airgap&quot;</span><span class="p">][</span><span class="s2">&quot;airgap_value&quot;</span><span class="p">]</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">__read_material_properties</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Read material properties from the input data.&quot;&quot;&quot;</span>
+        <span class="n">materials</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__input_props</span><span class="p">[</span><span class="s2">&quot;materials&quot;</span><span class="p">]</span>
+
+        <span class="k">for</span> <span class="n">key_material</span><span class="p">,</span> <span class="n">value_material</span> <span class="ow">in</span> <span class="n">materials</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="c1"># Creates a default material</span>
+            <span class="n">this_material</span> <span class="o">=</span> <span class="n">Material</span><span class="p">()</span>
+
+            <span class="n">this_material</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">key_material</span>
+
+            <span class="c1"># Updates the default material only if there is data in the json file</span>
+            <span class="k">if</span> <span class="s2">&quot;conductivity&quot;</span> <span class="ow">in</span> <span class="n">value_material</span><span class="p">:</span>
+                <span class="n">this_material</span><span class="o">.</span><span class="n">conductivity</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">value_material</span><span class="p">[</span><span class="s2">&quot;conductivity&quot;</span><span class="p">])</span>
+
+            <span class="k">if</span> <span class="s2">&quot;density&quot;</span> <span class="ow">in</span> <span class="n">value_material</span><span class="p">:</span>
+                <span class="n">this_material</span><span class="o">.</span><span class="n">density</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">value_material</span><span class="p">[</span><span class="s2">&quot;density&quot;</span><span class="p">])</span>
+
+            <span class="k">if</span> <span class="s2">&quot;mur&quot;</span> <span class="ow">in</span> <span class="n">value_material</span><span class="p">:</span>
+                <span class="k">if</span> <span class="nb">float</span><span class="p">(</span><span class="n">value_material</span><span class="p">[</span><span class="s2">&quot;mur&quot;</span><span class="p">])</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">this_material</span><span class="o">.</span><span class="n">mur</span> <span class="o">=</span> <span class="mf">1.0</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">this_material</span><span class="o">.</span><span class="n">mur</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">value_material</span><span class="p">[</span><span class="s2">&quot;mur&quot;</span><span class="p">])</span>
+
+            <span class="k">if</span> <span class="s2">&quot;epsr&quot;</span> <span class="ow">in</span> <span class="n">value_material</span><span class="p">:</span>
+                <span class="n">this_material</span><span class="o">.</span><span class="n">epsr</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">value_material</span><span class="p">[</span><span class="s2">&quot;epsr&quot;</span><span class="p">])</span>
+
+            <span class="k">if</span> <span class="s2">&quot;power_ferrite_loss_params&quot;</span> <span class="ow">in</span> <span class="n">value_material</span><span class="p">:</span>
+                <span class="n">this_material</span><span class="o">.</span><span class="n">power_ferrite_loss_params</span><span class="o">.</span><span class="n">cm</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">value_material</span><span class="p">[</span><span class="s2">&quot;power_ferrite_loss_params&quot;</span><span class="p">][</span><span class="s2">&quot;cm&quot;</span><span class="p">])</span>
+                <span class="n">this_material</span><span class="o">.</span><span class="n">power_ferrite_loss_params</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">value_material</span><span class="p">[</span><span class="s2">&quot;power_ferrite_loss_params&quot;</span><span class="p">][</span><span class="s2">&quot;x&quot;</span><span class="p">])</span>
+                <span class="n">this_material</span><span class="o">.</span><span class="n">power_ferrite_loss_params</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">value_material</span><span class="p">[</span><span class="s2">&quot;power_ferrite_loss_params&quot;</span><span class="p">][</span><span class="s2">&quot;y&quot;</span><span class="p">])</span>
+
+            <span class="k">if</span> <span class="s2">&quot;mu(freq)&quot;</span> <span class="ow">in</span> <span class="n">value_material</span><span class="p">:</span>
+                <span class="n">this_material</span><span class="o">.</span><span class="n">mu_vs_freq_list</span> <span class="o">=</span> <span class="n">value_material</span><span class="p">[</span><span class="s2">&quot;mu(freq)&quot;</span><span class="p">]</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="o">.</span><span class="n">materials</span><span class="p">[</span><span class="n">key_material</span><span class="p">]</span> <span class="o">=</span> <span class="n">this_material</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">__read_winding_properties</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Read winding properties from the input data.&quot;&quot;&quot;</span>
+        <span class="n">winding_props</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__input_props</span><span class="p">[</span><span class="s2">&quot;winding&quot;</span><span class="p">]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="o">.</span><span class="n">winding</span><span class="o">.</span><span class="n">layer_type</span> <span class="o">=</span> <span class="n">winding_props</span><span class="p">[</span><span class="s2">&quot;layer_type&quot;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="o">.</span><span class="n">winding</span><span class="o">.</span><span class="n">layer_spacing</span> <span class="o">=</span> <span class="n">winding_props</span><span class="p">[</span><span class="s2">&quot;layer_spacing&quot;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="o">.</span><span class="n">winding</span><span class="o">.</span><span class="n">top_margin</span> <span class="o">=</span> <span class="n">winding_props</span><span class="p">[</span><span class="s2">&quot;top_margin&quot;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="o">.</span><span class="n">winding</span><span class="o">.</span><span class="n">side_margin</span> <span class="o">=</span> <span class="n">winding_props</span><span class="p">[</span><span class="s2">&quot;side_margin&quot;</span><span class="p">]</span>
+
+        <span class="c1"># Layers</span>
+        <span class="k">for</span> <span class="n">key_layer</span><span class="p">,</span> <span class="n">value_layer</span> <span class="ow">in</span> <span class="n">winding_props</span><span class="p">[</span><span class="s2">&quot;layers&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">this_layer</span> <span class="o">=</span> <span class="n">Layer</span><span class="p">()</span>
+
+            <span class="k">if</span> <span class="s2">&quot;insulation&quot;</span> <span class="ow">in</span> <span class="n">value_layer</span><span class="p">:</span>
+                <span class="n">this_layer</span><span class="o">.</span><span class="n">insulation</span><span class="o">.</span><span class="n">material</span> <span class="o">=</span> <span class="n">value_layer</span><span class="p">[</span><span class="s2">&quot;insulation&quot;</span><span class="p">][</span><span class="s2">&quot;material&quot;</span><span class="p">]</span>
+                <span class="n">this_layer</span><span class="o">.</span><span class="n">insulation</span><span class="o">.</span><span class="n">thickness</span> <span class="o">=</span> <span class="n">value_layer</span><span class="p">[</span><span class="s2">&quot;insulation&quot;</span><span class="p">][</span><span class="s2">&quot;thickness&quot;</span><span class="p">]</span>
+
+            <span class="n">this_layer</span><span class="o">.</span><span class="n">conductor</span><span class="o">.</span><span class="n">draw_skin_layers</span> <span class="o">=</span> <span class="n">value_layer</span><span class="p">[</span><span class="s2">&quot;conductor&quot;</span><span class="p">][</span><span class="s2">&quot;draw_skin_layers&quot;</span><span class="p">]</span>
+            <span class="n">this_layer</span><span class="o">.</span><span class="n">conductor</span><span class="o">.</span><span class="n">material</span> <span class="o">=</span> <span class="n">value_layer</span><span class="p">[</span><span class="s2">&quot;conductor&quot;</span><span class="p">][</span><span class="s2">&quot;material&quot;</span><span class="p">]</span>
+            <span class="n">this_layer</span><span class="o">.</span><span class="n">conductor</span><span class="o">.</span><span class="n">type</span> <span class="o">=</span> <span class="n">value_layer</span><span class="p">[</span><span class="s2">&quot;conductor&quot;</span><span class="p">][</span><span class="s2">&quot;type&quot;</span><span class="p">]</span>
+
+            <span class="k">if</span> <span class="n">this_layer</span><span class="o">.</span><span class="n">conductor</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s2">&quot;Rectangular&quot;</span><span class="p">:</span>
+                <span class="n">this_layer</span><span class="o">.</span><span class="n">conductor</span><span class="o">.</span><span class="n">height</span> <span class="o">=</span> <span class="n">value_layer</span><span class="p">[</span><span class="s2">&quot;conductor&quot;</span><span class="p">][</span><span class="s2">&quot;height&quot;</span><span class="p">]</span>
+                <span class="n">this_layer</span><span class="o">.</span><span class="n">conductor</span><span class="o">.</span><span class="n">width</span> <span class="o">=</span> <span class="n">value_layer</span><span class="p">[</span><span class="s2">&quot;conductor&quot;</span><span class="p">][</span><span class="s2">&quot;width&quot;</span><span class="p">]</span>
+            <span class="k">elif</span> <span class="n">this_layer</span><span class="o">.</span><span class="n">conductor</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s2">&quot;Circular&quot;</span><span class="p">:</span>
+                <span class="n">this_layer</span><span class="o">.</span><span class="n">conductor</span><span class="o">.</span><span class="n">diameter</span> <span class="o">=</span> <span class="n">value_layer</span><span class="p">[</span><span class="s2">&quot;conductor&quot;</span><span class="p">][</span><span class="s2">&quot;diameter&quot;</span><span class="p">]</span>
+
+            <span class="n">this_layer</span><span class="o">.</span><span class="n">turns</span><span class="o">.</span><span class="n">quantity</span> <span class="o">=</span> <span class="n">value_layer</span><span class="p">[</span><span class="s2">&quot;turns&quot;</span><span class="p">][</span><span class="s2">&quot;quantity&quot;</span><span class="p">]</span>
+            <span class="n">this_layer</span><span class="o">.</span><span class="n">turns</span><span class="o">.</span><span class="n">spacing</span> <span class="o">=</span> <span class="n">value_layer</span><span class="p">[</span><span class="s2">&quot;turns&quot;</span><span class="p">][</span><span class="s2">&quot;spacing&quot;</span><span class="p">]</span>
+            <span class="n">this_layer</span><span class="o">.</span><span class="n">turns</span><span class="o">.</span><span class="n">distance</span> <span class="o">=</span> <span class="n">value_layer</span><span class="p">[</span><span class="s2">&quot;turns&quot;</span><span class="p">][</span><span class="s2">&quot;distance&quot;</span><span class="p">]</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="o">.</span><span class="n">winding</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="n">key_layer</span><span class="p">]</span> <span class="o">=</span> <span class="n">this_layer</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">__read_bobbin_properties</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Read bobbin properties from the input data.&quot;&quot;&quot;</span>
+        <span class="n">bobbin_props</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__input_props</span><span class="p">[</span><span class="s2">&quot;bobbin&quot;</span><span class="p">]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="o">.</span><span class="n">bobbin</span><span class="o">.</span><span class="n">draw_bobbin</span> <span class="o">=</span> <span class="n">bobbin_props</span><span class="p">[</span><span class="s2">&quot;draw_bobbin&quot;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="o">.</span><span class="n">bobbin</span><span class="o">.</span><span class="n">material</span> <span class="o">=</span> <span class="n">bobbin_props</span><span class="p">[</span><span class="s2">&quot;material&quot;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="o">.</span><span class="n">bobbin</span><span class="o">.</span><span class="n">board_thickness</span> <span class="o">=</span> <span class="n">bobbin_props</span><span class="p">[</span><span class="s2">&quot;board_thickness&quot;</span><span class="p">]</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">__read_settings_properties</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Read settings properties from the input data.&quot;&quot;&quot;</span>
+        <span class="n">setup_props</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__input_props</span><span class="p">[</span><span class="s2">&quot;settings&quot;</span><span class="p">]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">full_model</span> <span class="o">=</span> <span class="n">setup_props</span><span class="p">[</span><span class="s2">&quot;full_model&quot;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">region_offset</span> <span class="o">=</span> <span class="n">setup_props</span><span class="p">[</span><span class="s2">&quot;region_offset&quot;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">segmentation_angle</span> <span class="o">=</span> <span class="n">setup_props</span><span class="p">[</span><span class="s2">&quot;segmentation_angle&quot;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">analysis_setup</span><span class="o">.</span><span class="n">adaptive_frequency</span> <span class="o">=</span> <span class="n">setup_props</span><span class="p">[</span><span class="s2">&quot;analysis_setup&quot;</span><span class="p">][</span><span class="s2">&quot;adaptive_frequency&quot;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">analysis_setup</span><span class="o">.</span><span class="n">percentage_error</span> <span class="o">=</span> <span class="n">setup_props</span><span class="p">[</span><span class="s2">&quot;analysis_setup&quot;</span><span class="p">][</span><span class="s2">&quot;percentage_error&quot;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">analysis_setup</span><span class="o">.</span><span class="n">number_passes</span> <span class="o">=</span> <span class="n">setup_props</span><span class="p">[</span><span class="s2">&quot;analysis_setup&quot;</span><span class="p">][</span><span class="s2">&quot;number_passes&quot;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">analysis_setup</span><span class="o">.</span><span class="n">frequency_sweep</span><span class="o">.</span><span class="n">frequency_sweep</span> <span class="o">=</span> <span class="n">setup_props</span><span class="p">[</span><span class="s2">&quot;analysis_setup&quot;</span><span class="p">][</span>
+            <span class="s2">&quot;frequency_sweep&quot;</span>
+        <span class="p">][</span><span class="s2">&quot;frequency_sweep&quot;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">analysis_setup</span><span class="o">.</span><span class="n">frequency_sweep</span><span class="o">.</span><span class="n">start_frequency</span> <span class="o">=</span> <span class="n">setup_props</span><span class="p">[</span><span class="s2">&quot;analysis_setup&quot;</span><span class="p">][</span>
+            <span class="s2">&quot;frequency_sweep&quot;</span>
+        <span class="p">][</span><span class="s2">&quot;start_frequency&quot;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">analysis_setup</span><span class="o">.</span><span class="n">frequency_sweep</span><span class="o">.</span><span class="n">stop_frequency</span> <span class="o">=</span> <span class="n">setup_props</span><span class="p">[</span><span class="s2">&quot;analysis_setup&quot;</span><span class="p">][</span>
+            <span class="s2">&quot;frequency_sweep&quot;</span>
+        <span class="p">][</span><span class="s2">&quot;stop_frequency&quot;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">analysis_setup</span><span class="o">.</span><span class="n">frequency_sweep</span><span class="o">.</span><span class="n">samples</span> <span class="o">=</span> <span class="n">setup_props</span><span class="p">[</span><span class="s2">&quot;analysis_setup&quot;</span><span class="p">][</span>
+            <span class="s2">&quot;frequency_sweep&quot;</span>
+        <span class="p">][</span><span class="s2">&quot;samples&quot;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">analysis_setup</span><span class="o">.</span><span class="n">frequency_sweep</span><span class="o">.</span><span class="n">scale</span> <span class="o">=</span> <span class="n">setup_props</span><span class="p">[</span><span class="s2">&quot;analysis_setup&quot;</span><span class="p">][</span>
+            <span class="s2">&quot;frequency_sweep&quot;</span>
+        <span class="p">][</span><span class="s2">&quot;scale&quot;</span><span class="p">]</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">__read_circuit_properties</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Read circuit properties from the input data.&quot;&quot;&quot;</span>
+        <span class="n">circuit_props</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__input_props</span><span class="p">[</span><span class="s2">&quot;circuit&quot;</span><span class="p">]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="o">.</span><span class="n">circuit</span><span class="o">.</span><span class="n">connections</span> <span class="o">=</span> <span class="n">circuit_props</span><span class="p">[</span><span class="s2">&quot;connections&quot;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="o">.</span><span class="n">circuit</span><span class="o">.</span><span class="n">side_loads</span> <span class="o">=</span> <span class="n">circuit_props</span><span class="p">[</span><span class="s2">&quot;side_loads&quot;</span><span class="p">]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="o">.</span><span class="n">circuit</span><span class="o">.</span><span class="n">excitation</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">circuit_props</span><span class="p">[</span><span class="s2">&quot;excitation&quot;</span><span class="p">][</span><span class="s2">&quot;value&quot;</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="n">circuit_props</span><span class="p">[</span><span class="s2">&quot;excitation&quot;</span><span class="p">][</span><span class="s2">&quot;type&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;voltage&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="o">.</span><span class="n">circuit</span><span class="o">.</span><span class="n">excitation</span><span class="o">.</span><span class="n">type</span> <span class="o">=</span> <span class="n">ExcitationType</span><span class="o">.</span><span class="n">voltage</span>
+        <span class="k">elif</span> <span class="n">circuit_props</span><span class="p">[</span><span class="s2">&quot;excitation&quot;</span><span class="p">][</span><span class="s2">&quot;type&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;current&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="o">.</span><span class="n">circuit</span><span class="o">.</span><span class="n">excitation</span><span class="o">.</span><span class="n">type</span> <span class="o">=</span> <span class="n">ExcitationType</span><span class="o">.</span><span class="n">current</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">__read_json_version</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Read circuit properties from the input data.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="o">.</span><span class="n">json_version</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__input_props</span><span class="p">[</span><span class="s2">&quot;json_version&quot;</span><span class="p">]</span>
+
+<div class="viewcode-block" id="ToolkitBackend.read_props_from_json">
+<a class="viewcode-back" href="../../../../../../toolkit/api.html#ansys.aedt.toolkits.electronic_transformer.backend.api.ToolkitBackend.read_props_from_json">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">read_props_from_json</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_path</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Read properties from a JSON file.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        file_path : str</span>
+<span class="sd">            Path to the JSON file.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">with</span> <span class="n">Path</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">json_read</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__input_props</span> <span class="o">=</span> <span class="n">json_read</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">__validator</span><span class="o">.</span><span class="n">validate_json</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__input_props</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__read_core_properties</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__read_winding_properties</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__read_bobbin_properties</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__read_settings_properties</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__read_material_properties</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__read_circuit_properties</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__read_json_version</span><span class="p">()</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">__read_props_from_frontend</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">frontend_properties</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Read properties from a the frontend.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        frontend_properties : dict</span>
+<span class="sd">           Dictionary with the FE data.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__input_props</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;json_version&quot;</span><span class="p">:</span> <span class="n">frontend_properties</span><span class="p">[</span><span class="s2">&quot;json_version&quot;</span><span class="p">],</span>
+            <span class="s2">&quot;winding&quot;</span><span class="p">:</span> <span class="n">frontend_properties</span><span class="p">[</span><span class="s2">&quot;winding&quot;</span><span class="p">],</span>
+            <span class="s2">&quot;core&quot;</span><span class="p">:</span> <span class="n">frontend_properties</span><span class="p">[</span><span class="s2">&quot;core&quot;</span><span class="p">],</span>
+            <span class="s2">&quot;bobbin&quot;</span><span class="p">:</span> <span class="n">frontend_properties</span><span class="p">[</span><span class="s2">&quot;bobbin&quot;</span><span class="p">],</span>
+            <span class="s2">&quot;settings&quot;</span><span class="p">:</span> <span class="n">frontend_properties</span><span class="p">[</span><span class="s2">&quot;settings&quot;</span><span class="p">],</span>
+            <span class="s2">&quot;materials&quot;</span><span class="p">:</span> <span class="n">frontend_properties</span><span class="p">[</span><span class="s2">&quot;materials&quot;</span><span class="p">],</span>
+            <span class="s2">&quot;circuit&quot;</span><span class="p">:</span> <span class="n">frontend_properties</span><span class="p">[</span><span class="s2">&quot;circuit&quot;</span><span class="p">],</span>
+        <span class="p">}</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">__validator</span><span class="o">.</span><span class="n">validate_json</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__input_props</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__read_core_properties</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__read_winding_properties</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__read_bobbin_properties</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__read_settings_properties</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__read_material_properties</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__read_circuit_properties</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__read_json_version</span><span class="p">()</span>
+
+<div class="viewcode-block" id="ToolkitBackend.create_core_geometry">
+<a class="viewcode-back" href="../../../../../../toolkit/api.html#ansys.aedt.toolkits.electronic_transformer.backend.api.ToolkitBackend.create_core_geometry">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">create_core_geometry</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">frontend_properties</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Create the core geometry.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        frontend_properties : dict, optional</span>
+<span class="sd">            Frontend properties. The default is ``None``.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        :class:`ansys.aedt.toolkits.electronic_transformer.backend.workflows.core.Core`</span>
+<span class="sd">            Core object.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">frontend_properties</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__read_props_from_frontend</span><span class="p">(</span><span class="n">frontend_properties</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">connect_design</span><span class="p">(</span><span class="s2">&quot;Maxwell3D&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">aedtapp</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Not connected&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">False</span>
+
+        <span class="n">ocore</span> <span class="o">=</span> <span class="n">Core</span><span class="p">(</span><span class="s2">&quot;Core&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">aedtapp</span><span class="p">,</span> <span class="n">properties</span><span class="o">.</span><span class="n">core</span><span class="p">,</span> <span class="n">properties</span><span class="o">.</span><span class="n">settings</span><span class="p">)</span>
+        <span class="n">ocore</span><span class="o">.</span><span class="n">create_geometry</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">release_aedt</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">ocore</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Core not created&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">return</span> <span class="n">ocore</span></div>
+
+
+<div class="viewcode-block" id="ToolkitBackend.create_winding_geometry">
+<a class="viewcode-back" href="../../../../../../toolkit/api.html#ansys.aedt.toolkits.electronic_transformer.backend.api.ToolkitBackend.create_winding_geometry">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">create_winding_geometry</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">frontend_properties</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Create the winding geometry.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        frontend_properties : dict, optional</span>
+<span class="sd">            Frontend properties. The default is ``None``.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        :class:`ansys.aedt.toolkits.electronic_transformer.backend.workflows.winding.Winding`</span>
+<span class="sd">            Winding object.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Updates the backend data structure</span>
+        <span class="k">if</span> <span class="n">frontend_properties</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__read_props_from_frontend</span><span class="p">(</span><span class="n">frontend_properties</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">connect_design</span><span class="p">(</span><span class="s2">&quot;Maxwell3D&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">aedtapp</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Not connected&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">False</span>
+
+        <span class="n">owinding</span> <span class="o">=</span> <span class="n">Winding</span><span class="p">(</span>
+            <span class="s2">&quot;Windings&quot;</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">aedtapp</span><span class="p">,</span>
+            <span class="n">properties</span><span class="o">.</span><span class="n">winding</span><span class="p">,</span>
+            <span class="n">properties</span><span class="o">.</span><span class="n">core</span><span class="p">,</span>
+            <span class="n">properties</span><span class="o">.</span><span class="n">settings</span><span class="p">,</span>
+            <span class="n">properties</span><span class="o">.</span><span class="n">bobbin</span><span class="p">,</span>
+            <span class="n">properties</span><span class="o">.</span><span class="n">circuit</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="n">owinding</span><span class="o">.</span><span class="n">create_geometry</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">release_aedt</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">owinding</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Windings not created&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">return</span> <span class="n">owinding</span></div>
+
+
+<div class="viewcode-block" id="ToolkitBackend.create_bobbin_geometry">
+<a class="viewcode-back" href="../../../../../../toolkit/api.html#ansys.aedt.toolkits.electronic_transformer.backend.api.ToolkitBackend.create_bobbin_geometry">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">create_bobbin_geometry</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">frontend_properties</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Create the bobbin geometry.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        frontend_properties : dict, optional</span>
+<span class="sd">            Frontend properties. The default is ``None``.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        :class:`ansys.aedt.toolkits.electronic_transformer.backend.workflows.bobbin.Bobbin`</span>
+<span class="sd">            Bobbin object.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Updates the backend data structure</span>
+        <span class="k">if</span> <span class="n">frontend_properties</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__read_props_from_frontend</span><span class="p">(</span><span class="n">frontend_properties</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">connect_design</span><span class="p">(</span><span class="s2">&quot;Maxwell3D&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">aedtapp</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Not connected&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">False</span>
+
+        <span class="n">obobbin</span> <span class="o">=</span> <span class="n">Bobbin</span><span class="p">(</span>
+            <span class="s2">&quot;Bobbin&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">aedtapp</span><span class="p">,</span> <span class="n">properties</span><span class="o">.</span><span class="n">bobbin</span><span class="p">,</span> <span class="n">properties</span><span class="o">.</span><span class="n">core</span><span class="p">,</span> <span class="n">properties</span><span class="o">.</span><span class="n">winding</span><span class="p">,</span> <span class="n">properties</span><span class="o">.</span><span class="n">settings</span>
+        <span class="p">)</span>
+
+        <span class="n">obobbin</span><span class="o">.</span><span class="n">create_geometry</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">release_aedt</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">obobbin</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Bobbin not created&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">return</span> <span class="n">obobbin</span></div>
+
+
+<div class="viewcode-block" id="ToolkitBackend.create_model">
+<a class="viewcode-back" href="../../../../../../toolkit/api.html#ansys.aedt.toolkits.electronic_transformer.backend.api.ToolkitBackend.create_model">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">create_model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">frontend_properties</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Create the complete model.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        frontend_properties : dict, optional</span>
+<span class="sd">            Frontend properties. The default is ``None``.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        :class:`ansys.aedt.toolkits.electronic_transformer.backend.workflows.etk.ETK`</span>
+<span class="sd">            ETK object.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Updates the backend data structure</span>
+        <span class="k">if</span> <span class="n">frontend_properties</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__read_props_from_frontend</span><span class="p">(</span><span class="n">frontend_properties</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">connect_design</span><span class="p">(</span><span class="s2">&quot;Maxwell3D&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">aedtapp</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Not connected&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">False</span>
+
+        <span class="n">oetk</span> <span class="o">=</span> <span class="n">ETK</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">aedtapp</span><span class="p">,</span>
+            <span class="n">properties</span><span class="o">.</span><span class="n">core</span><span class="p">,</span>
+            <span class="n">properties</span><span class="o">.</span><span class="n">settings</span><span class="p">,</span>
+            <span class="n">properties</span><span class="o">.</span><span class="n">winding</span><span class="p">,</span>
+            <span class="n">properties</span><span class="o">.</span><span class="n">materials</span><span class="p">,</span>
+            <span class="n">properties</span><span class="o">.</span><span class="n">bobbin</span><span class="p">,</span>
+            <span class="n">properties</span><span class="o">.</span><span class="n">circuit</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="n">oetk</span><span class="o">.</span><span class="n">create_model</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">release_aedt</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">oetk</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Model not created&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+
+<div class="viewcode-block" id="ToolkitBackend.validate_json">
+<a class="viewcode-back" href="../../../../../../toolkit/api.html#ansys.aedt.toolkits.electronic_transformer.backend.api.ToolkitBackend.validate_json">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">validate_json</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Validate input data from a JSON file.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        data : :class:`pathlib.Path`</span>
+<span class="sd">            Path to the input data in JSON format.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">validator</span> <span class="o">=</span> <span class="n">Validation</span><span class="p">()</span>
+        <span class="n">validator</span><span class="o">.</span><span class="n">validate_json</span><span class="p">(</span><span class="n">data</span><span class="p">)</span></div>
+</div>
+
+</pre></div>
+
+                </article>
+              
+              
+              
+              
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<!-- If there is no fix edit button function, use the PyData edit-this-button-->
+</div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../../../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../../../../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+
+  <!-- Include desired assets -->
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.7/require.min.js"></script>
+
+<script>
+// Passing the search options to the search.js file
+const SEARCH_OPTIONS = JSON.parse('{"keys": ["title", "text", "objectID"], "limit": 10, "threshold": 0.2}');
+const SEARCH_FILE = "../../../../../../_static/search.json";
+const ADVANCE_SEARCH_PATH = "../../../../../../search.html";
+const EXTRA_SOURCES = JSON.parse('""');
+</script>
+
+
+<script src="../../../../../../_static/js/search.js"></script>
+
+  
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright (c) 2026 ANSYS, Inc. All rights reserved.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item"><p class="theme-version">
+  Built with the
+  <a href="https://sphinxdocs.ansys.com/version/stable/index.html"
+    >Ansys Sphinx Theme</a
+  >
+  1.6.0. <br />Last updated on
+  <span id="ast_build_date"></span>
+</p>
+<script>
+  var options = { day: "numeric", month: "long", year: "numeric" };
+  var ast_lastModifiedDate = new Date(document.lastModified);
+  var ast_build_date = ast_lastModifiedDate.toLocaleDateString("en-US", options);
+  document.getElementById("ast_build_date").innerHTML = ast_build_date;
+</script></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>
