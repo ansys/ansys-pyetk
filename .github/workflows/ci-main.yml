@@ -26,7 +26,7 @@ jobs:
       contents: read
     steps:
       - name: Build documentation
-        uses: ansys/actions/doc-build@73fa84c704bb6691f254cfe4d4b928c338b0d4da # v10.3.0
+        uses: ansys/actions/doc-build@3ad3b285bd9b67045477dafc7f9865a3aa39f692 # v11.0.6
         with:
           add-pdf-html-docs-as-assets: true
           check-links: false
