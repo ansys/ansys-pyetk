@@ -100,6 +100,7 @@ class ToolkitBackend(AEDTCommon):
         self.properties.core.material = core_props["material"]
         self.properties.core.dimensions = core_props["dimensions"]
         self.properties.core.airgap.define_airgap = core_props["airgap"]["define_airgap"]
+        self.properties.core.number_segments = core_props.get("number_segments", 0)
 
         if self.properties.core.airgap.define_airgap:
             self.properties.core.airgap.airgap_on_leg = core_props["airgap"]["airgap_on_leg"]
@@ -171,6 +172,7 @@ class ToolkitBackend(AEDTCommon):
             this_layer.turns.quantity = value_layer["turns"]["quantity"]
             this_layer.turns.spacing = value_layer["turns"]["spacing"]
             this_layer.turns.distance = value_layer["turns"]["distance"]
+            this_layer.segments_number = value_layer.get("segments_number", 0)
 
             self.properties.winding.layers[key_layer] = this_layer
 
@@ -188,7 +190,7 @@ class ToolkitBackend(AEDTCommon):
 
         self.properties.settings.full_model = setup_props["full_model"]
         self.properties.settings.region_offset = setup_props["region_offset"]
-        self.properties.settings.segmentation_angle = setup_props["segmentation_angle"]
+        self.properties.settings.number_segments = setup_props.get("number_segments", 0)
         self.properties.settings.analysis_setup.adaptive_frequency = setup_props["analysis_setup"]["adaptive_frequency"]
         self.properties.settings.analysis_setup.percentage_error = setup_props["analysis_setup"]["percentage_error"]
         self.properties.settings.analysis_setup.number_passes = setup_props["analysis_setup"]["number_passes"]

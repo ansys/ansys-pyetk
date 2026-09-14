@@ -36,7 +36,8 @@ class TestDataManager:
     def test_init(self):
         """Test DataManager initialization."""
         dm = DataManager()
-        assert dm.supported_json == "0.1.0"
+        assert dm.supported_json == "0.2.0"
+        assert dm.minimum_json == "0.1.0"
         assert dm.properties is not None
         assert dm.gui_properties is not None
         assert dm.database_manager is not None
@@ -88,7 +89,7 @@ class TestDataManager:
 
         # Verify structure
         assert "json_version" in result
-        assert result["json_version"] == "0.1.0"
+        assert result["json_version"] == "0.2.0"
 
         assert "core" in result
         assert result["core"]["supplier"] == "TDK"
@@ -97,6 +98,8 @@ class TestDataManager:
         assert result["core"]["material"] == "N87"
         assert "airgap" in result["core"]
         assert result["core"]["airgap"]["define_airgap"] is False
+        assert "number_segments" in result["core"]
+        assert result["core"]["number_segments"] == 0
 
         assert "winding" in result
         assert result["winding"]["layer_type"] == "Wound"
@@ -124,7 +127,7 @@ class TestDataManager:
         dm = DataManager()
 
         data = {
-            "json_version": "0.1.0",
+            "json_version": "0.2.0",
             "core": {
                 "supplier": "TDK",
                 "type": "EI",
@@ -192,7 +195,7 @@ class TestDataManager:
         dm = DataManager()
 
         data = {
-            "json_version": "0.1.0",
+            "json_version": "0.2.0",
             "core": {
                 "supplier": "TDK",
                 "type": "EI",
@@ -245,7 +248,7 @@ class TestDataManager:
         dm = DataManager()
 
         data = {
-            "json_version": "0.1.0",
+            "json_version": "0.2.0",
             "core": {
                 "supplier": "TDK",
                 "type": "EI",
@@ -417,13 +420,13 @@ class TestDataManager:
 
         dm.properties.settings.full_model = True
         dm.properties.settings.offset = 75.0
-        dm.properties.settings.segmentation_angle = 15.0
+        dm.properties.settings.number_segments = 15.0
 
         result = dm.create_backend_data()
 
         assert result["settings"]["full_model"] is True
         assert result["settings"]["region_offset"] == 75.0
-        assert result["settings"]["segmentation_angle"] == 15.0
+        assert result["settings"]["number_segments"] == 15.0
 
     def test_create_backend_data_with_materials(self):
         """Test backend data creation with material definitions."""
@@ -490,9 +493,9 @@ class TestDataManager:
         assert result["bobbin"]["draw_bobbin"] is False
 
     def test_format_input_version_unsupported(self):
-        """Test branch: if data["json_version"] < self.supported_json."""
+        """Test branch: if data["json_version"] < self.minimum_json."""
         dm = DataManager()
-        # Version lower than 0.1.0
+        # Version lower than minimum_json (0.1.0)
         unsupported_json_model = (
             Path(__file__).parent / "versioned_json" / "not_supported" / "not_supported_version.json"
         )
@@ -517,32 +520,119 @@ class TestDataManager:
     def test_format_input_version_current_exact(self):
         """Ensure boundary condition for version comparison is covered."""
         dm = DataManager()
+        versioned_json_model = Path(__file__).parent / "versioned_json" / "v0_2_0" / "EI_planar_rectangular.json"
+        with versioned_json_model.open("rb") as f:
+            data = json.load(f)
+
+        result = dm._format_input_version(data)
+        assert result == "Working with .json version: 0.2.0"
+
+    def test_format_input_version_with_number_segments(self):
+        """Test that number_segments in core and settings is read correctly from v0.2.0 JSON."""
+        dm = DataManager()
+
+        data = {
+            "json_version": "0.2.0",
+            "core": {
+                "supplier": "TDK",
+                "type": "EI",
+                "model": "EI30",
+                "material": "N87",
+                "dimensions": {},
+                "number_segments": 12,
+                "airgap": {"define_airgap": False, "airgap_on_leg": "None", "airgap_value": 0.0},
+            },
+            "bobbin": {"draw_bobbin": False, "board_thickness": 1.6, "material": "FR4"},
+            "winding": {
+                "layer_type": "Wound",
+                "layer_spacing": 0.5,
+                "top_margin": 1.0,
+                "side_margin": 1.0,
+                "layers": {},
+            },
+            "circuit": {
+                "connections": {},
+                "side_loads": [],
+                "excitation": {"type": "voltage", "value": 1.0},
+            },
+            "settings": {
+                "full_model": False,
+                "region_offset": 50.0,
+                "number_segments": 24,
+                "analysis_setup": {
+                    "adaptive_frequency": 100000.0,
+                    "percentage_error": 1.0,
+                    "number_passes": 5,
+                    "frequency_sweep": {
+                        "frequency_sweep": False,
+                        "samples": 1,
+                        "scale": "Linear",
+                        "start_frequency": 1000.0,
+                        "stop_frequency": 1000000.0,
+                    },
+                },
+            },
+        }
+
+        dm._format_input_version(data)
+
+        assert dm.gui_properties.core.number_segments == 12
+        assert dm.gui_properties.settings.number_segments == 24
+
+    def test_format_input_version_v0_1_0_backwards_compat(self):
+        """Ensure v0.1.0 JSON files (without number_segments) are still accepted.
+
+        This guards against regressions where raising minimum_json would break
+        users with JSON files from older installations of the toolkit.
+        """
+        dm = DataManager()
         versioned_json_model = Path(__file__).parent / "versioned_json" / "v0_1_0" / "EI_planar_rectangular.json"
         with versioned_json_model.open("rb") as f:
             data = json.load(f)
 
         result = dm._format_input_version(data)
         assert result == "Working with .json version: 0.1.0"
+        # core.number_segments defaults to 0 when absent from v0.1.0 JSON
+        assert dm.gui_properties.core.number_segments == 0
+        # settings.number_segments is derived from the layers' segments_number when absent from v0.1.0 JSON
+        assert dm.gui_properties.settings.number_segments == 8
 
     def test_import_data_from_json(self):
         """Import data only if valid."""
         dm = DataManager()
-        versioned_json_model = Path(__file__).parent / "versioned_json" / "v0_1_0" / "EI_planar_rectangular.json"
+        versioned_json_model = Path(__file__).parent / "versioned_json" / "v0_2_0" / "EI_planar_rectangular.json"
         not_supported_json = Path(__file__).parent / "not_supported_json" / "not_supported_version.json"
 
         msg, is_valid = dm._import_data_from_json(versioned_json_model)
         assert is_valid is True
-        assert msg == "Working with .json version: 0.1.0"
+        assert msg == "Working with .json version: 0.2.0"
 
         msg, is_valid = dm._import_data_from_json(not_supported_json)
         assert is_valid is False
         assert msg == "Incompatible/Not Selected JSON file"
 
+    def test_import_data_from_json_v0_1_0_backwards_compat_whole_model(self):
+        """Import full v0.1.0 model and verify backward-compatible field mapping."""
+        dm = DataManager()
+        versioned_json_model = Path(__file__).parent / "versioned_json" / "v0_1_0" / "EI_planar_rectangular.json"
+
+        msg, is_valid = dm._import_data_from_json(versioned_json_model)
+
+        assert is_valid is True
+        assert msg == "Working with .json version: 0.1.0"
+        assert dm.gui_properties.core.type == "EI"
+        assert dm.gui_properties.core.model == "E14/3.5/5R"
+        # v0.1.0 has no core-level number_segments; default remains zero.
+        assert dm.gui_properties.core.number_segments == 0
+        # conductor segmentation is derived from legacy layer segments_number.
+        assert dm.gui_properties.settings.number_segments == 8
+        assert len(dm.gui_properties.winding.layers_definition) == 8
+
     def test_create_layers_for_backend(self):
         """Create layers in same data structure as backend needs it."""
         dm = DataManager()
 
-        versioned_json_model = Path(__file__).parent / "versioned_json" / "v0_1_0" / "EI_planar_rectangular.json"
+        versioned_json_model = Path(__file__).parent / "versioned_json" / "v0_2_0" / "EI_planar_rectangular.json"
         with versioned_json_model.open("rb") as f:
             versioned_json = json.load(f)
 
@@ -557,7 +647,7 @@ class TestDataManager:
     def test_update_frontend_properties(self):
         """Load model and ensure that the properties sent to the backend are the same as the UI."""
         dm = DataManager()
-        versioned_json_model = Path(__file__).parent / "versioned_json" / "v0_1_0" / "EI_planar_rectangular.json"
+        versioned_json_model = Path(__file__).parent / "versioned_json" / "v0_2_0" / "EI_planar_rectangular.json"
         _ = dm._import_data_from_json(versioned_json_model)
         dm._update_frontend_properties()
         assert fe_properties.core.type == gui_properties.core.type

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright (C) 2023 - 2026 ANSYS, Inc. and/or its affiliates.
+# Copyright (C) 2023 - 2026 Synopsys, Inc. and ANSYS, Inc. All rights reserved.
 # SPDX-License-Identifier: Apache-2.0
 #
 #
@@ -130,7 +130,6 @@ class Winding(GeometryCommon):
         position_z_final,
         layer_number,
         fillet_radius,
-        segmentation_angle,
         profile_width=0.0,
         profile_height=0.0,
         profile_diameter=0.0,
@@ -151,8 +150,6 @@ class Winding(GeometryCommon):
             Layer number.
         fillet_radius : float
             Fillet radius.
-        segmentation_angle : float
-            Segmentation angle.
         profile_width : float, optional
             Profile width. The default is ``0.0``.
         profile_height : float, optional
@@ -177,7 +174,6 @@ class Winding(GeometryCommon):
                 position_z_final + wire_offset,
                 fillet_radius,
                 layer_number,
-                segmentation_angle,
                 turn_num,
             )
         elif self.core_cross_section == CoreCrossSection.rectangular:
@@ -187,7 +183,6 @@ class Winding(GeometryCommon):
                 position_z_final + wire_offset,
                 fillet_radius,
                 layer_number,
-                segmentation_angle,
                 turn_num,
             )
 
@@ -362,7 +357,7 @@ class Winding(GeometryCommon):
         #     )  # TODO: Really how? on the surface of a solid conductor???
 
     def __create_sweep_path_rectangular(
-        self, sweep_path_x, sweep_path_y, position_z, fillet_radius, layer_number, segmentation_angle=0, turn_num=0
+        self, sweep_path_x, sweep_path_y, position_z, fillet_radius, layer_number, turn_num=0
     ):
         """Create a rectangular profile of the winding.
 
@@ -381,8 +376,6 @@ class Winding(GeometryCommon):
             Radius of the fillet to make round corners of the coil.
         layer_number : int
             Layer number for the body name.
-        segmentation_angle : float, optional
-            Segmentation angle. A true surface would be a mesh overkill. The default is ``0``.
         turn_num : int, optional
             Turn number. It is used for planar transformers to append the path name.
             Otherwise, many warnings are generated in the UI. The default is ``0``.
@@ -435,7 +428,7 @@ class Winding(GeometryCommon):
         return name
 
     def __create_sweep_path_circular(
-        self, sweep_path_x, _sweep_path_y, position_z, _fillet_radius, layer_number, segmentation_angle=0, turn_num=0
+        self, sweep_path_x, _sweep_path_y, position_z, _fillet_radius, layer_number, turn_num=0
     ):
         """Create a round profile of the winding.
 
@@ -451,8 +444,6 @@ class Winding(GeometryCommon):
             Unused. Kept to maintain the signature of the base class.
         layer_number : int
             Layer number for the body name.
-        segmentation_angle : float, optional
-            Segmentation angle. A true surface would be a mesh overkill. The default is ``0``.
         turn_num : int, optional
             Turn number. It is used for planar transformers to append the path name.
             Otherwise, many warnings are generated in the UI. The default is ``0``.
@@ -470,7 +461,7 @@ class Winding(GeometryCommon):
             orientation="XY",
             origin=[0, 0, position_z],
             radius=sweep_path_x / 2,
-            # num_sides=segments_number Causes a parasolid issue: BUG 1317171
+            # TODO: Use self.__core_properties.number_segments when BUG 1317171 is resolved
             name=name,
             is_covered=False,
         )
@@ -518,9 +509,6 @@ class Winding(GeometryCommon):
             dim_d5 = self.__core_properties.dimensions["D_4"] + airgap_both
             dim_d6 = self.__core_properties.dimensions["D_5"]
 
-        segmentation_angle = self.__settings_properties.segmentation_angle
-        winding_parameters_dict = winding_parameters_dict
-
         if layer_type == "Planar":
             margin = top_bottom_margin
 
@@ -559,7 +547,6 @@ class Winding(GeometryCommon):
                         position_z,
                         layer_num,
                         fillet_radius=(sweep_path_x - dim_d3) / 2,
-                        segmentation_angle=segmentation_angle,
                         profile_width=conductor_width,
                         profile_height=conductor_height,
                         turn_num=turn_num + 1,
@@ -582,7 +569,8 @@ class Winding(GeometryCommon):
                     conductor_full_size = 2 * margin + conductor_width + 2 * insulation_thickness
                 else:
                     conductor_diameter = layer.conductor.diameter
-                    segments_number = self.segmentation_angle(self.__settings_properties.segmentation_angle)
+                    segments_number = layer.segments_number
+
                     # factor of 2 is applied due to existence of margin and insulation on both sides
                     conductor_full_size = 2 * margin + conductor_diameter + 2 * insulation_thickness
 
@@ -599,7 +587,6 @@ class Winding(GeometryCommon):
                         conductor_z_position,
                         layer_num,
                         fillet_radius,
-                        segmentation_angle,
                         profile_width=conductor_width,
                         profile_height=conductor_height,
                     )
@@ -613,7 +600,6 @@ class Winding(GeometryCommon):
                         conductor_z_position,
                         layer_num,
                         fillet_radius,
-                        segmentation_angle,
                         profile_diameter=conductor_diameter,
                         profile_segments_num=segments_number,
                     )
