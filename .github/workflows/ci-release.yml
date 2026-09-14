@@ -93,7 +93,7 @@ jobs:
       contents: read        # Required to read repository content for building
       id-token: write       # Required for OIDC token generation (for provenance signing)
     steps:
-      - uses: ansys/actions/build-wheelhouse@d946b24b9a765f4169bcc94afdb27bd1a0533741 # v10.3.2
+      - uses: ansys/actions/build-wheelhouse@7410037bfb276c79ae91eb3617b9f5d2876f0c94 # v11.0.8
         with:
           library-name: ${{ env.LIBRARY_NAME }}
           operating-system: ${{ matrix.os }}
