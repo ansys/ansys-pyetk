@@ -1577,6 +1577,10 @@ class GeometryMenu(object):
             root_item = self.connections_tree_widget.topLevelItem(0)
             payload = root_item.data(0, Qt.UserRole)
             self._commit_connection_to_UserData(payload)
+            # Persist the committed payload back to the tree row so generated group keys
+            # are retained for later stash/export and do not serialize as a null key.
+            root_item.setData(0, Qt.UserRole, payload)
+            root_item.setText(0, self._connection_to_label(payload))
             self.update_connections_def()
 
     def _disconnect(self):
