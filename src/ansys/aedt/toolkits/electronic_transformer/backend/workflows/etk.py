@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright (C) 2023 - 2026 ANSYS, Inc. and/or its affiliates.
+# Copyright (C) 2023 - 2026 Synopsys, Inc. and ANSYS, Inc. All rights reserved.
 # SPDX-License-Identifier: Apache-2.0
 #
 #
@@ -36,7 +36,7 @@ class ETK:
         core_properties,
         setup_definitions,
         winding_properties,
-        materials,
+        materials_properties,
         bobbin_properties,
         circuit_properties,
     ):
@@ -52,7 +52,7 @@ class ETK:
             Setup properties.
         winding_properties : :class:`ansys.aedt.toolkits.common.properties.WindingProperties`
             Winding properties.
-        materials : :class:`ansys.aedt.toolkits.common.properties.MaterialsProperties`
+        materials_properties : :class:`ansys.aedt.toolkits.common.properties.MaterialsProperties`
             Materials properties.
         bobbin_properties : :class:`ansys.aedt.toolkits.common.properties.BobbinProperties`
             Bobbin properties.
@@ -63,7 +63,7 @@ class ETK:
         self.__core_properties = core_properties
         self.__setup_definitions = setup_definitions
         self.__winding_properties = winding_properties
-        self.__materials = materials
+        self.__materials_properties = materials_properties
         self.__bobbin_properties = bobbin_properties
         self.__circuit_properties = circuit_properties
 
@@ -82,7 +82,7 @@ class ETK:
         ocore.create_geometry()
 
         # Sets the core material
-        ocore.set_material(self.__materials[self.__core_properties.material])
+        ocore.set_material(self.__materials_properties[self.__core_properties.material])
 
         if not ocore:
             logger.error("Core not created")
@@ -99,10 +99,12 @@ class ETK:
             self.__setup_definitions,
             self.__bobbin_properties,
         )
-
-        owinding.create_geometry()
         material_name = next(iter(self.__winding_properties.layers.values())).conductor.material
-        owinding.set_material(self.__materials[material_name])
+
+        # Required because the windings require the material info for skin layers
+        owinding.set_class_obj_material(self.__materials_properties[material_name])
+        owinding.create_geometry()
+        owinding.set_material(self.__materials_properties[material_name])
         owinding.create_terminal_sections()
         owinding.create_excitations()
         osetup.assign_matrix_winding()
@@ -126,7 +128,7 @@ class ETK:
         )
 
         obobbin.create_geometry()
-        obobbin.set_material(self.__materials[self.__bobbin_properties.material])
+        obobbin.set_material(self.__materials_properties[self.__bobbin_properties.material])
 
         if not obobbin:
             logger.error("Bobbin not created")

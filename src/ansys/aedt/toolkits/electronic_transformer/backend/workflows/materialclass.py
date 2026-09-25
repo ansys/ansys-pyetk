@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright (C) 2023 - 2026 ANSYS, Inc. and/or its affiliates.
+# Copyright (C) 2023 - 2026 Synopsys, Inc. and ANSYS, Inc. All rights reserved.
 # SPDX-License-Identifier: Apache-2.0
 #
 #
@@ -15,7 +15,6 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
 
 from dataclasses import dataclass
 from dataclasses import field
@@ -55,12 +54,12 @@ class MaterialPropsMagnetic:
     core_loss: MaterialPropsCoreLoss = field(default_factory=MaterialPropsCoreLoss)
 
 
-class Material:
+class MaterialClass:
     """Manages material properties."""
 
     def __init__(
         self,
-        name: str,
+        name: str = "",
     ):
         """Initialize and launch the material component.
 
@@ -89,7 +88,60 @@ class Material:
 
     @magnetic_props.setter
     def magnetic_props(self, value: MaterialPropsMagnetic):
-        self.__magnetic_props = value
+        self.__magnetic_props.core_loss.cm = value.core_loss.cm
+        self.__magnetic_props.core_loss.x = value.core_loss.x
+        self.__magnetic_props.core_loss.y = value.core_loss.y
+        self.__magnetic_props.rel_permeability = value.rel_permeability
+
+    @property
+    def conductivity(self):
+        """Get the conductivity alias."""
+        return self.__electric_props.sigma
+
+    @conductivity.setter
+    def conductivity(self, value: float):
+        self.__electric_props.sigma = value
+
+    @property
+    def epsr(self):
+        """Get the relative permittivity alias."""
+        return self.__electric_props.rel_permittivity
+
+    @epsr.setter
+    def epsr(self, value: float):
+        self.__electric_props.rel_permittivity = value
+
+    @property
+    def mur(self):
+        """Get the relative permeability alias."""
+        return self.__magnetic_props.rel_permeability
+
+    @mur.setter
+    def mur(self, value: float):
+        self.__magnetic_props.rel_permeability = value
+
+    @property
+    def mu_vs_freq(self):
+        """Get permeability-versus-frequency data as a list of pairs."""
+        return list(self.__magnetic_props.rel_permeability_vs_freq.data.items())
+
+    @mu_vs_freq.setter
+    def mu_vs_freq(self, value):
+        if value is None:
+            self.__magnetic_props.rel_permeability_vs_freq.data = {}
+        else:
+            self.__magnetic_props.rel_permeability_vs_freq.data = dict(value)
+
+    @property
+    def power_ferrite_loss_params(self):
+        """Get the core-loss alias."""
+        return self.__magnetic_props.core_loss
+
+    @power_ferrite_loss_params.setter
+    def power_ferrite_loss_params(self, value: MaterialPropsCoreLoss):
+        self.__magnetic_props.core_loss.cm = value.cm
+        self.__magnetic_props.core_loss.x = value.x
+        self.__magnetic_props.core_loss.y = value.y
 
     @property
     def electric_props(self):

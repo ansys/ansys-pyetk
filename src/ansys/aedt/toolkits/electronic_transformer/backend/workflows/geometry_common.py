@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright (C) 2023 - 2026 ANSYS, Inc. and/or its affiliates.
+# Copyright (C) 2023 - 2026 Synopsys, Inc. and ANSYS, Inc. All rights reserved.
 # SPDX-License-Identifier: Apache-2.0
 #
 #
@@ -16,13 +16,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-## Perform imports and define constants
 from abc import ABC
 from abc import abstractmethod
 from enum import Enum
 from enum import auto
 
-from ansys.aedt.toolkits.electronic_transformer.backend.workflows.material import Material
+from ansys.aedt.toolkits.electronic_transformer.backend.models import Material as Material_Properties
+from ansys.aedt.toolkits.electronic_transformer.backend.workflows.materialclass import MaterialClass
 
 ALL_CORES = {
     "E": "ECore",
@@ -97,7 +97,7 @@ class GeometryCommon(GeometryCreatable):
         self.__core_cross_section = CoreCrossSection.NONE
         self.__color = [0, 0, 0]
         self.__objects_list = []
-        self.__material = Material
+        self.__material = MaterialClass()
 
     @property
     def core_cross_section(self):
@@ -217,21 +217,39 @@ class GeometryCommon(GeometryCreatable):
 
         Returns
         -------
-        :class:`ansys.aedt.toolkits.electronic_transformer.backend.workflows.material.Material`
+        :class:`ansys.aedt.toolkits.electronic_transformer.backend.workflows.materialclass.MaterialClass`
             Material.
         """
         return self.__material
 
-    def set_material(self, material: Material):
+    def set_class_obj_material(self, material: Material_Properties):
+        """Set the material to the class object.
+
+        It does not apply the material in AEDT.
+
+        Parameters
+        ----------
+        material : :class:`ansys.aedt.toolkits.electronic_transformer.backend.models.Material`
+            Backend material model to copy from.
+        """
+        self.__material.name = material.name
+        self.__material.conductivity = material.conductivity
+        self.__material.epsr = material.epsr
+        self.__material.mu_vs_freq = material.mu_vs_freq
+        self.__material.mur = material.mur
+        self.__material.power_ferrite_loss_params.cm = material.power_ferrite_loss_params.cm
+        self.__material.power_ferrite_loss_params.x = material.power_ferrite_loss_params.x
+        self.__material.power_ferrite_loss_params.y = material.power_ferrite_loss_params.y
+
+    def set_material(self, material: Material_Properties):
         """Set the material to a given object.
 
         Parameters
         ----------
-        material : :class:`ansys.aedt.toolkits.electronic_transformer.backend.workflows.material.Material`
-            Material to set.
+        material : :class:`ansys.aedt.toolkits.electronic_transformer.backend.models.Material`
+            Backend material model to apply.
         """
-        self.__material = material
-
+        self.set_class_obj_material(material)
         material_name = self.__material.name + "_pyETK"
 
         # Creates the material
