@@ -21,7 +21,7 @@ from abc import abstractmethod
 from enum import Enum
 from enum import auto
 
-from ansys.aedt.toolkits.electronic_transformer.backend.models import Material as Material_Properties
+from ansys.aedt.toolkits.electronic_transformer.backend.models import Material as MaterialProperties
 from ansys.aedt.toolkits.electronic_transformer.backend.workflows.materialclass import MaterialClass
 
 ALL_CORES = {
@@ -222,7 +222,7 @@ class GeometryCommon(GeometryCreatable):
         """
         return self.__material
 
-    def set_class_obj_material(self, material: Material_Properties):
+    def set_class_obj_material(self, material: MaterialProperties):
         """Set the material to the class object.
 
         It does not apply the material in AEDT.
@@ -241,7 +241,7 @@ class GeometryCommon(GeometryCreatable):
         self.__material.power_ferrite_loss_params.x = material.power_ferrite_loss_params.x
         self.__material.power_ferrite_loss_params.y = material.power_ferrite_loss_params.y
 
-    def set_material(self, material: Material_Properties):
+    def set_material(self, material: MaterialProperties):
         """Set the material to a given object.
 
         Parameters
