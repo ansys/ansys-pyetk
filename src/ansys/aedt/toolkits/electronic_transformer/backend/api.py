@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright (C) 2023 - 2026 ANSYS, Inc. and/or its affiliates.
+# Copyright (C) 2023 - 2026 Synopsys, Inc. and ANSYS, Inc. All rights reserved.
 # SPDX-License-Identifier: Apache-2.0
 #
 #
@@ -15,7 +15,6 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
 
 from pathlib import Path
 import sys
@@ -336,8 +335,10 @@ class ToolkitBackend(AEDTCommon):
             properties.settings,
             properties.bobbin,
         )
-
+        material_name = next(iter(properties.winding.layers.values())).conductor.material
+        owinding.set_class_obj_material(self.properties.materials[material_name])
         owinding.create_geometry()
+
         self.release_aedt()
 
         if not owinding:

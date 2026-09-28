@@ -258,7 +258,7 @@ class Winding(GeometryCommon):
         """
         # TODO: Update it based on the Material class
         frequency = self.__settings_properties.analysis_setup.adaptive_frequency
-        sigma = 58000000
+        sigma = self.material.electric_props.sigma
         skin_depth = 503.292121 * math.sqrt(1 / (sigma * frequency)) * 1000  # convert to mm
         points = []
 
@@ -279,7 +279,7 @@ class Winding(GeometryCommon):
                         points=points,
                         segment_type=None,
                         cover_surface=False,
-                        close_surface=True,
+                        close_surface=False,
                         name=profile_name + "_low",
                         xsection_num_seg=12,
                     )
@@ -293,7 +293,7 @@ class Winding(GeometryCommon):
                         points=points,
                         segment_type=None,
                         cover_surface=False,
-                        close_surface=True,
+                        close_surface=False,
                         name=profile_name + "_high",
                         xsection_num_seg=12,
                     )
