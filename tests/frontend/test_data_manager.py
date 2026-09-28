@@ -664,6 +664,23 @@ class TestDataManager:
             dm.gui_properties.winding.layer.insulation.thickness
         )
 
+    def test_import_wound_json_uses_default_insulation_when_explicitly_zero(self):
+        """Wound JSON with explicit zero insulation should keep default wire insulation in the UI."""
+        dm = DataManager()
+        wound_json = Path(__file__).parents[1] / "backend" / "json_files" / "E_wound_rectangular.json"
+
+        with wound_json.open("r", encoding="utf-8") as file:
+            input_data = json.load(file)
+
+        input_data["winding"]["layers"]["layer_1"]["insulation"] = {"thickness": 0.0}
+        msg = dm._format_input_version(input_data)
+
+        assert msg == "Working with .json version: 0.2.0"
+        assert dm.gui_properties.winding.layer_type == "Wound"
+        assert dm.gui_properties.winding.layers_definition["layer_1"]["insulation_thickness"] == pytest.approx(
+            dm.gui_properties.winding.layer.insulation.thickness
+        )
+
     def test_create_layers_for_backend(self):
         """Create layers in same data structure as backend needs it."""
         dm = DataManager()

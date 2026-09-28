@@ -290,10 +290,10 @@ class DataManager:
 
             if self.gui_properties.winding.layer_type.lower() == "wound":
                 # Keep legacy/UI behavior: when wound JSON has no explicit insulation
-                # and uses zero (or missing) turns distance, use default insulation.
-                insulation_from_json = value_layer.get("insulation", {}).get("thickness", None)
-                turns_distance = value_layer.get("turns", {}).get("distance", None)
-                if insulation_from_json is None:
+                # and uses zero (or missing) insulation/turns distance, use default insulation.
+                insulation_from_json = value_layer.get("insulation", {}).get("thickness")
+                turns_distance = value_layer.get("turns", {}).get("distance")
+                if insulation_from_json in (None, 0, 0.0):
                     if turns_distance in (None, 0, 0.0):
                         insulation_from_json = self.gui_properties.winding.layer.insulation.thickness
                     else:
