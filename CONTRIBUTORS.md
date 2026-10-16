@@ -1,5 +1,4 @@
 # Contributors
-Listed in alphabetical order.
 
 ## Project Lead
 
