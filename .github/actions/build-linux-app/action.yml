@@ -64,11 +64,17 @@ runs:
         sudo apt install ruby -y
         sudo gem install fpm
 
+    - name: Set up uv
+      uses: astral-sh/setup-uv@bec219d24cd3e171d82865faccec33120bb574f4 # v10.1.0
+      with:
+        activate-environment: true
+        enable-cache: false
+        prune-cache: true
+
     - name: Install Python Dependencies
       shell: bash
       run: |
-        pip install --upgrade pip
-        pip install .[freeze]
+        uv sync --frozen --extra freeze
 
     - name: Extract version
       id: extract-version
