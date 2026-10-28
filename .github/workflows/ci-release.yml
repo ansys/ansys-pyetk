@@ -44,7 +44,7 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
-      - uses: ./.github/actions/build-windows-app
+      - uses: $/.github/actions/build-windows-app
         with:
           artifact-name: 'PyETK-Installer-Windows'
           python-version: ${{ env.MAIN_PYTHON_VERSION }}
@@ -62,7 +62,7 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
-      - uses: ./.github/actions/build-linux-app
+      - uses: $/.github/actions/build-linux-app
         with:
           artifact-name: 'PyETK-Installer-ubuntu_${{ matrix.os }}'
           python-version: ${{ env.MAIN_PYTHON_VERSION }}
