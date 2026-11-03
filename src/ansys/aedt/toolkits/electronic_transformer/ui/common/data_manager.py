@@ -294,7 +294,7 @@ class DataManager:
                 insulation_from_json = value_layer.get("insulation", {}).get("thickness")
                 turns_distance = value_layer.get("turns", {}).get("distance")
                 if not insulation_from_json:
-                    if turns_distance in (None, 0, 0.0):
+                    if not turns_distance:
                         insulation_from_json = self.gui_properties.winding.layer.insulation.thickness
                     else:
                         insulation_from_json = turns_distance
