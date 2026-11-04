@@ -15,6 +15,15 @@ updates:
         - "ansys-aedt-toolkits-common"
         - "pyaedt"
         - "ansys-sphinx-theme"
+    # Group python dependencies but exclude key Ansys packages
+    groups:
+      python-dependencies:
+        patterns:
+          - "*"
+        exclude-patterns:
+          - "ansys-aedt-toolkits-common"
+          - "pyaedt"
+          - "ansys-sphinx-theme"
     assignees:
       - "DaveTwyman"
       - "jvela018"
@@ -38,6 +47,11 @@ updates:
         - "*"
       exclude:
         - "ansys/actions"
+    # Group GitHub Actions dependency updates into a single PR
+    groups:
+      github-actions:
+        patterns:
+          - "*"
     assignees:
       - "DaveTwyman"
       - "jvela018"
@@ -61,6 +75,11 @@ updates:
         - "*"  # Include all dependencies in cooldown
       exclude:
         - "ansys/pre-commit-hooks"
+    # Group pre-commit dependency updates into a single PR
+    groups:
+      pre-commit:
+        patterns:
+          - "*"
     assignees:
       - "DaveTwyman"
       - "jvela018"
