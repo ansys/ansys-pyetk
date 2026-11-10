@@ -35,7 +35,7 @@ from ansys.aedt.toolkits.electronic_transformer.ui.common.database_manager impor
 pytestmark = [pytest.mark.frontend]
 
 CONFIG_DIR_ENV = "PYAEDT_TOOLKIT_CONFIG_DIR"
-USER_DIR_PARTS = ("Ansys", "ElectronicTransformerToolkit", "data")
+USER_DIR_PARTS = ("Ansys", "Electronic Transformer toolKit", "data")
 
 
 @pytest.fixture(autouse=True)
