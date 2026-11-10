@@ -40,7 +40,7 @@ def user_data_dir():
         return Path(os.environ["PYAEDT_TOOLKIT_CONFIG_DIR"]).absolute() / "data"
     if getattr(sys, "frozen", False):
         base = os.environ.get("APPDATA") or str(Path.home() / ".config")
-        return Path(base) / "Ansys" / "ElectronicTransformerToolkit" / "data"
+        return Path(base) / "Ansys" / "Electronic Transformer toolKit" / "data"
     return None
 
 
