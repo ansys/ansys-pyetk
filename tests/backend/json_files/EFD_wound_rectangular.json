@@ -1,7 +1,7 @@
 {
   "json_version": "0.2.0",
   "core": {
-    "supplier": "Phillips",
+    "supplier": "Philips",
     "type": "EFD",
     "model": "EFD30",
     "material": "4F1",

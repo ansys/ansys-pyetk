@@ -1,7 +1,7 @@
 {
   "json_version": "0.2.0",
   "core": {
-    "supplier": "Phillips",
+    "supplier": "Philips",
     "type": "ER",
     "model": "ER54",
     "material": "4F1",
