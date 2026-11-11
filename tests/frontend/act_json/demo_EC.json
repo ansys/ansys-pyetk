@@ -1,7 +1,7 @@
 {
     "core_dimensions": {
         "segmentation_angle": 10,
-        "supplier": "Phillips",
+        "supplier": "Philips",
         "core_type": "EC",
         "core_model": "EC35",
         "D_1": "30.0",
