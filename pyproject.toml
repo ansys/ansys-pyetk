@@ -34,6 +34,7 @@ classifiers = [
 dependencies = [
     'ansys-aedt-toolkits-common[all]',
     "pyaedt",
+    "pyside6<6.12",
 ]
 
 [project.optional-dependencies]
