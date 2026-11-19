@@ -9,6 +9,401 @@ This document contains the release notes for the project.
 
 .. towncrier release notes start
 
+`0.5.0 <https://github.com/ansys/ansys-pyetk/releases/tag/v0.5.0>`_ - November 19, 2026
+=======================================================================================
+
+.. tab-set::
+
+
+  .. tab-item:: Added
+
+    .. list-table::
+        :header-rows: 0
+        :widths: auto
+
+        * - Log and Settings Open by Default
+          - `#211 <https://github.com/ansys/ansys-pyetk/pull/211>`_
+
+        * - Browse removal
+          - `#221 <https://github.com/ansys/ansys-pyetk/pull/221>`_
+
+        * - User can add own materials on top of shipped ones
+          - `#429 <https://github.com/ansys/ansys-pyetk/pull/429>`_
+
+
+  .. tab-item:: Fixed
+
+    .. list-table::
+        :header-rows: 0
+        :widths: auto
+
+        * - Core and Conductor Faceting to use Segmentation Number not Mix of Angle and Number
+          - `#201 <https://github.com/ansys/ansys-pyetk/pull/201>`_
+
+        * - Correct Frequency Units in JSON Import Route
+          - `#208 <https://github.com/ansys/ansys-pyetk/pull/208>`_
+
+        * - Added region and winding support for half symmetry U and UI core models
+          - `#209 <https://github.com/ansys/ansys-pyetk/pull/209>`_
+
+        * - UI defaults
+          - `#213 <https://github.com/ansys/ansys-pyetk/pull/213>`_
+
+        * - Frontend - Validation Checks Added
+          - `#239 <https://github.com/ansys/ansys-pyetk/pull/239>`_
+
+        * - JSON load issue for Current excitation and Insulation Thickness
+          - `#264 <https://github.com/ansys/ansys-pyetk/pull/264>`_
+
+        * - JSON Insulation Import
+          - `#302 <https://github.com/ansys/ansys-pyetk/pull/302>`_
+
+        * - Export of None Connection Key to JSON
+          - `#313 <https://github.com/ansys/ansys-pyetk/pull/313>`_
+
+        * - Fix skin layers and improved material class
+          - `#339 <https://github.com/ansys/ansys-pyetk/pull/339>`_
+
+
+  .. tab-item:: Documentation
+
+    .. list-table::
+        :header-rows: 0
+        :widths: auto
+
+        * - Update individual contributors
+          - `#196 <https://github.com/ansys/ansys-pyetk/pull/196>`_
+
+
+  .. tab-item:: Dependencies
+
+    .. list-table::
+        :header-rows: 0
+        :widths: auto
+
+        * - Bump actions/checkout from 6.0.2 to 6.0.3
+          - `#230 <https://github.com/ansys/ansys-pyetk/pull/230>`_
+
+        * - Bump astral-sh/setup-uv from 8.1.0 to 8.2.0
+          - `#232 <https://github.com/ansys/ansys-pyetk/pull/232>`_
+
+        * - Bump //github.com/python-jsonschema/check-jsonschema from 0.37.2 to 0.37.2
+          - `#233 <https://github.com/ansys/ansys-pyetk/pull/233>`_
+
+        * - Bump //github.com/astral-sh/ruff-pre-commit from v0.15.14 to 0.15.16
+          - `#234 <https://github.com/ansys/ansys-pyetk/pull/234>`_
+
+        * - Bump prek from 0.4.3 to 0.4.4
+          - `#235 <https://github.com/ansys/ansys-pyetk/pull/235>`_
+
+        * - Bump pyaedt from 1.0.1 to 1.1.0
+          - `#236 <https://github.com/ansys/ansys-pyetk/pull/236>`_
+
+        * - Bump tornado from 6.5.6 to 6.5.7
+          - `#240 <https://github.com/ansys/ansys-pyetk/pull/240>`_
+
+        * - Bump starlette from 1.2.1 to 1.3.1
+          - `#241 <https://github.com/ansys/ansys-pyetk/pull/241>`_
+
+        * - Bump jupyter-server from 2.19.0 to 2.20.0
+          - `#242 <https://github.com/ansys/ansys-pyetk/pull/242>`_
+
+        * - Bump https//github.com/astral-sh/ruff-pre-commit from v0.15.16 to 0.15.17
+          - `#244 <https://github.com/ansys/ansys-pyetk/pull/244>`_
+
+        * - Bump msgpack from 1.1.2 to 1.2.1
+          - `#245 <https://github.com/ansys/ansys-pyetk/pull/245>`_
+
+        * - Bump jupyterlab from 4.5.8 to 4.5.9
+          - `#246 <https://github.com/ansys/ansys-pyetk/pull/246>`_
+
+        * - Bump ansys/actions/release-github from 10.3.0 to 10.3.2
+          - `#250 <https://github.com/ansys/ansys-pyetk/pull/250>`_
+
+        * - Bump https//github.com/ansys/pre-commit-hooks from v0.7.2 to 0.8.0
+          - `#251 <https://github.com/ansys/ansys-pyetk/pull/251>`_
+
+        * - Bump https//github.com/astral-sh/ruff-pre-commit from v0.15.17 to 0.15.18
+          - `#252 <https://github.com/ansys/ansys-pyetk/pull/252>`_
+
+        * - Bump ansys/actions/doc-style from 10.3.0 to 10.3.2
+          - `#253 <https://github.com/ansys/ansys-pyetk/pull/253>`_
+
+        * - Bump softprops/action-gh-release from 2.6.2 to 3.0.1
+          - `#254 <https://github.com/ansys/ansys-pyetk/pull/254>`_
+
+        * - Bump ansys/actions/build-wheelhouse from 10.3.0 to 10.3.2
+          - `#255 <https://github.com/ansys/ansys-pyetk/pull/255>`_
+
+        * - Bump ansys/actions/doc-deploy-dev from 10.3.0 to 10.3.2
+          - `#256 <https://github.com/ansys/ansys-pyetk/pull/256>`_
+
+        * - Bump prek from 0.4.4 to 0.4.5
+          - `#257 <https://github.com/ansys/ansys-pyetk/pull/257>`_
+
+        * - Bump ansys-sphinx-theme from 1.8.2 to 1.9.0
+          - `#258 <https://github.com/ansys/ansys-pyetk/pull/258>`_
+
+        * - Bump pytest from 9.0.3 to 9.1.1
+          - `#259 <https://github.com/ansys/ansys-pyetk/pull/259>`_
+
+        * - Bump pyinstaller from 6.20.0 to 6.21.0
+          - `#260 <https://github.com/ansys/ansys-pyetk/pull/260>`_
+
+        * - Bump jupyterlab from 4.5.9 to 4.6.1
+          - `#261 <https://github.com/ansys/ansys-pyetk/pull/261>`_
+
+        * - Bump ansys/actions/doc-changelog from 10.3.0 to 10.3.2
+          - `#265 <https://github.com/ansys/ansys-pyetk/pull/265>`_
+
+        * - Bump actions/setup-python from 6.2.0 to 6.3.0
+          - `#266 <https://github.com/ansys/ansys-pyetk/pull/266>`_
+
+        * - Bump ansys/actions/check-actions-security from 10.3.0 to 10.3.2
+          - `#268 <https://github.com/ansys/ansys-pyetk/pull/268>`_
+
+        * - Bump ansys/actions/check-pr-title from 10.3.0 to 10.3.2
+          - `#269 <https://github.com/ansys/ansys-pyetk/pull/269>`_
+
+        * - Bump actions/checkout from 6.0.3 to 7.0.0
+          - `#270 <https://github.com/ansys/ansys-pyetk/pull/270>`_
+
+        * - Bump pyaedt from 1.1.0 to 1.2.0
+          - `#271 <https://github.com/ansys/ansys-pyetk/pull/271>`_
+
+        * - Bump mistune from 3.2.1 to 3.3.0
+          - `#273 <https://github.com/ansys/ansys-pyetk/pull/273>`_
+
+        * - Bump pillow from 12.2.0 to 12.3.0
+          - `#277 <https://github.com/ansys/ansys-pyetk/pull/277>`_
+
+        * - Bump setuptools from 82.0.1 to 83.0.0
+          - `#278 <https://github.com/ansys/ansys-pyetk/pull/278>`_
+
+        * - Bump jupyterlab from 4.5.9 to 4.5.10
+          - `#279 <https://github.com/ansys/ansys-pyetk/pull/279>`_
+
+        * - Bump https//github.com/codespell-project/codespell from v2.4.2 to 2.4.3
+          - `#280 <https://github.com/ansys/ansys-pyetk/pull/280>`_
+
+        * - Bump aiohttp from 3.14.1 to 3.14.3
+          - `#284 <https://github.com/ansys/ansys-pyetk/pull/284>`_
+
+        * - Bump https//github.com/python-jsonschema/check-jsonschema from 0.37.3 to 0.38.0
+          - `#292 <https://github.com/ansys/ansys-pyetk/pull/292>`_
+
+        * - Bump tornado from 6.5.7 to 6.5.8
+          - `#299 <https://github.com/ansys/ansys-pyetk/pull/299>`_
+
+        * - Bump mistune from 3.3.0 to 3.3.3
+          - `#303 <https://github.com/ansys/ansys-pyetk/pull/303>`_
+
+        * - Bump ansys/actions/doc-deploy-stable from 10.3.0 to 11.0.4
+          - `#304 <https://github.com/ansys/ansys-pyetk/pull/304>`_
+
+        * - Bump ansys/actions/doc-deploy-changelog from 10.3.0 to 11.0.4
+          - `#305 <https://github.com/ansys/ansys-pyetk/pull/305>`_
+
+        * - Bump ansys/actions/doc-deploy-dev from 10.3.2 to 11.0.6
+          - `#306 <https://github.com/ansys/ansys-pyetk/pull/306>`_
+
+        * - Bump actions/setup-python from 6.3.0 to 7.0.0
+          - `#307 <https://github.com/ansys/ansys-pyetk/pull/307>`_
+
+        * - Bump https//github.com/astral-sh/ruff-pre-commit from v0.15.18 to 0.16.5
+          - `#308 <https://github.com/ansys/ansys-pyetk/pull/308>`_
+
+        * - Bump astral-sh/setup-uv from 8.2.0 to 10.0.1
+          - `#309 <https://github.com/ansys/ansys-pyetk/pull/309>`_
+
+        * - Bump jupytext from 1.19.3 to 1.19.5
+          - `#310 <https://github.com/ansys/ansys-pyetk/pull/310>`_
+
+        * - Bump jupyterlab from 4.6.1 to 4.6.3
+          - `#311 <https://github.com/ansys/ansys-pyetk/pull/311>`_
+
+        * - Bump actions/labeler from 6.0.1 to 7.0.0
+          - `#314 <https://github.com/ansys/ansys-pyetk/pull/314>`_
+
+        * - Bump ansys/actions/release-github from 10.3.2 to 11.0.6
+          - `#315 <https://github.com/ansys/ansys-pyetk/pull/315>`_
+
+        * - Bump ansys/actions/doc-style from 10.3.2 to 11.0.8
+          - `#316 <https://github.com/ansys/ansys-pyetk/pull/316>`_
+
+        * - Bump ansys/actions/doc-build from 10.3.0 to 11.0.8
+          - `#317 <https://github.com/ansys/ansys-pyetk/pull/317>`_
+
+        * - Bump ansys/actions/build-wheelhouse from 10.3.2 to 11.0.8
+          - `#318 <https://github.com/ansys/ansys-pyetk/pull/318>`_
+
+        * - Bump https//github.com/astral-sh/ruff-pre-commit from v0.16.5 to 0.16.6
+          - `#319 <https://github.com/ansys/ansys-pyetk/pull/319>`_
+
+        * - Bump ipywidgets from 8.1.8 to 8.1.9
+          - `#320 <https://github.com/ansys/ansys-pyetk/pull/320>`_
+
+        * - Update flit-core requirement from <4,>=3.2 to >=3.2,<5
+          - `#321 <https://github.com/ansys/ansys-pyetk/pull/321>`_
+
+        * - Bump pyaedt from 1.2.0 to 1.6.0
+          - `#322 <https://github.com/ansys/ansys-pyetk/pull/322>`_
+
+        * - Bump prek from 0.4.5 to 0.5.2
+          - `#323 <https://github.com/ansys/ansys-pyetk/pull/323>`_
+
+        * - Bump soupsieve from 2.8.4 to 2.9
+          - `#328 <https://github.com/ansys/ansys-pyetk/pull/328>`_
+
+        * - Bump anyio from 4.13.0 to 4.14.2
+          - `#329 <https://github.com/ansys/ansys-pyetk/pull/329>`_
+
+        * - Bump ansys/actions/doc-deploy-changelog from 11.0.4 to 11.0.8
+          - `#330 <https://github.com/ansys/ansys-pyetk/pull/330>`_
+
+        * - Bump https//github.com/astral-sh/ruff-pre-commit from v0.16.6 to 0.16.7
+          - `#331 <https://github.com/ansys/ansys-pyetk/pull/331>`_
+
+        * - Bump astral-sh/setup-uv from 10.0.1 to 10.1.0
+          - `#332 <https://github.com/ansys/ansys-pyetk/pull/332>`_
+
+        * - Bump pypa/gh-action-pypi-publish from 1.14.0 to 1.14.2
+          - `#333 <https://github.com/ansys/ansys-pyetk/pull/333>`_
+
+        * - Bump ansys/actions/check-actions-security from 10.3.2 to 11.0.8
+          - `#334 <https://github.com/ansys/ansys-pyetk/pull/334>`_
+
+        * - Bump ansys/actions/doc-deploy-dev from 11.0.6 to 11.0.8
+          - `#335 <https://github.com/ansys/ansys-pyetk/pull/335>`_
+
+        * - Bump pyinstaller from 6.21.0 to 6.22.3
+          - `#336 <https://github.com/ansys/ansys-pyetk/pull/336>`_
+
+        * - Bump pyside6 from 6.11.1 to 6.11.2
+          - `#337 <https://github.com/ansys/ansys-pyetk/pull/337>`_
+
+        * - Bump ansys/actions/doc-changelog from 10.3.2 to 11.0.8
+          - `#340 <https://github.com/ansys/ansys-pyetk/pull/340>`_
+
+        * - Bump ansys/actions/build-library from 10.3.0 to 11.0.8
+          - `#341 <https://github.com/ansys/ansys-pyetk/pull/341>`_
+
+        * - Bump https//github.com/astral-sh/ruff-pre-commit from v0.16.7 to 0.16.8
+          - `#342 <https://github.com/ansys/ansys-pyetk/pull/342>`_
+
+        * - Bump actions/checkout from 7.0.0 to 7.0.1
+          - `#343 <https://github.com/ansys/ansys-pyetk/pull/343>`_
+
+        * - Bump ansys/actions/release-github from 11.0.6 to 11.0.8
+          - `#344 <https://github.com/ansys/ansys-pyetk/pull/344>`_
+
+        * - Bump softprops/action-gh-release from 3.0.1 to 3.0.3
+          - `#345 <https://github.com/ansys/ansys-pyetk/pull/345>`_
+
+        * - Bump prek from 0.5.2 to 0.5.3
+          - `#346 <https://github.com/ansys/ansys-pyetk/pull/346>`_
+
+        * - Bump pyaedt from 1.6.0 to 1.7.0
+          - `#347 <https://github.com/ansys/ansys-pyetk/pull/347>`_
+
+        * - Bump numpydoc from 1.10.0 to 1.11.0
+          - `#348 <https://github.com/ansys/ansys-pyetk/pull/348>`_
+
+        * - Bump ansys/actions/check-pr-title from 10.3.2 to 11.0.8
+          - `#352 <https://github.com/ansys/ansys-pyetk/pull/352>`_
+
+        * - Bump ansys/actions/doc-deploy-stable from 11.0.4 to 11.0.8
+          - `#353 <https://github.com/ansys/ansys-pyetk/pull/353>`_
+
+        * - Bump https//github.com/astral-sh/ruff-pre-commit from v0.16.8 to 0.16.9
+          - `#354 <https://github.com/ansys/ansys-pyetk/pull/354>`_
+
+        * - Bump https//github.com/python-jsonschema/check-jsonschema from 0.38.0 to 0.38.2
+          - `#355 <https://github.com/ansys/ansys-pyetk/pull/355>`_
+
+        * - Bump pyaedt from 1.7.0 to 1.8.0
+          - `#356 <https://github.com/ansys/ansys-pyetk/pull/356>`_
+
+        * - Bump astral-sh/setup-uv from 10.1.0 to 10.2.0
+          - `#357 <https://github.com/ansys/ansys-pyetk/pull/357>`_
+
+        * - Bump jupyterlab from 4.6.3 to 4.6.4
+          - `#358 <https://github.com/ansys/ansys-pyetk/pull/358>`_
+
+        * - Bump urllib3 from 2.7.0 to 2.8.0
+          - `#359 <https://github.com/ansys/ansys-pyetk/pull/359>`_
+
+        * - Bump tornado from 6.5.8 to 6.5.9
+          - `#360 <https://github.com/ansys/ansys-pyetk/pull/360>`_
+
+        * - Bump https//github.com/astral-sh/ruff-pre-commit from v0.16.9 to 0.16.10
+          - `#362 <https://github.com/ansys/ansys-pyetk/pull/362>`_
+
+        * - Bump prek from 0.5.3 to 0.5.4
+          - `#363 <https://github.com/ansys/ansys-pyetk/pull/363>`_
+
+        * - Bump werkzeug from 3.1.8 to 3.1.9
+          - `#382 <https://github.com/ansys/ansys-pyetk/pull/382>`_
+
+        * - Bump fsspec from 2026.4.0 to 2026.6.0
+          - `#384 <https://github.com/ansys/ansys-pyetk/pull/384>`_
+
+        * - Bump multidict from 6.7.1 to 6.9.1
+          - `#385 <https://github.com/ansys/ansys-pyetk/pull/385>`_
+
+        * - Bump actions/download-artifact from 7.0.0 to 8.0.2
+          - `#386 <https://github.com/ansys/ansys-pyetk/pull/386>`_
+
+        * - Bump actions/upload-artifact from 6.0.0 to 7.0.2
+          - `#387 <https://github.com/ansys/ansys-pyetk/pull/387>`_
+
+        * - Bump pypa/gh-action-pypi-publish from 1.14.2 to 1.14.3
+          - `#406 <https://github.com/ansys/ansys-pyetk/pull/406>`_
+
+        * - Bump the pre-commit group with 3 updates
+          - `#425 <https://github.com/ansys/ansys-pyetk/pull/425>`_
+
+        * - Bump the github-actions group with 13 updates
+          - `#426 <https://github.com/ansys/ansys-pyetk/pull/426>`_
+
+        * - Bump the python-dependencies group with 7 updates
+          - `#427 <https://github.com/ansys/ansys-pyetk/pull/427>`_
+
+        * - Bump the pre-commit group with 2 updates
+          - `#430 <https://github.com/ansys/ansys-pyetk/pull/430>`_
+
+        * - Bump the github-actions group with 12 updates
+          - `#431 <https://github.com/ansys/ansys-pyetk/pull/431>`_
+
+
+  .. tab-item:: Maintenance
+
+    .. list-table::
+        :header-rows: 0
+        :widths: auto
+
+        * - Update CHANGELOG for v0.4.1
+          - `#195 <https://github.com/ansys/ansys-pyetk/pull/195>`_
+
+        * - Update main 0.5.dev0
+          - `#197 <https://github.com/ansys/ansys-pyetk/pull/197>`_
+
+        * - General updates related to configuration files and CI
+          - `#226 <https://github.com/ansys/ansys-pyetk/pull/226>`_
+
+        * - Use \`\`[dependency-groups]\`\` in \`\`pyproject.toml\`\` and introduce \`\`uv.lock\`\` file
+          - `#227 <https://github.com/ansys/ansys-pyetk/pull/227>`_
+
+        * - Update missing or outdated files
+          - `#297 <https://github.com/ansys/ansys-pyetk/pull/297>`_
+
+        * - Update ansys/actions to v11.1.3 and upgrade uv.lock file
+          - `#401 <https://github.com/ansys/ansys-pyetk/pull/401>`_
+
+        * - Add Groupings to Dependabot to reduce Volume of automatically Generated PRs
+          - `#411 <https://github.com/ansys/ansys-pyetk/pull/411>`_
+
+
 `0.4.1 <https://github.com/ansys/ansys-pyetk/releases/tag/v0.4.1>`_ - May 04, 2026
 ==================================================================================
 
