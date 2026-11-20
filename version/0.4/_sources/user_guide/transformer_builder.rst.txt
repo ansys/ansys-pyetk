@@ -1,0 +1,26 @@
+.. _transformer_builder:
+
+**Transformer Builder** tab
+===========================
+
+In the UI's upper left corner, click the cube icon to display the **Transformer Builder** tab.
+
+.. image:: ../_static/pyetk-toolkit-builder.svg
+    :width: 800
+    :alt: Transformer Builder tab
+
+In this tab, specify transformer information:
+
+- Core type
+- Core dimensions
+- Bobbin type
+- Bobbin dimensions
+- Winding data
+- Excitation data
+
+Use the **Settings** pane on the left side of the **Transformer Builder** tab to specify Maxwell analysis settings:
+
+- Number of passes
+- Percentage error
+- Maximum number of passes
+- Frequency sweeps
