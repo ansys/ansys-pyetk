@@ -1,0 +1,16 @@
+.. _api:
+
+API reference
+=============
+
+The PyETK API contains the ``ToolkitBackend`` class, which provides methods for creating the whole model or specific geometries, such as the core, winding, or bobbin. These methods help you to visualize those parts and create core types, bobbins, excitations, circuits, and ultimately assemble an electronic transformer model. You use the PyETK API at the toolkit level.
+
+The `PyAEDT Common Toolkit <https://aedt.common.toolkit.docs.pyansys.com/>`_ provides common methods to create an AEDT session or connect to an existing AEDT session.
+
+For information on using the PyETK API, see
+`Create a transformer model in AEDT using the PyETK API <../examples/api_example.py>`_.
+
+.. automodule:: ansys.aedt.toolkits.electronic_transformer.backend.api
+    :members:
+    :undoc-members:
+    :show-inheritance:
