@@ -36,7 +36,7 @@ pytestmark = [pytest.mark.backend]
         ("Litz Rectangular", {"width": 2.05, "height": 2.05}),
     ],
 )
-def test_create_litz_model(aedt_common_fixture_function, tmp_path, conductor_type, dimensions):
+def test_create_litz_model(aedt_common_fixture_function, tmp_path, monkeypatch, conductor_type, dimensions):
     source = Path(__file__).parents[1] / "json_files" / "RM_wound_circular.json"
     data = json.loads(source.read_text())
     conductor = data["winding"]["layers"]["layer_1"]["conductor"]
@@ -46,23 +46,24 @@ def test_create_litz_model(aedt_common_fixture_function, tmp_path, conductor_typ
     path.write_text(json.dumps(data))
     backend = aedt_common_fixture_function
     backend.load_properties_from_json(path)
+    monkeypatch.setattr(
+        "ansys.aedt.toolkits.electronic_transformer.backend.workflows.etk.Circuit.create_circuit",
+        lambda self: None,
+    )
     assert backend.create_model()
     backend.connect_design("Maxwell3D")
-    plot = next(plot for plot in backend.aedtapp.post.plots if str(plot) == "Stranded Loss")
+    app = backend.aedtapp
+    plot = next(plot for plot in app.post.plots if str(plot) == "Stranded Loss")
     assert set(plot.expressions) == {"StrandedLoss", "StrandedLossAC"}
-    objects = [
-        obj
-        for obj in backend.aedtapp.modeler.object_list
-        if obj.name.startswith("Layer1") and "_Section" not in obj.name
-    ]
+    objects = [obj for obj in app.modeler.object_list if obj.name.startswith("Layer1") and "_Section" not in obj.name]
     assert objects
-    material = backend.aedtapp.materials[objects[0].material_name]
+    material = app.materials[objects[0].material_name]
     assert material.stacking_type == "Litz Wire"
     assert material.wire_type == "Round"
     assert str(material.strand_number) == "100"
     assert str(material.wire_diameter) == "0.1mm"
     for obj in objects:
-        assert not backend.aedtapp.oboundary.GetEddyEffect(obj.name)
+        assert not app.oboundary.GetEddyEffect(obj.name)
 
 
 def test_create_planar_rectangular_litz_geometry(aedt_common_fixture_function, tmp_path):
