@@ -484,6 +484,12 @@
         "diameter": {
           "type": "number"
         },
+        "strand_diameter": {
+          "type": "number"
+        },
+        "strand_number": {
+          "type": "integer"
+        },
         "height": {
           "type": "number"
         },
@@ -508,6 +514,59 @@
           },
           "required": [
             "diameter"
+          ]
+        },
+        {
+          "properties": {
+            "type": {
+              "const": "Litz"
+            },
+            "diameter": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            },
+            "strand_diameter": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            },
+            "strand_number": {
+              "type": "integer",
+              "minimum": 2
+            }
+          },
+          "required": [
+            "diameter",
+            "strand_diameter",
+            "strand_number"
+          ]
+        },
+        {
+          "properties": {
+            "type": {
+              "const": "Litz Rectangular"
+            },
+            "width": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            },
+            "height": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            },
+            "strand_diameter": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            },
+            "strand_number": {
+              "type": "integer",
+              "minimum": 2
+            }
+          },
+          "required": [
+            "width",
+            "height",
+            "strand_diameter",
+            "strand_number"
           ]
         },
         {

@@ -18,10 +18,16 @@
 
 import logging
 import math
+import re
+
+from ansys.aedt.core import generate_unique_name
 
 from ansys.aedt.toolkits.electronic_transformer.backend.workflows.geometry_common import ALL_CORES
 from ansys.aedt.toolkits.electronic_transformer.backend.workflows.geometry_common import CoreCrossSection
 from ansys.aedt.toolkits.electronic_transformer.backend.workflows.geometry_common import GeometryCommon
+from ansys.aedt.toolkits.electronic_transformer.common.conductors import LITZ_TYPES
+from ansys.aedt.toolkits.electronic_transformer.common.conductors import RECTANGULAR_TYPES
+from ansys.aedt.toolkits.electronic_transformer.common.validation import connection_layers
 
 logger = logging.getLogger(__name__)
 
@@ -66,8 +72,11 @@ class Winding(GeometryCommon):
         self.__bobbin_properties = bobbin_properties
         self.__list_terminal_sections = []
         # Uses the first layer information
-        self.__draw_skin_layers = next(iter(self.properties.layers.values())).conductor.draw_skin_layers
-        self.__conductor_type = next(iter(self.properties.layers.values())).conductor.type
+        conductor = next(iter(self.properties.layers.values())).conductor
+        self.__draw_skin_layers = conductor.draw_skin_layers
+        self.__conductor_type = conductor.type
+        if self.__conductor_type in LITZ_TYPES:
+            self.__draw_skin_layers = False
 
     @property
     def terminals_list(self):
@@ -122,6 +131,82 @@ class Winding(GeometryCommon):
             return False
 
         return True
+
+    def set_material(self, material, connections=None):
+        """Assign one Litz material per side, or the shared material for solid conductors."""
+        if self.__conductor_type not in LITZ_TYPES:
+            return super().set_material(material)
+
+        grouped_objects = self._objects_by_layer()
+        side_layers = self._litz_side_layers(material, connections, grouped_objects)
+
+        for side, layer_names in side_layers.items():
+            objects = [obj for name in layer_names for obj in grouped_objects[name]]
+            conductor = self.properties.layers[layer_names[0]].conductor
+            material_name = generate_unique_name(f"{material.name}_pyETK_Litz_side_{side}")
+            mat = self.aedtapp.materials.add_material(material_name)
+            if not mat:
+                raise RuntimeError(f"Failed to create material {material_name}.")
+            mat.conductivity = material.conductivity
+            mat.permeability = material.mur
+            mat.stacking_type = "Litz Wire"
+            mat.wire_type = "Round"
+            mat.wire_diameter = f"{conductor.strand_diameter}mm"
+            mat.strand_number = conductor.strand_number
+            if not self.aedtapp.assign_material(assignment=objects, material=material_name):
+                raise RuntimeError(f"Failed to assign material {material_name}.")
+
+        if not self.aedtapp.eddy_effects_on(
+            assignment=[obj.name for obj in self.objects_list], enable_eddy_effects=False
+        ):
+            raise RuntimeError("Failed to disable eddy effects on Litz windings.")
+
+    def _objects_by_layer(self):
+        """Group winding geometry by layer."""
+        grouped_objects = {key: [] for key in self.properties.layers}
+        for obj in self.objects_list:
+            match = re.match(r"^Layer(\d+)(?:_|$)", obj.name)
+            layer = f"layer_{match.group(1)}" if match else None
+            if layer not in grouped_objects:
+                raise ValueError(f"Cannot associate winding object {obj.name!r} with a layer.")
+            grouped_objects[layer].append(obj)
+        for name, objects in grouped_objects.items():
+            if not objects:
+                raise ValueError(f"No winding objects found for {name}.")
+        return grouped_objects
+
+    def _litz_side_layers(self, material, connections, grouped_objects):
+        """Check side assignments and return their layer names."""
+        if not connections:
+            raise ValueError("Litz material assignment requires side connections.")
+
+        side_layers = {}
+        assigned_layers = set()
+        for side, connection in connections.items():
+            layer_names = [f"layer_{number}" for number in connection_layers(connection)]
+            if not layer_names:
+                raise ValueError(f"Side {side} has no winding layers.")
+            for layer_name in layer_names:
+                if layer_name not in grouped_objects:
+                    raise ValueError(f"Side {side} references unknown winding {layer_name}.")
+                if layer_name in assigned_layers:
+                    raise ValueError(f"{layer_name} is connected more than once.")
+                assigned_layers.add(layer_name)
+            conductor = self.properties.layers[layer_names[0]].conductor
+            if conductor.material and conductor.material.lower() != material.name.lower():
+                raise ValueError(f"Side {side}: conductor material differs from the selected winding material.")
+            if len({self._litz_specification(name) for name in layer_names}) > 1:
+                raise ValueError(f"Side {side}: all layers must use the same Litz material and strand specification.")
+            side_layers[side] = layer_names
+        if assigned_layers != set(grouped_objects):
+            missing = ", ".join(sorted(set(grouped_objects) - assigned_layers))
+            raise ValueError(f"Winding layers not connected to a side: {missing}.")
+        return side_layers
+
+    def _litz_specification(self, layer_name):
+        """Return the material and strand specification of a layer."""
+        conductor = self.properties.layers[layer_name].conductor
+        return conductor.material, conductor.strand_diameter, conductor.strand_number
 
     def __create_single_turn(
         self,
@@ -202,7 +287,7 @@ class Winding(GeometryCommon):
                 profile_segments_num,
                 profile_diameter,
             )
-        if self.__conductor_type == "Rectangular":
+        if self.__conductor_type in RECTANGULAR_TYPES:
             profile_name = self.aedtapp.modeler.create_rectangle(
                 orientation="Y",
                 origin=[(sweep_path_x) / 2 - profile_width / 2, 0, position_z_final],
@@ -264,7 +349,7 @@ class Winding(GeometryCommon):
 
         for i in range(1, 3):
             profile_name = "{}_skin_{}".format(profile_name, i)
-            if self.__conductor_type == "Rectangular":
+            if self.__conductor_type in RECTANGULAR_TYPES:
                 # validate if skin depth is less than 1/3 of conductor height/width (planar/wound)
                 if self.properties.layer_type == "Planar":
                     if profile_height < 3 * skin_depth:
@@ -562,7 +647,7 @@ class Winding(GeometryCommon):
                 insulation_thickness = layer.insulation.thickness
                 layer_num = int(layer_name.split("_")[1])
 
-                if self.__conductor_type == "Rectangular":
+                if self.__conductor_type in RECTANGULAR_TYPES:
                     conductor_width = layer.conductor.width
                     conductor_height = layer.conductor.height
                     # factor of 2 is applied due to existence of margin and insulation on both sides
@@ -578,7 +663,7 @@ class Winding(GeometryCommon):
                 sweep_path_x = dim_d3 + conductor_full_size
                 sweep_path_y = dim_d6 + conductor_full_size
                 fillet_radius = (sweep_path_x - dim_d3) / 2
-                if self.__conductor_type == "Rectangular":
+                if self.__conductor_type in RECTANGULAR_TYPES:
                     conductor_z_position -= conductor_height
                     move_vec = 2 * insulation_thickness + conductor_height
                     names = self.__create_single_turn(
@@ -640,7 +725,7 @@ class Winding(GeometryCommon):
             self.aedtapp.assign_winding(
                 assignment=None,
                 winding_type="External",
-                is_solid=True,
+                is_solid=layer.conductor.type not in LITZ_TYPES,
                 current=0.0,
                 resistance=0.0,
                 inductance=0.0,

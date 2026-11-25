@@ -3,7 +3,7 @@
 ################################################################################
 ## Form generated from reading UI file 'main_page.ui'
 ##
-## Created by: Qt User Interface Compiler version 6.10.0
+## Created by: Qt User Interface Compiler version 6.11.1
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
@@ -545,64 +545,161 @@ class Ui_Geometry(object):
         self.groupBox_2.setObjectName(u"groupBox_2")
         sizePolicy1.setHeightForWidth(self.groupBox_2.sizePolicy().hasHeightForWidth())
         self.groupBox_2.setSizePolicy(sizePolicy1)
-        self.groupBox_2.setMinimumSize(QSize(575, 625))
-        self.groupBox_2.setMaximumSize(QSize(575, 640))
+        self.groupBox_2.setMinimumSize(QSize(595, 625))
+        self.groupBox_2.setMaximumSize(QSize(595, 640))
         self.gridLayout_8 = QGridLayout(self.groupBox_2)
         self.gridLayout_8.setObjectName(u"gridLayout_8")
         self.gridLayout_5 = QGridLayout()
         self.gridLayout_5.setObjectName(u"gridLayout_5")
-        self.parallel = QPushButton(self.groupBox_2)
-        self.parallel.setObjectName(u"parallel")
-        self.parallel.setMinimumSize(QSize(0, 25))
-        self.parallel.setMaximumSize(QSize(90, 25))
+        self.height_row_placeholder = QWidget(self.groupBox_2)
+        self.height_row_placeholder.setObjectName(u"height_row_placeholder")
+        self.height_row_placeholder.setMinimumSize(QSize(0, 26))
+        self.height_label_layout = QHBoxLayout(self.height_row_placeholder)
+        self.height_label_layout.setObjectName(u"height_label_layout")
+        self.height_label_layout.setContentsMargins(0, 0, 0, 0)
+        self.strand_diameter_label = QLabel(self.height_row_placeholder)
+        self.strand_diameter_label.setObjectName(u"strand_diameter_label")
 
-        self.gridLayout_5.addWidget(self.parallel, 13, 0, 1, 1)
+        self.height_label_layout.addWidget(self.strand_diameter_label)
 
-        self.label_7 = QLabel(self.groupBox_2)
-        self.label_7.setObjectName(u"label_7")
 
-        self.gridLayout_5.addWidget(self.label_7, 1, 1, 1, 1)
+        self.gridLayout_5.addWidget(self.height_row_placeholder, 3, 0, 1, 1)
 
-        self.delete_row = QPushButton(self.groupBox_2)
-        self.delete_row.setObjectName(u"delete_row")
+        self.strand_row_placeholder = QWidget(self.groupBox_2)
+        self.strand_row_placeholder.setObjectName(u"strand_row_placeholder")
+        self.strand_row_placeholder.setMinimumSize(QSize(0, 26))
+        self.strand_count_label_layout = QHBoxLayout(self.strand_row_placeholder)
+        self.strand_count_label_layout.setObjectName(u"strand_count_label_layout")
+        self.strand_count_label_layout.setContentsMargins(0, 0, 0, 0)
+        self.strand_number_label = QLabel(self.strand_row_placeholder)
+        self.strand_number_label.setObjectName(u"strand_number_label")
 
-        self.gridLayout_5.addWidget(self.delete_row, 7, 0, 1, 1)
+        self.strand_count_label_layout.addWidget(self.strand_number_label)
 
-        self.label_3 = QLabel(self.groupBox_2)
-        self.label_3.setObjectName(u"label_3")
-        self.label_3.setMaximumSize(QSize(16777215, 20))
 
-        self.gridLayout_5.addWidget(self.label_3, 10, 1, 1, 1)
+        self.gridLayout_5.addWidget(self.strand_row_placeholder, 4, 0, 1, 1)
 
-        self.verticalSpacer_15 = QSpacerItem(20, 15, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed)
+        self.ungroup = QPushButton(self.groupBox_2)
+        self.ungroup.setObjectName(u"ungroup")
+        self.ungroup.setMinimumSize(QSize(91, 25))
+        self.ungroup.setMaximumSize(QSize(90, 16777215))
 
-        self.gridLayout_5.addItem(self.verticalSpacer_15, 14, 0, 1, 1)
+        self.gridLayout_5.addWidget(self.ungroup, 17, 0, 1, 1)
+
+        self.verticalSpacer_11 = QSpacerItem(20, 60, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed)
+
+        self.gridLayout_5.addItem(self.verticalSpacer_11, 18, 0, 1, 1)
+
+        self.add_layer = QPushButton(self.groupBox_2)
+        self.add_layer.setObjectName(u"add_layer")
+        self.add_layer.setMinimumSize(QSize(0, 25))
+        self.add_layer.setMaximumSize(QSize(90, 16777215))
+
+        self.gridLayout_5.addWidget(self.add_layer, 7, 0, 1, 1)
+
+        self.horizontalSpacer_4 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+
+        self.gridLayout_5.addItem(self.horizontalSpacer_4, 0, 6, 1, 1)
+
+        self.horizontalSpacer_3 = QSpacerItem(0, 20, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
+
+        self.gridLayout_5.addItem(self.horizontalSpacer_3, 0, 3, 1, 1)
+
+        self.verticalSpacer_8 = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed)
+
+        self.gridLayout_5.addItem(self.verticalSpacer_8, 8, 0, 1, 1)
+
+        self.layer_spacing = QLineEdit(self.groupBox_2)
+        self.layer_spacing.setObjectName(u"layer_spacing")
+        self.layer_spacing.setMaximumSize(QSize(70, 16777215))
+
+        self.gridLayout_5.addWidget(self.layer_spacing, 1, 5, 1, 1)
+
+        self.label_8 = QLabel(self.groupBox_2)
+        self.label_8.setObjectName(u"label_8")
+
+        self.gridLayout_5.addWidget(self.label_8, 0, 4, 1, 1)
+
+        self.build_combo = QComboBox(self.groupBox_2)
+        self.build_combo.addItem("")
+        self.build_combo.addItem("")
+        self.build_combo.setObjectName(u"build_combo")
+        self.build_combo.setMinimumSize(QSize(100, 0))
+        self.build_combo.setMaximumSize(QSize(100, 16777215))
+
+        self.gridLayout_5.addWidget(self.build_combo, 0, 1, 1, 1)
 
         self.verticalSpacer_14 = QSpacerItem(20, 10, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
 
-        self.gridLayout_5.addItem(self.verticalSpacer_14, 17, 3, 1, 1)
-
-        self.verticalSpacer_13 = QSpacerItem(20, 5, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed)
-
-        self.gridLayout_5.addItem(self.verticalSpacer_13, 3, 0, 1, 1)
-
-        self.label_9 = QLabel(self.groupBox_2)
-        self.label_9.setObjectName(u"label_9")
-
-        self.gridLayout_5.addWidget(self.label_9, 1, 4, 1, 1)
+        self.gridLayout_5.addItem(self.verticalSpacer_14, 19, 3, 1, 1)
 
         self.add_winding = QPushButton(self.groupBox_2)
         self.add_winding.setObjectName(u"add_winding")
         self.add_winding.setMinimumSize(QSize(0, 25))
         self.add_winding.setMaximumSize(QSize(90, 20))
 
-        self.gridLayout_5.addWidget(self.add_winding, 4, 0, 1, 1)
+        self.gridLayout_5.addWidget(self.add_winding, 6, 0, 1, 1)
 
-        self.label_10 = QLabel(self.groupBox_2)
-        self.label_10.setObjectName(u"label_10")
-        self.label_10.setMaximumSize(QSize(16777215, 20))
+        self.connections_tree_widget = QTreeWidget(self.groupBox_2)
+        __qtreewidgetitem = QTreeWidgetItem()
+        __qtreewidgetitem.setText(0, u"1")
+        self.connections_tree_widget.setHeaderItem(__qtreewidgetitem)
+        self.connections_tree_widget.setObjectName(u"connections_tree_widget")
+        sizePolicy.setHeightForWidth(self.connections_tree_widget.sizePolicy().hasHeightForWidth())
+        self.connections_tree_widget.setSizePolicy(sizePolicy)
+        self.connections_tree_widget.setMinimumSize(QSize(440, 100))
+        self.connections_tree_widget.setMaximumSize(QSize(440, 100))
 
-        self.gridLayout_5.addWidget(self.label_10, 11, 0, 1, 1)
+        self.gridLayout_5.addWidget(self.connections_tree_widget, 13, 1, 6, 6)
+
+        self.series = QPushButton(self.groupBox_2)
+        self.series.setObjectName(u"series")
+        self.series.setMinimumSize(QSize(0, 25))
+        self.series.setMaximumSize(QSize(90, 25))
+
+        self.gridLayout_5.addWidget(self.series, 14, 0, 1, 1)
+
+        self.height_field_container = QWidget(self.groupBox_2)
+        self.height_field_container.setObjectName(u"height_field_container")
+        self.height_field_container.setMinimumSize(QSize(160, 0))
+        self.height_field_container.setMaximumSize(QSize(160, 16777215))
+        self.height_field_layout = QHBoxLayout(self.height_field_container)
+        self.height_field_layout.setObjectName(u"height_field_layout")
+        self.height_field_layout.setContentsMargins(0, 0, 0, 0)
+        self.strand_diameter = QLineEdit(self.height_field_container)
+        self.strand_diameter.setObjectName(u"strand_diameter")
+        self.strand_diameter.setMinimumSize(QSize(75, 0))
+        self.strand_diameter.setMaximumSize(QSize(75, 16777215))
+
+        self.height_field_layout.addWidget(self.strand_diameter)
+
+        self.height_field_layout_spacer = QSpacerItem(0, 0, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+
+        self.height_field_layout.addItem(self.height_field_layout_spacer)
+
+
+        self.gridLayout_5.addWidget(self.height_field_container, 3, 1, 1, 1)
+
+        self.strand_count_field_container = QWidget(self.groupBox_2)
+        self.strand_count_field_container.setObjectName(u"strand_count_field_container")
+        self.strand_count_field_container.setMinimumSize(QSize(160, 0))
+        self.strand_count_field_container.setMaximumSize(QSize(160, 16777215))
+        self.strand_count_field_layout = QHBoxLayout(self.strand_count_field_container)
+        self.strand_count_field_layout.setObjectName(u"strand_count_field_layout")
+        self.strand_count_field_layout.setContentsMargins(0, 0, 0, 0)
+        self.strand_number = QLineEdit(self.strand_count_field_container)
+        self.strand_number.setObjectName(u"strand_number")
+        self.strand_number.setMinimumSize(QSize(75, 0))
+        self.strand_number.setMaximumSize(QSize(75, 16777215))
+
+        self.strand_count_field_layout.addWidget(self.strand_number)
+
+        self.strand_count_field_layout_spacer = QSpacerItem(0, 0, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+
+        self.strand_count_field_layout.addItem(self.strand_count_field_layout_spacer)
+
+
+        self.gridLayout_5.addWidget(self.strand_count_field_container, 4, 1, 1, 1)
 
         self.cond_material = QComboBox(self.groupBox_2)
         self.cond_material.addItem("")
@@ -615,106 +712,112 @@ class Ui_Geometry(object):
 
         self.gridLayout_5.addWidget(self.cond_material, 0, 5, 1, 1)
 
-        self.label_8 = QLabel(self.groupBox_2)
-        self.label_8.setObjectName(u"label_8")
+        self.label_9 = QLabel(self.groupBox_2)
+        self.label_9.setObjectName(u"label_9")
 
-        self.gridLayout_5.addWidget(self.label_8, 0, 4, 1, 1)
-
-        self.layer_spacing = QLineEdit(self.groupBox_2)
-        self.layer_spacing.setObjectName(u"layer_spacing")
-        self.layer_spacing.setMaximumSize(QSize(70, 16777215))
-
-        self.gridLayout_5.addWidget(self.layer_spacing, 1, 5, 1, 1)
+        self.gridLayout_5.addWidget(self.label_9, 1, 4, 1, 1)
 
         self.cond_type = QComboBox(self.groupBox_2)
+        self.cond_type.addItem("")
+        self.cond_type.addItem("")
         self.cond_type.addItem("")
         self.cond_type.addItem("")
         self.cond_type.setObjectName(u"cond_type")
         sizePolicy.setHeightForWidth(self.cond_type.sizePolicy().hasHeightForWidth())
         self.cond_type.setSizePolicy(sizePolicy)
-        self.cond_type.setMinimumSize(QSize(100, 0))
-        self.cond_type.setMaximumSize(QSize(70, 16777215))
+        self.cond_type.setMinimumSize(QSize(160, 0))
+        self.cond_type.setMaximumSize(QSize(160, 16777215))
 
-        self.gridLayout_5.addWidget(self.cond_type, 1, 2, 1, 1)
+        self.gridLayout_5.addWidget(self.cond_type, 1, 1, 1, 1)
 
-        self.connections_tree_widget = QTreeWidget(self.groupBox_2)
-        __qtreewidgetitem = QTreeWidgetItem()
-        __qtreewidgetitem.setText(0, u"1");
-        self.connections_tree_widget.setHeaderItem(__qtreewidgetitem)
-        self.connections_tree_widget.setObjectName(u"connections_tree_widget")
-        sizePolicy.setHeightForWidth(self.connections_tree_widget.sizePolicy().hasHeightForWidth())
-        self.connections_tree_widget.setSizePolicy(sizePolicy)
-        self.connections_tree_widget.setMaximumSize(QSize(450, 300))
+        self.verticalSpacer_15 = QSpacerItem(20, 15, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed)
 
-        self.gridLayout_5.addWidget(self.connections_tree_widget, 11, 1, 6, 6)
+        self.gridLayout_5.addItem(self.verticalSpacer_15, 16, 0, 1, 1)
 
-        self.verticalSpacer_11 = QSpacerItem(20, 60, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed)
+        self.parallel = QPushButton(self.groupBox_2)
+        self.parallel.setObjectName(u"parallel")
+        self.parallel.setMinimumSize(QSize(0, 25))
+        self.parallel.setMaximumSize(QSize(90, 25))
 
-        self.gridLayout_5.addItem(self.verticalSpacer_11, 16, 0, 1, 1)
+        self.gridLayout_5.addWidget(self.parallel, 15, 0, 1, 1)
+
+        self.delete_row = QPushButton(self.groupBox_2)
+        self.delete_row.setObjectName(u"delete_row")
+        self.delete_row.setMaximumSize(QSize(90, 16777215))
+
+        self.gridLayout_5.addWidget(self.delete_row, 9, 0, 1, 1)
+
+        self.label_10 = QLabel(self.groupBox_2)
+        self.label_10.setObjectName(u"label_10")
+        self.label_10.setMaximumSize(QSize(16777215, 20))
+
+        self.gridLayout_5.addWidget(self.label_10, 13, 0, 1, 1)
+
+        self.conductor_dimension_field_container = QWidget(self.groupBox_2)
+        self.conductor_dimension_field_container.setObjectName(u"conductor_dimension_field_container")
+        self.conductor_dimension_field_container.setMinimumSize(QSize(160, 0))
+        self.conductor_dimension_field_container.setMaximumSize(QSize(160, 16777215))
+        self.conductor_dimension_field_layout = QHBoxLayout(self.conductor_dimension_field_container)
+        self.conductor_dimension_field_layout.setObjectName(u"conductor_dimension_field_layout")
+        self.conductor_dimension_field_layout.setContentsMargins(0, 0, 0, 0)
+        self.conductor_dimension = QLineEdit(self.conductor_dimension_field_container)
+        self.conductor_dimension.setObjectName(u"conductor_dimension")
+        self.conductor_dimension.setMinimumSize(QSize(75, 0))
+        self.conductor_dimension.setMaximumSize(QSize(75, 16777215))
+
+        self.conductor_dimension_field_layout.addWidget(self.conductor_dimension)
+
+        self.conductor_height = QLineEdit(self.conductor_dimension_field_container)
+        self.conductor_height.setObjectName(u"conductor_height")
+        self.conductor_height.setMinimumSize(QSize(75, 0))
+        self.conductor_height.setMaximumSize(QSize(75, 16777215))
+
+        self.conductor_dimension_field_layout.addWidget(self.conductor_height)
+
+        self.conductor_dimension_field_layout_spacer = QSpacerItem(0, 0, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+
+        self.conductor_dimension_field_layout.addItem(self.conductor_dimension_field_layout_spacer)
+
+
+        self.gridLayout_5.addWidget(self.conductor_dimension_field_container, 2, 1, 1, 1)
 
         self.winding_tree_widget = QTreeWidget(self.groupBox_2)
         __qtreewidgetitem1 = QTreeWidgetItem()
-        __qtreewidgetitem1.setText(0, u"1");
+        __qtreewidgetitem1.setText(0, u"1")
         self.winding_tree_widget.setHeaderItem(__qtreewidgetitem1)
         self.winding_tree_widget.setObjectName(u"winding_tree_widget")
         sizePolicy.setHeightForWidth(self.winding_tree_widget.sizePolicy().hasHeightForWidth())
         self.winding_tree_widget.setSizePolicy(sizePolicy)
-        self.winding_tree_widget.setMinimumSize(QSize(450, 300))
-        self.winding_tree_widget.setMaximumSize(QSize(450, 300))
+        self.winding_tree_widget.setMinimumSize(QSize(440, 200))
+        self.winding_tree_widget.setMaximumSize(QSize(440, 200))
 
-        self.gridLayout_5.addWidget(self.winding_tree_widget, 3, 1, 7, 6)
+        self.gridLayout_5.addWidget(self.winding_tree_widget, 5, 1, 7, 6, Qt.AlignmentFlag.AlignTop)
 
-        self.horizontalSpacer_4 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+        self.side_load_label = QLabel(self.groupBox_2)
+        self.side_load_label.setObjectName(u"side_load_label")
 
-        self.gridLayout_5.addItem(self.horizontalSpacer_4, 0, 6, 1, 1)
+        self.gridLayout_5.addWidget(self.side_load_label, 2, 4, 1, 1)
 
-        self.series = QPushButton(self.groupBox_2)
-        self.series.setObjectName(u"series")
-        self.series.setMinimumSize(QSize(0, 25))
-        self.series.setMaximumSize(QSize(90, 25))
+        self.side_load = QLineEdit(self.groupBox_2)
+        self.side_load.setObjectName(u"side_load")
 
-        self.gridLayout_5.addWidget(self.series, 12, 0, 1, 1)
-
-        self.add_layer = QPushButton(self.groupBox_2)
-        self.add_layer.setObjectName(u"add_layer")
-        self.add_layer.setMinimumSize(QSize(0, 25))
-        self.add_layer.setMaximumSize(QSize(90, 16777215))
-
-        self.gridLayout_5.addWidget(self.add_layer, 5, 0, 1, 1)
+        self.gridLayout_5.addWidget(self.side_load, 2, 5, 1, 1)
 
         self.label_6 = QLabel(self.groupBox_2)
         self.label_6.setObjectName(u"label_6")
 
-        self.gridLayout_5.addWidget(self.label_6, 0, 1, 1, 1)
+        self.gridLayout_5.addWidget(self.label_6, 0, 0, 1, 1)
 
-        self.build_combo = QComboBox(self.groupBox_2)
-        self.build_combo.addItem("")
-        self.build_combo.addItem("")
-        self.build_combo.setObjectName(u"build_combo")
-        self.build_combo.setMinimumSize(QSize(100, 0))
-        self.build_combo.setMaximumSize(QSize(100, 16777215))
+        self.label_7 = QLabel(self.groupBox_2)
+        self.label_7.setObjectName(u"label_7")
 
-        self.gridLayout_5.addWidget(self.build_combo, 0, 2, 1, 1)
+        self.gridLayout_5.addWidget(self.label_7, 1, 0, 1, 1)
 
-        self.ungroup = QPushButton(self.groupBox_2)
-        self.ungroup.setObjectName(u"ungroup")
-        self.ungroup.setMinimumSize(QSize(91, 25))
-        self.ungroup.setMaximumSize(QSize(90, 16777215))
+        self.conductor_dimension_label = QLabel(self.groupBox_2)
+        self.conductor_dimension_label.setObjectName(u"conductor_dimension_label")
+        self.conductor_dimension_label.setMinimumSize(QSize(110, 0))
 
-        self.gridLayout_5.addWidget(self.ungroup, 15, 0, 1, 1)
-
-        self.horizontalSpacer_3 = QSpacerItem(30, 20, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
-
-        self.gridLayout_5.addItem(self.horizontalSpacer_3, 0, 3, 1, 1)
-
-        self.winding_label = QLabel(self.groupBox_2)
-        self.winding_label.setObjectName(u"winding_label")
-
-        self.gridLayout_5.addWidget(self.winding_label, 10, 2, 1, 1)
-
-        self.verticalSpacer_8 = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed)
-
-        self.gridLayout_5.addItem(self.verticalSpacer_8, 6, 0, 1, 1)
+        self.gridLayout_5.addWidget(self.conductor_dimension_label, 2, 0, 1, 1)
 
 
         self.gridLayout_8.addLayout(self.gridLayout_5, 0, 0, 1, 1)
@@ -847,28 +950,32 @@ class Ui_Geometry(object):
         self.label_12.setText(QCoreApplication.translate("Geometry", u"Excitation Type", None))
         self.label_4.setText(QCoreApplication.translate("Geometry", u"Frequency, (kHz)", None))
         self.groupBox_2.setTitle(QCoreApplication.translate("Geometry", u"Winding", None))
-        self.parallel.setText(QCoreApplication.translate("Geometry", u"Parallel", None))
-        self.label_7.setText(QCoreApplication.translate("Geometry", u"Conductor Shape", None))
-        self.delete_row.setText(QCoreApplication.translate("Geometry", u"Delete", None))
-        self.label_3.setText(QCoreApplication.translate("Geometry", u"Winding", None))
-        self.label_9.setText(QCoreApplication.translate("Geometry", u"Layer Spacing, (mm)", None))
-        self.add_winding.setText(QCoreApplication.translate("Geometry", u"Add Winding", None))
-        self.label_10.setText(QCoreApplication.translate("Geometry", u"Connect In:", None))
-        self.cond_material.setItemText(0, QCoreApplication.translate("Geometry", u"Copper", None))
-        self.cond_material.setItemText(1, QCoreApplication.translate("Geometry", u"Aluminium", None))
-
-        self.label_8.setText(QCoreApplication.translate("Geometry", u"Conductor Material", None))
-        self.cond_type.setItemText(0, QCoreApplication.translate("Geometry", u"Rectangular", None))
-        self.cond_type.setItemText(1, QCoreApplication.translate("Geometry", u"Circular", None))
-
-        self.series.setText(QCoreApplication.translate("Geometry", u"Series", None))
+        self.strand_diameter_label.setText(QCoreApplication.translate("Geometry", u"Strand Dia (mm)", None))
+        self.strand_number_label.setText(QCoreApplication.translate("Geometry", u"Strand Count", None))
+        self.ungroup.setText(QCoreApplication.translate("Geometry", u"Disconnect", None))
         self.add_layer.setText(QCoreApplication.translate("Geometry", u"Add Layer", None))
-        self.label_6.setText(QCoreApplication.translate("Geometry", u"Winding Build", None))
+        self.label_8.setText(QCoreApplication.translate("Geometry", u"Conductor Material", None))
         self.build_combo.setItemText(0, QCoreApplication.translate("Geometry", u"Wound", None))
         self.build_combo.setItemText(1, QCoreApplication.translate("Geometry", u"Planar", None))
 
-        self.ungroup.setText(QCoreApplication.translate("Geometry", u"Disconnect", None))
-        self.winding_label.setText(QCoreApplication.translate("Geometry", u"winding_label", None))
+        self.add_winding.setText(QCoreApplication.translate("Geometry", u"Add Winding", None))
+        self.series.setText(QCoreApplication.translate("Geometry", u"Series", None))
+        self.cond_material.setItemText(0, QCoreApplication.translate("Geometry", u"Copper", None))
+        self.cond_material.setItemText(1, QCoreApplication.translate("Geometry", u"Aluminium", None))
+
+        self.label_9.setText(QCoreApplication.translate("Geometry", u"Layer Spacing, (mm)", None))
+        self.cond_type.setItemText(0, QCoreApplication.translate("Geometry", u"Rectangular (Solid)", None))
+        self.cond_type.setItemText(1, QCoreApplication.translate("Geometry", u"Round (Solid)", None))
+        self.cond_type.setItemText(2, QCoreApplication.translate("Geometry", u"Rectangular (Litz)", None))
+        self.cond_type.setItemText(3, QCoreApplication.translate("Geometry", u"Round (Litz)", None))
+
+        self.parallel.setText(QCoreApplication.translate("Geometry", u"Parallel", None))
+        self.delete_row.setText(QCoreApplication.translate("Geometry", u"Delete", None))
+        self.label_10.setText(QCoreApplication.translate("Geometry", u"Connect in:", None))
+        self.side_load_label.setText(QCoreApplication.translate("Geometry", u"Side load (ohm)", None))
+        self.label_6.setText(QCoreApplication.translate("Geometry", u"Winding Build", None))
+        self.label_7.setText(QCoreApplication.translate("Geometry", u"Conductor Type", None))
+        self.conductor_dimension_label.setText(QCoreApplication.translate("Geometry", u"Width (mm)", None))
         self.groupBox_5.setTitle(QCoreApplication.translate("Geometry", u"Save and Create Transformer", None))
         self.New_button.setText(QCoreApplication.translate("Geometry", u"Create Transformer", None))
         self.save_etk.setText(QCoreApplication.translate("Geometry", u"Save As", None))

@@ -18,6 +18,10 @@
 
 import json
 
+from ansys.aedt.toolkits.electronic_transformer.common.conductors import LITZ_TYPES
+from ansys.aedt.toolkits.electronic_transformer.common.conductors import RECTANGULAR_TYPES
+from ansys.aedt.toolkits.electronic_transformer.common.validation import Validation
+from ansys.aedt.toolkits.electronic_transformer.common.validation import connection_layers
 from ansys.aedt.toolkits.electronic_transformer.ui.common.database_manager import database_manager
 from ansys.aedt.toolkits.electronic_transformer.ui.common.units_and_scales import freq_scale
 from ansys.aedt.toolkits.electronic_transformer.ui.models import AirGapConfig
@@ -303,11 +307,14 @@ class DataManager:
             if self.gui_properties.winding.layer_type.lower() == "planar":
                 layers[key_layer].update({"turn_spacing": value_layer["turns"].get("distance", 0.0)})
 
-            if value_layer["conductor"].get("diameter", 0.0) != 0.0:
-                layers[key_layer].update({"conductor_diameter": value_layer["conductor"]["diameter"]})
-            else:
+            if value_layer["conductor"]["type"] in RECTANGULAR_TYPES:
                 layers[key_layer].update({"conductor_width": value_layer["conductor"]["width"]})
                 layers[key_layer].update({"conductor_height": value_layer["conductor"]["height"]})
+            else:
+                layers[key_layer].update({"conductor_diameter": value_layer["conductor"]["diameter"]})
+            if value_layer["conductor"]["type"] in LITZ_TYPES:
+                layers[key_layer]["strand_diameter"] = value_layer["conductor"]["strand_diameter"]
+                layers[key_layer]["strand_number"] = value_layer["conductor"]["strand_number"]
 
             if i == 0:
                 self.gui_properties.winding.conductor_type = value_layer["conductor"]["type"]
@@ -348,6 +355,8 @@ class DataManager:
                     for k, v in subdict.items():
                         if v == "Layer":
                             collected_keys.append(k)
+                        elif isinstance(v, dict):
+                            collected_keys.extend(connection_layers(v))
                 else:
                     collected_keys.append(subdict_key)
             flattened_connections[outer_key] = collected_keys
@@ -367,6 +376,14 @@ class DataManager:
         if file.is_file():
             with file.open("r") as f:
                 data = json.load(f)
+                if any(
+                    layer.get("conductor", {}).get("type") in LITZ_TYPES
+                    for layer in data.get("winding", {}).get("layers", {}).values()
+                ):
+                    try:
+                        Validation().validate_json(data)
+                    except ValueError as error:
+                        return f"Invalid Litz configuration: {error}", False
                 msg = self._format_input_version(data)
                 warning = getattr(self.gui_properties, "_segments_warning", "")
                 if warning:
@@ -391,38 +408,42 @@ class DataManager:
             dict: The layers dictionary for the backend.
         """
         be_layers = {}
-        nlayers = len(layers)
-        for n in range(1, nlayers + 1):
-            be_layers[f"layer_{n}"] = {
-                "segments_number": layers[f"layer_{n}"].get("segments_number", 0),
+        conductor_type = self.gui_properties.winding.conductor_type
+        for n in range(1, len(layers) + 1):
+            layer_name = f"layer_{n}"
+            layer = layers[layer_name]
+            be_layer = {
+                "segments_number": layer.get("segments_number", 0),
                 "conductor": {
                     "draw_skin_layers": self.gui_properties.settings.draw_skin_layers,
                     "material": self.gui_properties.winding.conductor_material,
-                    "type": self.gui_properties.winding.conductor_type,
+                    "type": conductor_type,
                 },
                 "turns": {
-                    "quantity": layers[f"layer_{n}"]["turns_number"],
+                    "quantity": layer["turns_number"],
                     "spacing": "top",
-                    "distance": layers[f"layer_{n}"].get(
-                        "turn_spacing", layers[f"layer_{n}"].get("insulation_thickness", 0.0)
-                    ),
+                    "distance": layer.get("turn_spacing", layer.get("insulation_thickness", 0.0)),
                 },
             }
 
             # update insulation only if available in model
             if self.gui_properties.winding.layer_type.lower() == "wound":
-                be_layers[f"layer_{n}"]["insulation"] = {
-                    "thickness": be_layers[f"layer_{n}"]["turns"]["distance"],
+                be_layer["insulation"] = {
+                    "thickness": be_layer["turns"]["distance"],
                     "material": self.gui_properties.winding.insulation_material,
                 }
 
             # depending on conductor cross section populate dimensions
-            if self.gui_properties.winding.conductor_type.lower() == "circular":
-                be_layers[f"layer_{n}"]["conductor"].update({"diameter": layers[f"layer_{n}"]["conductor_diameter"]})
-
-            if self.gui_properties.winding.conductor_type.lower() == "rectangular":
-                be_layers[f"layer_{n}"]["conductor"].update({"width": layers[f"layer_{n}"]["conductor_width"]})
-                be_layers[f"layer_{n}"]["conductor"].update({"height": layers[f"layer_{n}"]["conductor_height"]})
+            conductor = be_layer["conductor"]
+            if conductor_type.lower() in ("circular", "litz"):
+                conductor["diameter"] = layer["conductor_diameter"]
+            if conductor_type in RECTANGULAR_TYPES:
+                conductor["width"] = layer["conductor_width"]
+                conductor["height"] = layer["conductor_height"]
+            if conductor_type in LITZ_TYPES:
+                conductor["strand_diameter"] = layer["strand_diameter"]
+                conductor["strand_number"] = layer["strand_number"]
+            be_layers[layer_name] = be_layer
         return be_layers
 
     def _update_frontend_properties(self):
