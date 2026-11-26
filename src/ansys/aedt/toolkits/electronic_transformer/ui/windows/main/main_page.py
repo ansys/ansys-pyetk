@@ -615,10 +615,10 @@ class Ui_Geometry(object):
 
         self.gridLayout_5.addWidget(self.layer_spacing, 1, 5, 1, 1)
 
-        self.label_8 = QLabel(self.groupBox_2)
-        self.label_8.setObjectName(u"label_8")
+        self.conductor_material_label = QLabel(self.groupBox_2)
+        self.conductor_material_label.setObjectName(u"conductor_material_label")
 
-        self.gridLayout_5.addWidget(self.label_8, 0, 4, 1, 1)
+        self.gridLayout_5.addWidget(self.conductor_material_label, 0, 4, 1, 1)
 
         self.build_combo = QComboBox(self.groupBox_2)
         self.build_combo.addItem("")
@@ -702,8 +702,6 @@ class Ui_Geometry(object):
         self.gridLayout_5.addWidget(self.strand_count_field_container, 4, 1, 1, 1)
 
         self.cond_material = QComboBox(self.groupBox_2)
-        self.cond_material.addItem("")
-        self.cond_material.addItem("")
         self.cond_material.setObjectName(u"cond_material")
         sizePolicy.setHeightForWidth(self.cond_material.sizePolicy().hasHeightForWidth())
         self.cond_material.setSizePolicy(sizePolicy)
@@ -954,14 +952,12 @@ class Ui_Geometry(object):
         self.strand_number_label.setText(QCoreApplication.translate("Geometry", u"Strand Count", None))
         self.ungroup.setText(QCoreApplication.translate("Geometry", u"Disconnect", None))
         self.add_layer.setText(QCoreApplication.translate("Geometry", u"Add Layer", None))
-        self.label_8.setText(QCoreApplication.translate("Geometry", u"Conductor Material", None))
+        self.conductor_material_label.setText(QCoreApplication.translate("Geometry", u"Conductor Material", None))
         self.build_combo.setItemText(0, QCoreApplication.translate("Geometry", u"Wound", None))
         self.build_combo.setItemText(1, QCoreApplication.translate("Geometry", u"Planar", None))
 
         self.add_winding.setText(QCoreApplication.translate("Geometry", u"Add Winding", None))
         self.series.setText(QCoreApplication.translate("Geometry", u"Series", None))
-        self.cond_material.setItemText(0, QCoreApplication.translate("Geometry", u"Copper", None))
-        self.cond_material.setItemText(1, QCoreApplication.translate("Geometry", u"Aluminium", None))
 
         self.label_9.setText(QCoreApplication.translate("Geometry", u"Layer Spacing, (mm)", None))
         self.cond_type.setItemText(0, QCoreApplication.translate("Geometry", u"Rectangular (Solid)", None))
@@ -980,4 +976,3 @@ class Ui_Geometry(object):
         self.New_button.setText(QCoreApplication.translate("Geometry", u"Create Transformer", None))
         self.save_etk.setText(QCoreApplication.translate("Geometry", u"Save As", None))
     # retranslateUi
-

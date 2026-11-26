@@ -104,7 +104,11 @@ class ETK:
         # Required because the windings require the material info for skin layers
         owinding.set_class_obj_material(self.__materials_properties[material_name])
         owinding.create_geometry()
-        owinding.set_material(self.__materials_properties[material_name], self.__circuit_properties.connections)
+        owinding.set_material(
+            self.__materials_properties[material_name],
+            self.__circuit_properties.connections,
+            self.__materials_properties,
+        )
         owinding.create_terminal_sections()
         owinding.create_excitations()
         osetup.assign_matrix_winding()

@@ -132,23 +132,30 @@ class Winding(GeometryCommon):
 
         return True
 
-    def set_material(self, material, connections=None):
+    def set_material(self, material, connections=None, materials=None):
         """Assign one Litz material per side, or the shared material for solid conductors."""
         if self.__conductor_type not in LITZ_TYPES:
             return super().set_material(material)
 
         grouped_objects = self._objects_by_layer()
-        side_layers = self._litz_side_layers(material, connections, grouped_objects)
+        side_layers = self._litz_side_layers(connections, grouped_objects)
 
         for side, layer_names in side_layers.items():
             objects = [obj for name in layer_names for obj in grouped_objects[name]]
             conductor = self.properties.layers[layer_names[0]].conductor
-            material_name = generate_unique_name(f"{material.name}_pyETK_Litz_side_{side}")
+            conductor_material = conductor.material or material.name
+            side_material = materials.get(conductor_material) if materials else None
+            if side_material is None and conductor_material.lower() == material.name.lower():
+                side_material = material
+            if side_material is None:
+                raise ValueError(f"No material properties found for Litz material {conductor_material!r}.")
+
+            material_name = generate_unique_name(f"{side_material.name}_pyETK_Litz_side_{side}")
             mat = self.aedtapp.materials.add_material(material_name)
             if not mat:
                 raise RuntimeError(f"Failed to create material {material_name}.")
-            mat.conductivity = material.conductivity
-            mat.permeability = material.mur
+            mat.conductivity = side_material.conductivity
+            mat.permeability = side_material.mur
             mat.stacking_type = "Litz Wire"
             mat.wire_type = "Round"
             mat.wire_diameter = f"{conductor.strand_diameter}mm"
@@ -175,7 +182,7 @@ class Winding(GeometryCommon):
                 raise ValueError(f"No winding objects found for {name}.")
         return grouped_objects
 
-    def _litz_side_layers(self, material, connections, grouped_objects):
+    def _litz_side_layers(self, connections, grouped_objects):
         """Check side assignments and return their layer names."""
         if not connections:
             raise ValueError("Litz material assignment requires side connections.")
@@ -192,9 +199,6 @@ class Winding(GeometryCommon):
                 if layer_name in assigned_layers:
                     raise ValueError(f"{layer_name} is connected more than once.")
                 assigned_layers.add(layer_name)
-            conductor = self.properties.layers[layer_names[0]].conductor
-            if conductor.material and conductor.material.lower() != material.name.lower():
-                raise ValueError(f"Side {side}: conductor material differs from the selected winding material.")
             if len({self._litz_specification(name) for name in layer_names}) > 1:
                 raise ValueError(f"Side {side}: all layers must use the same Litz material and strand specification.")
             side_layers[side] = layer_names

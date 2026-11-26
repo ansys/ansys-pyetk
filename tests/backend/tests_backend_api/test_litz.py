@@ -89,33 +89,43 @@ def test_create_planar_rectangular_litz_geometry(aedt_common_fixture_function, t
         assert not app.oboundary.GetEddyEffect(obj.name)
 
 
-def test_assign_distinct_litz_materials(aedt_common_fixture_function, tmp_path):
+def test_assign_distinct_litz_materials(aedt_common_fixture_function, tmp_path, monkeypatch):
     source = Path(__file__).parents[1] / "json_files" / "RM_wound_circular.json"
     data = json.loads(source.read_text())
     data["winding"]["layers"]["layer_1"]["conductor"].update(type="Litz", strand_diameter=0.1, strand_number=100)
     second_layer = copy.deepcopy(data["winding"]["layers"]["layer_1"])
-    second_layer["conductor"].update(strand_diameter=0.2, strand_number=20)
+    second_layer["conductor"].update(material="Aluminum", strand_diameter=0.2, strand_number=20)
     data["winding"]["layers"]["layer_2"] = second_layer
     data["circuit"]["connections"]["2"] = {"2": "Layer"}
     data["circuit"]["side_loads"].append(1e-6)
+    data["materials"]["Aluminum"] = {"conductivity": 35e6, "mur": 1}
     path = tmp_path / "litz.json"
     path.write_text(json.dumps(data))
     backend = aedt_common_fixture_function
     backend.load_properties_from_json(path)
+    monkeypatch.setattr(
+        "ansys.aedt.toolkits.electronic_transformer.backend.workflows.etk.Circuit.create_circuit",
+        lambda self: None,
+    )
+    assert backend.create_model()
     backend.connect_design("Maxwell3D")
     app = backend.aedtapp
-    app.solution_type = "EddyCurrent"
-    props = backend.properties
-    winding = Winding("Windings", app, props.winding, props.core, props.settings, props.bobbin)
-    winding.set_class_obj_material(props.materials["Copper"])
-    assert winding.create_geometry()
-    winding.set_material(props.materials["Copper"], props.circuit.connections)
-    layer2_objects = [obj for obj in winding.objects_list if obj.name.startswith("Layer2")]
+
+    layer1_objects = [
+        obj for obj in app.modeler.object_list if obj.name.startswith("Layer1") and "_Section" not in obj.name
+    ]
+    layer2_objects = [
+        obj for obj in app.modeler.object_list if obj.name.startswith("Layer2") and "_Section" not in obj.name
+    ]
+    assert layer1_objects
     assert layer2_objects
+    first_material = app.materials[layer1_objects[0].material_name]
     second_material = app.materials[layer2_objects[0].material_name]
+    assert first_material.name.lower().startswith("copper_pyetk_litz_side_1")
+    assert second_material.name.lower().startswith("aluminum_pyetk_litz_side_2")
+    assert float(first_material.conductivity.value) == 58e6
+    assert float(second_material.conductivity.value) == 35e6
     assert str(second_material.strand_number) == "20"
     assert str(second_material.wire_diameter) == "0.2mm"
-    for obj in winding.objects_list:
+    for obj in layer1_objects + layer2_objects:
         assert not app.oboundary.GetEddyEffect(obj.name)
-        expected = "copper_pyetk_litz_side_1" if obj.name.startswith("Layer1") else "copper_pyetk_litz_side_2"
-        assert obj.material_name.lower().startswith(expected)

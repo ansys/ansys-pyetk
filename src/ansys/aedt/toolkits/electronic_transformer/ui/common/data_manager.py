@@ -140,7 +140,7 @@ class DataManager:
 
         """
         if "json_version" in data.keys():
-            if data["json_version"] >= self.minimum_json:
+            if self._is_supported_json_version(data["json_version"]):
                 self.gui_properties.core.supplier = data["core"]["supplier"]
                 self.gui_properties.core.type = data["core"]["type"]
                 self.gui_properties.core.model = data["core"]["model"]
@@ -315,6 +315,7 @@ class DataManager:
             if value_layer["conductor"]["type"] in LITZ_TYPES:
                 layers[key_layer]["strand_diameter"] = value_layer["conductor"]["strand_diameter"]
                 layers[key_layer]["strand_number"] = value_layer["conductor"]["strand_number"]
+                layers[key_layer]["conductor_material"] = value_layer["conductor"]["material"]
 
             if i == 0:
                 self.gui_properties.winding.conductor_type = value_layer["conductor"]["type"]
@@ -362,6 +363,16 @@ class DataManager:
             flattened_connections[outer_key] = collected_keys
         return flattened_connections
 
+    def _is_supported_json_version(self, version):
+        """Return whether a JSON version is a supported three-part numeric version."""
+        version_parts = version.split(".") if isinstance(version, str) else []
+        if len(version_parts) != 3 or not all(part.isdecimal() for part in version_parts):
+            return False
+        parsed_version = tuple(map(int, version_parts))
+        minimum_version = tuple(map(int, self.minimum_json.split(".")))
+        supported_version = tuple(map(int, self.supported_json.split(".")))
+        return minimum_version <= parsed_version <= supported_version
+
     def _import_data_from_json(self, file):
         """Import data from a JSON file.
 
@@ -385,6 +396,8 @@ class DataManager:
                     except ValueError as error:
                         return f"Invalid Litz configuration: {error}", False
                 msg = self._format_input_version(data)
+                if msg.endswith("Not Supported"):
+                    return msg, False
                 warning = getattr(self.gui_properties, "_segments_warning", "")
                 if warning:
                     msg = msg + "\n" + warning
@@ -416,7 +429,11 @@ class DataManager:
                 "segments_number": layer.get("segments_number", 0),
                 "conductor": {
                     "draw_skin_layers": self.gui_properties.settings.draw_skin_layers,
-                    "material": self.gui_properties.winding.conductor_material,
+                    "material": (
+                        layer.get("conductor_material", self.gui_properties.winding.conductor_material)
+                        if conductor_type in LITZ_TYPES
+                        else self.gui_properties.winding.conductor_material
+                    ),
                     "type": conductor_type,
                 },
                 "turns": {
@@ -517,6 +534,7 @@ class DataManager:
         self.properties.settings.number_segments = self.gui_properties.settings.number_segments
 
         # Materials
+        self.properties.materials = {}
         if self.gui_properties.winding.insulation_material:
             self.properties.materials.update(
                 {
@@ -525,14 +543,13 @@ class DataManager:
                     ][self.gui_properties.winding.insulation_material]
                 }
             )
-        if self.gui_properties.winding.conductor_material:
-            self.properties.materials.update(
-                {
-                    self.gui_properties.winding.conductor_material: self.database_manager.materials_database["winding"][
-                        self.gui_properties.winding.conductor_material
-                    ]
-                }
-            )
+        conductor_materials = {
+            layer.get("conductor_material", self.gui_properties.winding.conductor_material)
+            for layer in self.gui_properties.winding.layers_definition.values()
+        }
+        conductor_materials.add(self.gui_properties.winding.conductor_material)
+        for material in conductor_materials - {""}:
+            self.properties.materials[material] = self.database_manager.materials_database["winding"][material]
         if self.gui_properties.core.material:
             self.properties.materials.update(
                 {

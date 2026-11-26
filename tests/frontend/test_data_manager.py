@@ -505,6 +505,19 @@ class TestDataManager:
 
         assert ".json version 0.0.1 Not Supported" == result
 
+    @pytest.mark.parametrize("version", ["0.10.0", "invalid", "0.2"])
+    def test_format_input_version_rejects_future_or_malformed_versions(self, version):
+        dm = DataManager()
+        assert dm._format_input_version({"json_version": version}) == f".json version {version} Not Supported"
+
+    def test_import_data_rejects_future_json_version(self, tmp_path):
+        dm = DataManager()
+        path = tmp_path / "future.json"
+        path.write_text(json.dumps({"json_version": "0.10.0"}))
+        message, valid = dm._import_data_from_json(path)
+        assert message == ".json version 0.10.0 Not Supported"
+        assert valid is False
+
     def test_format_input_version_legacy_act(self):
         """Test branch: if "json_version" not in data.keys()."""
         dm = DataManager()

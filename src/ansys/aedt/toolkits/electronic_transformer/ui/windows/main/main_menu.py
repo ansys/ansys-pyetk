@@ -257,6 +257,15 @@ class GeometryMenu(object):
         for field in (self.strand_diameter, self.strand_number):
             field.editingFinished.connect(self._strand_settings_changed)
         self.cond_material = self.geometry_menu_widget.findChild(QComboBox, "cond_material")
+        self.cond_material_label = self.geometry_menu_widget.findChild(QLabel, "conductor_material_label")
+        self.cond_material.clear()
+        conductor_materials = (
+            material
+            for material in self.materials_database["winding"]
+            if material != self.gui_properties.winding.insulation_material
+        )
+        self.cond_material.addItems(sorted(conductor_materials, key=str.lower))
+        self.cond_material.currentTextChanged.connect(self._conductor_material_changed)
         self.build_combo = self.geometry_menu_widget.findChild(QComboBox, "build_combo")
 
         self.connections_tree_widget = self.geometry_menu_widget.findChild(QTreeWidget, "connections_tree_widget")
@@ -566,9 +575,8 @@ class GeometryMenu(object):
 
         self._read_ui_data()
         self.data_manager._update_frontend_properties()
-        if self._conductor_type() in LITZ_TYPES and not self._validate_litz_model(
-            self.data_manager.create_backend_data()
-        ):
+        model = self.data_manager.create_backend_data()
+        if self._conductor_type() in LITZ_TYPES and not self._validate_litz_model(model):
             return False
 
         be_properties = self.main_window.get_properties()
@@ -955,6 +963,7 @@ class GeometryMenu(object):
                 "side_load": self._default_side_load,
                 "strand_diameter": 0.1,
                 "strand_number": 7,
+                "conductor_material": self.gui_properties.winding.conductor_material,
                 "conductor": {
                     "width": self._conductor_width,
                     "height": self._conductor_height,
@@ -1012,8 +1021,10 @@ class GeometryMenu(object):
         self.conductor_dimension.setEnabled(winding is not None)
         self.conductor_height.setEnabled(winding is not None)
         self.side_load.setEnabled(winding is not None)
+        self.cond_material.setEnabled(winding is not None)
         if winding is None:
             self.side_load_label.setText("Side load (ohm)")
+            self.cond_material_label.setText("Conductor Material")
             self.side_load.clear()
             self.conductor_dimension.clear()
             self.conductor_height.clear()
@@ -1022,12 +1033,39 @@ class GeometryMenu(object):
             return
         data = winding.data(0, Qt.UserRole)
         conductor = data["conductor"]
+        if conductor_type in LITZ_TYPES:
+            self.cond_material_label.setText(f"Side {data['side']} Conductor Material")
+        else:
+            self.cond_material_label.setText("Conductor Material")
+        material = (
+            data.get("conductor_material", self.gui_properties.winding.conductor_material)
+            if conductor_type in LITZ_TYPES
+            else self.gui_properties.winding.conductor_material
+        )
+        self.cond_material.blockSignals(True)
+        if self.cond_material.findText(material) < 0:
+            self.cond_material.addItem(material)
+        self.cond_material.setCurrentText(material)
+        self.cond_material.blockSignals(False)
         self.side_load_label.setText(f"Side {data['side']} Load (ohm)")
         self.side_load.setText(str(data["side_load"]))
         self.conductor_dimension.setText(str(conductor["width" if rectangular else "diameter"]))
         self.conductor_height.setText(str(conductor["height"]))
         self.strand_diameter.setText(str(data["strand_diameter"]))
         self.strand_number.setText(str(data["strand_number"]))
+
+    def _conductor_material_changed(self, material):
+        """Store the selected conductor material for the active Litz side."""
+        if self._conductor_type() not in LITZ_TYPES:
+            self.gui_properties.winding.conductor_material = material
+            return
+        winding = self._selected_winding()
+        if winding is None:
+            return
+        data = winding.data(0, Qt.UserRole)
+        data["conductor_material"] = material
+        winding.setData(0, Qt.UserRole, data)
+        self.gui_properties.winding.layers_definition = self._update_layers_definition()
 
     def _side_load_changed(self):
         """Store the load for the selected winding side."""
@@ -1916,6 +1954,9 @@ class GeometryMenu(object):
                 if conductor_type in LITZ_TYPES:
                     layers_def[layer_key]["strand_diameter"] = side_data["strand_diameter"]
                     layers_def[layer_key]["strand_number"] = side_data["strand_number"]
+                    layers_def[layer_key]["conductor_material"] = side_data.get(
+                        "conductor_material", self.gui_properties.winding.conductor_material
+                    )
         return layers_def
 
     def _stash_connections(self):
@@ -2004,12 +2045,7 @@ class GeometryMenu(object):
             self.current_example_index = self.example_files.index(file_name)
         except ValueError:
             self.current_example_index = 0
-
-        msg, is_valid = self.data_manager._import_data_from_json(file_name)
-        self.ui.update_logger(msg)
-        if is_valid:
-            self._write_ui_data()
-            self.example_name.setText(file_name.name)
+        self._load_etk_json(file_name)
 
     def _reset_example_dir(self):
         """Reset navigation to default examples directory and revert displayed design to 'New Design'."""
@@ -2071,7 +2107,9 @@ class GeometryMenu(object):
         conductor_type = self.gui_properties.winding.conductor_type
         self.build_combo.setCurrentText(self.gui_properties.winding.layer_type)
         self.cond_type.setCurrentText(CONDUCTOR_LABELS.get(conductor_type, conductor_type))
+        self.cond_material.blockSignals(True)
         self.cond_material.setCurrentText(self.gui_properties.winding.conductor_material)
+        self.cond_material.blockSignals(False)
         self.layer_spacing.setText(str(self.gui_properties.winding.layer_spacing))
 
         # Winding Table
@@ -2245,6 +2283,9 @@ class GeometryMenu(object):
                     "side_load": float(load),
                     "strand_diameter": strand_diameter,
                     "strand_number": strand_number,
+                    "conductor_material": first_layer.get(
+                        "conductor_material", self.gui_properties.winding.conductor_material
+                    ),
                     "conductor": conductor,
                 },
             )
@@ -2364,7 +2405,8 @@ class GeometryMenu(object):
         self.gui_properties.winding.layer_spacing = self.layer_spacing.text()
         self.gui_properties.settings.draw_skin_layers = self.draw_skin_layers.isChecked()
         self.gui_properties.winding.conductor_type= self._conductor_type()
-        self.gui_properties.winding.conductor_material = self.cond_material.currentText()
+        if self.gui_properties.winding.conductor_type not in LITZ_TYPES:
+            self.gui_properties.winding.conductor_material = self.cond_material.currentText()
 
         self.gui_properties.settings.include_bobbin = self.bobbin_checkbox.isChecked()
         self.gui_properties.bobbin_board_and_margin.thickness = float(self.bobbin_board_thickness.text())
@@ -2407,6 +2449,8 @@ class GeometryMenu(object):
 
         # handle the event where the user cancels the option to save
         if file_name != Path("."):
+            if file_name.suffix.lower() != ".json":
+                file_name = file_name.with_suffix(".json")
             if self._save_model(file=file_name):
                 self._active_dir = file_name.parent
                 self.example_files = sorted(self._active_dir.glob("*.json")) + [None]

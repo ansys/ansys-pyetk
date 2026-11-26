@@ -103,10 +103,23 @@ def test_open_and_save_dialog_round_trip(conductor_type, dimensions, litz_data, 
     for key in ("diameter", "width", "height", "strand_diameter", "strand_number"):
         conductor.pop(key, None)
     conductor.update(type=conductor_type, **dimensions)
+    if conductor_type in ("Litz", "Litz Rectangular"):
+        second_conductor = copy.deepcopy(conductor)
+        second_conductor.update(material="Aluminium", strand_diameter=0.2, strand_number=20)
+        if conductor_type == "Litz":
+            second_conductor["diameter"] = 1.6
+        else:
+            second_conductor.update(width=1.6, height=1.2)
+        litz_data["winding"]["layers"]["layer_2"] = copy.deepcopy(litz_data["winding"]["layers"]["layer_1"])
+        litz_data["winding"]["layers"]["layer_2"]["conductor"] = second_conductor
+        litz_data["circuit"]["connections"] = {"1": {"1": "Layer"}, "2": {"2": "Layer"}}
+        litz_data["circuit"]["side_loads"].append(1e-6)
+        litz_data["materials"]["Aluminium"] = {"conductivity": 38e6, "mur": 1, "epsr": 1}
     Validation().validate_json(litz_data)
     source = tmp_path / "input.json"
     source.write_text(json.dumps(litz_data))
-    target = tmp_path / "saved.json"
+    target = tmp_path / "saved"
+    saved_target = target.with_suffix(".json")
     monkeypatch.setattr(QFileDialog, "getOpenFileName", lambda **kwargs: (str(source), ""))
     monkeypatch.setattr(QFileDialog, "getSaveFileName", lambda **kwargs: (str(target), ""))
 
@@ -120,24 +133,35 @@ def test_open_and_save_dialog_round_trip(conductor_type, dimensions, litz_data, 
         assert menu.strand_diameter.text() == str(dimensions["strand_diameter"])
         assert menu.strand_number.text() == str(dimensions["strand_number"])
     menu.save_button_clicked()
-    assert target.is_file()
-    saved = json.loads(target.read_text())
+    assert saved_target.is_file()
+    saved = json.loads(saved_target.read_text())
     Validation().validate_json(saved)
     saved_conductor = saved["winding"]["layers"]["layer_1"]["conductor"]
     assert saved_conductor["type"] == conductor_type
     for key, value in dimensions.items():
         assert saved_conductor[key] == value
+    if conductor_type in ("Litz", "Litz Rectangular"):
+        saved_second_conductor = saved["winding"]["layers"]["layer_2"]["conductor"]
+        assert saved_second_conductor["material"] == "Aluminium"
+        assert saved_second_conductor["strand_diameter"] == 0.2
+        assert saved_second_conductor["strand_number"] == 20
     assert {
         key for key in ("diameter", "width", "height", "strand_diameter", "strand_number") if key in saved_conductor
     } == set(dimensions)
-    assert menu.example_name.text() == target.name
+    assert menu.example_name.text() == saved_target.name
     menu.cond_type.setCurrentText(CONDUCTOR_LABELS["Circular" if conductor_type != "Circular" else "Rectangular"])
-    monkeypatch.setattr(QFileDialog, "getOpenFileName", lambda **kwargs: (str(target), ""))
+    monkeypatch.setattr(QFileDialog, "getOpenFileName", lambda **kwargs: (str(saved_target), ""))
     menu.example_button_clicked()
     assert menu.cond_type.currentText() == CONDUCTOR_LABELS[conductor_type]
     assert menu.conductor_dimension.text() == str(dimensions.get("width", dimensions.get("diameter")))
+    if conductor_type in ("Litz", "Litz Rectangular"):
+        second_side = menu.winding_tree_widget.topLevelItem(1)
+        menu.winding_tree_widget.setCurrentItem(second_side)
+        assert menu.cond_material_label.text() == "Side 2 Conductor Material"
+        assert menu.cond_material.currentText() == "Aluminium"
     if "strand_number" in dimensions:
-        assert menu.strand_number.text() == str(dimensions["strand_number"])
+        expected_strand_count = 20 if conductor_type in ("Litz", "Litz Rectangular") else dimensions["strand_number"]
+        assert menu.strand_number.text() == str(expected_strand_count)
     pages.close()
     columns.close()
     assert app is not None
@@ -196,6 +220,9 @@ def test_litz_schema_and_winding_consistency(litz_data):
     validator.validate_json(data)
     data["winding"]["layers"]["layer_2"]["conductor"]["strand_diameter"] = 10.0
     with pytest.raises(ValueError, match="strand area"):
+        validator.validate_json(data)
+    data["json_version"] = "0.2"
+    with pytest.raises(ValueError, match="Invalid input data"):
         validator.validate_json(data)
 
 
@@ -348,6 +375,7 @@ def test_rectangular_litz_round_trip_and_validation(litz_data, tmp_path):
     manager._update_frontend_properties()
     output = manager.create_backend_data()
     Validation().validate_json(output)
+    assert output["json_version"] == manager.supported_json
     assert output["winding"]["layers"]["layer_1"]["conductor"]["type"] == "Litz Rectangular"
     conductor["strand_number"] = 300
     with pytest.raises(ValueError, match="strand area"):
@@ -384,8 +412,9 @@ def test_rectangular_litz_uses_rectangular_profile_and_stranded_excitation():
 
 def test_litz_multi_side_json_round_trip(litz_data, tmp_path):
     second_layer = copy.deepcopy(litz_data["winding"]["layers"]["layer_1"])
-    second_layer["conductor"].update(diameter=1.5, strand_diameter=0.2, strand_number=20)
+    second_layer["conductor"].update(material="Aluminium", diameter=1.5, strand_diameter=0.2, strand_number=20)
     litz_data["winding"]["layers"]["layer_2"] = second_layer
+    litz_data["materials"]["Aluminium"] = {"conductivity": 38e6, "mur": 1, "epsr": 1}
     litz_data["circuit"]["connections"] = {"1": {"1": "Layer"}, "2": {"2": "Layer"}}
     litz_data["circuit"]["side_loads"].append(1e-6)
     path = tmp_path / "input.json"
@@ -399,10 +428,11 @@ def test_litz_multi_side_json_round_trip(litz_data, tmp_path):
     manager._update_frontend_properties()
     output = manager.create_backend_data()
     Validation().validate_json(output)
+    assert output["materials"]["Aluminium"]["conductivity"] == 38e6
     for layer in ("layer_1", "layer_2"):
         expected = litz_data["winding"]["layers"][layer]["conductor"]
         actual = output["winding"]["layers"][layer]["conductor"]
-        for field in ("diameter", "strand_diameter", "strand_number"):
+        for field in ("material", "diameter", "strand_diameter", "strand_number"):
             assert actual[field] == expected[field]
 
 
@@ -458,20 +488,33 @@ def test_litz_material_assignment_rejects_invalid_sides(connections, message):
     app.materials.add_material.assert_not_called()
 
 
-def test_litz_material_assignment_rejects_different_side_base_material():
+def test_litz_material_assignment_uses_each_side_base_material():
     app = MagicMock()
+    created_materials = []
+
+    def add_material(name):
+        material = SimpleNamespace(name=name)
+        created_materials.append(material)
+        return material
+
+    app.materials.add_material.side_effect = add_material
     layers = {
         "layer_1": Layer(conductor=Conductor(type="Litz", material="Copper", strand_diameter=0.1, strand_number=50)),
-        "layer_2": Layer(conductor=Conductor(type="Litz", material="Aluminium", strand_diameter=0.1, strand_number=50)),
+        "layer_2": Layer(conductor=Conductor(type="Litz", material="Aluminum", strand_diameter=0.1, strand_number=50)),
     }
     winding = Winding("Windings", app, WindingProperties(layers=layers), Core(), Settings(), Bobbin())
     winding.objects_list_append([SimpleNamespace(name="Layer1"), SimpleNamespace(name="Layer2")])
-    with pytest.raises(ValueError, match="differs from the selected winding material"):
-        winding.set_material(
-            Material(name="Copper", conductivity=58e6, mur=1),
-            {"1": {"1": "Layer"}, "2": {"2": "Layer"}},
-        )
-    app.materials.add_material.assert_not_called()
+    winding.set_material(
+        Material(name="Copper", conductivity=58e6, mur=1),
+        {"1": {"1": "Layer"}, "2": {"2": "Layer"}},
+        {
+            "Copper": Material(name="Copper", conductivity=58e6, mur=1),
+            "Aluminum": Material(name="Aluminum", conductivity=35e6, mur=1),
+        },
+    )
+    assert created_materials[0].name.lower().startswith("copper_pyetk_litz_side_1")
+    assert created_materials[1].name.lower().startswith("aluminum_pyetk_litz_side_2")
+    assert [material.conductivity for material in created_materials] == [58e6, 35e6]
 
 
 def test_new_layers_use_side_dimensions_without_per_layer_copies():
@@ -537,6 +580,10 @@ def test_litz_winding_table_preserves_side_settings():
     menu.strand_diameter = QLineEdit()
     menu.strand_number_label = QLabel()
     menu.strand_number = QLineEdit()
+    menu.cond_material = QComboBox()
+    menu.cond_material.addItems(["Copper", "Aluminium"])
+    menu.cond_material_label = QLabel()
+    menu.cond_material.currentTextChanged.connect(menu._conductor_material_changed)
     menu.ui = MagicMock()
     menu._default_side_load = 1e-6
     menu._turn_number = 15
@@ -546,15 +593,44 @@ def test_litz_winding_table_preserves_side_settings():
     menu._insulation_thickness = 0.05
     menu._segments_number = 8
     layers = {
-        "layer_1": {"conductor_diameter": 1.0, "strand_diameter": 0.1, "strand_number": 10},
-        "layer_2": {"conductor_diameter": 1.2, "strand_diameter": 0.1, "strand_number": 10},
-        "layer_3": {"conductor_diameter": 1.5, "strand_diameter": 0.2, "strand_number": 20},
+        "layer_1": {
+            "conductor_diameter": 1.0,
+            "strand_diameter": 0.1,
+            "strand_number": 10,
+            "conductor_material": "Copper",
+        },
+        "layer_2": {
+            "conductor_diameter": 1.2,
+            "strand_diameter": 0.1,
+            "strand_number": 10,
+            "conductor_material": "Copper",
+        },
+        "layer_3": {
+            "conductor_diameter": 1.5,
+            "strand_diameter": 0.2,
+            "strand_number": 20,
+            "conductor_material": "Aluminium",
+        },
     }
     menu._populate_layers_from_definition(layers, {"1": ["1", "2"], "2": ["3"]}, [1.0, 2.0])
     menu._conductor_type_changed()
     first_side = menu.winding_tree_widget.topLevelItem(0)
     second_side = menu.winding_tree_widget.topLevelItem(1)
+    menu.winding_tree_widget.setCurrentItem(first_side)
+    menu._show_conductor_dimensions()
     assert menu._update_layers_definition()["layer_2"]["conductor_diameter"] == 1.0
+    assert menu.cond_material_label.text() == "Side 1 Conductor Material"
+    assert menu.cond_material.currentText() == "Copper"
+    menu.cond_material.setCurrentText("Aluminium")
+    assert menu._update_layers_definition()["layer_1"]["conductor_material"] == "Aluminium"
+    assert menu._update_layers_definition()["layer_2"]["conductor_material"] == "Aluminium"
+    menu.winding_tree_widget.setCurrentItem(second_side)
+    menu._show_conductor_dimensions()
+    menu.cond_material.setCurrentText("Copper")
+    output = menu._update_layers_definition()
+    assert output["layer_1"]["conductor_material"] == output["layer_2"]["conductor_material"] == "Aluminium"
+    assert output["layer_3"]["conductor_material"] == "Copper"
+    menu.cond_material.setCurrentText("Aluminium")
     menu.winding_tree_widget.setCurrentItem(first_side.child(0))
     menu._show_conductor_dimensions()
     assert menu.side_load_label.text() == "Side 1 Load (ohm)"
@@ -583,6 +659,8 @@ def test_litz_winding_table_preserves_side_settings():
     menu.ui.update_logger.assert_any_call("Conductor dimensions must be positive numbers.")
     menu.winding_tree_widget.setCurrentItem(second_side)
     menu._show_conductor_dimensions()
+    assert menu.cond_material_label.text() == "Side 2 Conductor Material"
+    assert menu.cond_material.currentText() == "Aluminium"
     assert menu.conductor_dimension.text() == "1.5"
     assert menu.side_load_label.text() == "Side 2 Load (ohm)"
     assert menu.side_load.text() == "2.0"
@@ -657,8 +735,10 @@ def test_conductor_type_switch_keeps_winding_layout_stable():
         "strand_number",
         "side_load_label",
         "side_load",
+        "cond_material",
     ):
         setattr(menu, name, getattr(page, name))
+    menu.cond_material_label = page.conductor_material_label
     widget.resize(1400, 900)
     widget.show()
     geometries = []
