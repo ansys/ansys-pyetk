@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright (C) 2023 - 2026 ANSYS, Inc. and/or its affiliates.
+# Copyright (C) 2023 - 2026 Synopsys, Inc. and ANSYS, Inc. All rights reserved.
 # SPDX-License-Identifier: Apache-2.0
 #
 #
@@ -19,6 +19,7 @@
 from ansys.aedt.toolkits.electronic_transformer.backend.workflows.core import Core
 from ansys.aedt.toolkits.electronic_transformer.backend.workflows.setup import Setup
 from ansys.aedt.toolkits.electronic_transformer.backend.workflows.winding import Winding
+from ansys.aedt.toolkits.electronic_transformer.common.conductors import LITZ_TYPES
 
 
 class PostProcessing:
@@ -113,6 +114,9 @@ class PostProcessing:
         self.__creat_3d_field_plot()
         self.__create_loss_report()
 
+        if any(layer.conductor.type in LITZ_TYPES for layer in self.__winding.properties.layers.values()):
+            self.__create_stranded_loss_report()
+
         # Create leakage plot, only if there are at least 2 sides.
         # For a single side, there is no leakage inductance to calculate.
         if len(self.__circuit_properties.connections) > 1:
@@ -172,3 +176,14 @@ class PostProcessing:
             expressions=["CoreLoss", "SolidLoss"],
             plot_type="Data Table",
         )
+
+    def __create_stranded_loss_report(self):
+        """Create a frequency plot of stranded losses for Litz windings."""
+        report = self.__aedt.post.create_report(
+            plot_name="Stranded Loss",
+            expressions=["StrandedLoss", "StrandedLossAC"],
+            primary_sweep_variable="Freq",
+            plot_type="Rectangular Plot",
+        )
+        if not report:
+            raise RuntimeError("Failed to create the stranded loss report.")

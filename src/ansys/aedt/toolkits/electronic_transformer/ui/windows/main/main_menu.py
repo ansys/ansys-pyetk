@@ -1,5 +1,6 @@
 
 import json
+import math
 from pathlib import Path
 import sys
 
@@ -27,15 +28,12 @@ from PySide6.QtWidgets import QTreeWidget
 from PySide6.QtWidgets import QTreeWidgetItem
 from PySide6.QtWidgets import QWidget
 from PySide6.QtWidgets import QStyledItemDelegate
-from PySide6.QtCore import QRegularExpression
-from PySide6.QtGui import QRegularExpressionValidator
 from PySide6.QtGui import QIntValidator
 
 from ansys.aedt.toolkits.electronic_transformer.ui.common.database_manager import database_manager
 # Default user interface properties
 from ansys.aedt.toolkits.electronic_transformer.ui.models import fe_properties
 from ansys.aedt.toolkits.electronic_transformer.ui.models import gui_properties
-from ansys.aedt.toolkits.electronic_transformer.ui.models import AirGapConfig
 from ansys.aedt.toolkits.electronic_transformer.ui.models import GUIProperties
 from ansys.aedt.toolkits.electronic_transformer.ui.common.data_manager import data_manager
 from ansys.aedt.toolkits.electronic_transformer.ui.common.units_and_scales import freq_units
@@ -43,6 +41,9 @@ from ansys.aedt.toolkits.electronic_transformer.ui.common.units_and_scales impor
 from ansys.aedt.toolkits.electronic_transformer.ui.common.units_and_scales import scale_units
 # from ansys.aedt.toolkits.electronic_transformer.ui.workflows.ui_validation import Validation
 from ansys.aedt.toolkits.electronic_transformer.common.validation import Validation
+from ansys.aedt.toolkits.electronic_transformer.common.conductors import CONDUCTOR_LABELS
+from ansys.aedt.toolkits.electronic_transformer.common.conductors import LITZ_TYPES
+from ansys.aedt.toolkits.electronic_transformer.common.conductors import RECTANGULAR_TYPES
 
 from ansys.aedt.toolkits.electronic_transformer.ui.windows.main.main_column import Ui_LeftColumn
 from ansys.aedt.toolkits.electronic_transformer.ui.windows.main.main_page import Ui_Geometry
@@ -59,34 +60,21 @@ class WindingTreeDelegate(QStyledItemDelegate):
     """Need to use this to apply validators to the QTreeWidget used for winding configuration,
     as it doesn't support them by default."""
 
-    rect_cond_regex = QRegularExpression(r"^\d*\.?\d+(\s*x\s*|\s+)\d*\.?\d+$")
-
     def createEditor(self, parent, option, index):
         column_index = index.column()
         is_parent = not index.parent().isValid()
 
         # Specify which cells in tree are locked
         # Set winding column to locked
-        if column_index == 0:
+        if column_index in (0, 2, 4):
             return None
-        # Only one cell in column 4 and Side layer where side load is set is active, all others are locked
-        if is_parent and column_index != 4:
-            return None
-        if not is_parent and column_index == 4:
+        if is_parent:
             return None
 
-        # Specify which cells in tree can be modified and create editor for circular or rectangular shapes
+        # Specify which cells in tree can be modified
         editor = QLineEdit(parent)
         if column_index == 1:
             editor.setValidator(QIntValidator(1, 1000, editor))
-        elif column_index == 2:
-            is_circular = "Diameter" in self.parent().headerItem().text(2)
-            if is_circular:
-                dv = QDoubleValidator(editor)
-                dv.setLocale(QLocale.c())
-                editor.setValidator(dv)
-            else:
-                editor.setValidator(QRegularExpressionValidator(self.rect_cond_regex, editor))
         else:
             dv = QDoubleValidator(editor)
             dv.setLocale(QLocale.c())
@@ -254,7 +242,30 @@ class GeometryMenu(object):
         self.add_layer = self.geometry_menu_widget.findChild(QPushButton, "add_layer")
         self.delete_row = self.geometry_menu_widget.findChild(QPushButton, "delete_row")
         self.cond_type = self.geometry_menu_widget.findChild(QComboBox, "cond_type")
+        self.side_load_label = self.geometry_menu_widget.findChild(QLabel, "side_load_label")
+        self.side_load = self.geometry_menu_widget.findChild(QLineEdit, "side_load")
+        self.side_load.editingFinished.connect(self._side_load_changed)
+        self.conductor_dimension_label = self.geometry_menu_widget.findChild(QLabel, "conductor_dimension_label")
+        self.conductor_dimension = self.geometry_menu_widget.findChild(QLineEdit, "conductor_dimension")
+        self.conductor_height = self.geometry_menu_widget.findChild(QLineEdit, "conductor_height")
+        self.strand_diameter_label = self.geometry_menu_widget.findChild(QLabel, "strand_diameter_label")
+        self.strand_diameter = self.geometry_menu_widget.findChild(QLineEdit, "strand_diameter")
+        self.strand_number_label = self.geometry_menu_widget.findChild(QLabel, "strand_number_label")
+        self.strand_number = self.geometry_menu_widget.findChild(QLineEdit, "strand_number")
+        for field in (self.conductor_dimension, self.conductor_height):
+            field.editingFinished.connect(self._conductor_dimensions_changed)
+        for field in (self.strand_diameter, self.strand_number):
+            field.editingFinished.connect(self._strand_settings_changed)
         self.cond_material = self.geometry_menu_widget.findChild(QComboBox, "cond_material")
+        self.cond_material_label = self.geometry_menu_widget.findChild(QLabel, "conductor_material_label")
+        self.cond_material.clear()
+        conductor_materials = (
+            material
+            for material in self.materials_database["winding"]
+            if material != self.gui_properties.winding.insulation_material
+        )
+        self.cond_material.addItems(sorted(conductor_materials, key=str.lower))
+        self.cond_material.currentTextChanged.connect(self._conductor_material_changed)
         self.build_combo = self.geometry_menu_widget.findChild(QComboBox, "build_combo")
 
         self.connections_tree_widget = self.geometry_menu_widget.findChild(QTreeWidget, "connections_tree_widget")
@@ -263,7 +274,8 @@ class GeometryMenu(object):
         self.parallel = self.geometry_menu_widget.findChild(QPushButton, "parallel")
         self.ungroup = self.geometry_menu_widget.findChild(QPushButton, "ungroup")
 
-        self.winding_label = self.geometry_menu_widget.findChild(QLabel, "winding_label")
+        self.connection_label = self.geometry_menu_widget.findChild(QLabel, "label_10")
+        self._connection_side = ""
 
         # # Default Winding and Layer values
         self._conductor_width = 0.4
@@ -285,6 +297,7 @@ class GeometryMenu(object):
         self.winding_tree_widget.itemChanged.connect(self._winding_item_changed)
         self.build_combo.currentIndexChanged.connect(self._update_build)
         self.winding_tree_widget.itemSelectionChanged.connect(self._stash_connections)
+        self.winding_tree_widget.itemSelectionChanged.connect(self._show_conductor_dimensions)
 
         self.series.clicked.connect(lambda: self.connect_connections(connection_type="Series"))
         self.parallel.clicked.connect(lambda: self.connect_connections(connection_type="Parallel"))
@@ -562,6 +575,9 @@ class GeometryMenu(object):
 
         self._read_ui_data()
         self.data_manager._update_frontend_properties()
+        model = self.data_manager.create_backend_data()
+        if self._conductor_type() in LITZ_TYPES and not self._validate_litz_model(model):
+            return False
 
         be_properties = self.main_window.get_properties()
         if be_properties.get("active_project"):
@@ -833,27 +849,43 @@ class GeometryMenu(object):
 
     def _update_build(self):
         """Manage the UI display based on the selected build, either ``Wound`` or ``Planar``.
-        Planar components can only be constructed with rectangular wire. Wound components can be
-        constructed from either rectangular or circular wire."""
+        Planar components can only be constructed with rectangular solid or Litz wire. Wound components can be
+        constructed from solid rectangular and circular, or Litz wire."""
 
         header_item = self.winding_tree_widget.headerItem()
+        planar = self.build_combo.currentIndex() == 1
+        self._restrict_conductor_types(planar)
 
-        if self.build_combo.currentIndex() == 1:
+        if planar:
             self.bobbin_label.setText("Board Thickness, (mm)")
-            self.cond_type.setCurrentText("Rectangular")
-            self.cond_type.setDisabled(True)
             self.bobbin_groupbox.setTitle("Board and Margin")
             self.bobbin_checkbox.setText("Include Board")
             header_item.setText(3, "Turn Spacing\n(mm)")
 
         else:
             self.bobbin_label.setText("Bobbin Thickness, (mm)")
-            self.cond_type.setDisabled(False)
             self.bobbin_groupbox.setTitle("Bobbin and Margin")
             self.bobbin_checkbox.setText("Include Bobbin")
             header_item.setText(3, "Insulation\n(mm)")
 
         self.gui_properties.winding.layer_type = self.build_combo.currentText()
+
+    def _restrict_conductor_types(self, rectangular_only):
+        """List only rectangular conductor types for a planar build, and all types otherwise."""
+        previous = self._conductor_type()
+        labels = [
+            label for kind, label in CONDUCTOR_LABELS.items() if not rectangular_only or kind in RECTANGULAR_TYPES
+        ]
+        if labels == [self.cond_type.itemText(i) for i in range(self.cond_type.count())]:
+            return
+        selected = previous if previous in RECTANGULAR_TYPES or not rectangular_only else "Rectangular"
+        self.cond_type.blockSignals(True)
+        self.cond_type.clear()
+        self.cond_type.addItems(labels)
+        self.cond_type.setCurrentText(CONDUCTOR_LABELS[selected])
+        self.cond_type.blockSignals(False)
+        if selected != previous:
+            self._conductor_type_changed()
 
     def _excitation_change(self):
         """Switch between voltage and current using values stored in ``UserRole``."""
@@ -891,6 +923,8 @@ class GeometryMenu(object):
         ]
 
         self.winding_tree_widget.setHeaderLabels(headers)
+        self.winding_tree_widget.setColumnHidden(2, True)
+        self.winding_tree_widget.setColumnHidden(4, True)
 
         # Set header size to display two rows in title
         hdr = self.winding_tree_widget.header()
@@ -898,13 +932,12 @@ class GeometryMenu(object):
         hdr.setFixedHeight(50)
 
         # Hard wired column widths...
-        self.winding_tree_widget.setColumnWidth(0, 95)  # Layer label
+        self.winding_tree_widget.setColumnWidth(0, 120)  # Layer label
         self.winding_tree_widget.setColumnWidth(1, 40)  # Turns
         self.winding_tree_widget.setColumnWidth(2, 110)  # Cond Size
         self.winding_tree_widget.setColumnWidth(3, 95)  # Turn Spacing / Wire Insulation
         self.winding_tree_widget.setColumnWidth(4, 40)  # Side Load
 
-        # Conductor column is added in this method
         self._conductor_type_changed()
 
     def _add_winding(self):
@@ -928,6 +961,14 @@ class GeometryMenu(object):
                 "type": "Winding",
                 "side": next_side_index,
                 "side_load": self._default_side_load,
+                "strand_diameter": 0.1,
+                "strand_number": 7,
+                "conductor_material": self.gui_properties.winding.conductor_material,
+                "conductor": {
+                    "width": self._conductor_width,
+                    "height": self._conductor_height,
+                    "diameter": self._conductor_diameter,
+                },
             },
         )
 
@@ -937,54 +978,155 @@ class GeometryMenu(object):
         self._add_layer()
 
     def _conductor_type_changed(self):
-        """Handle the conductor type change event.
-        When the user changes the conductor type, this method populates the conductor column
-        from ``UserRole`` and updates the conductor column header.
-        """
-        # First change winding tree header to match selected conductor type
-        cond_text = self.cond_type.currentText()
-        header_item = self.winding_tree_widget.headerItem()
+        """Update conductor-specific controls when the conductor type changes."""
+        cond_text = self._conductor_type()
+        if hasattr(self, "conductor_segments") and self.conductor_segments is not None:
+            round_conductor = cond_text in ("Circular", "Litz")
+            self.conductor_segments.setEnabled(round_conductor)
+            self.conductor_segments.setText(
+                str(self.gui_properties.settings.number_segments) if round_conductor else "--"
+            )
 
-        if cond_text == "Circular":
-            header_item.setText(2, "Conductor_Size\n(Diameter)")
-            if hasattr(self, "conductor_segments") and self.conductor_segments is not None:
-                self.conductor_segments.setEnabled(True)
-                self.conductor_segments.setText(str(self.gui_properties.settings.number_segments))
-
-        else:
-            header_item.setText(2, "Conductor_Size\n(Width x Height)")
-            if hasattr(self, "conductor_segments") and self.conductor_segments is not None:
-                self.conductor_segments.setEnabled(False)
-                self.conductor_segments.setText("--")
-
-        # Then retrieve values for that conductor from UserRole
-        tree = self.winding_tree_widget
-        tree.blockSignals(True)
-
-        for winding_index in range(tree.topLevelItemCount()):
-            winding = tree.topLevelItem(winding_index)
-
-            for layer_index in range(winding.childCount()):
-                row = winding.child(layer_index)
-                data = row.data(0, Qt.UserRole)
-
-                cond = data.get("conductor")
-                if cond_text == "Circular":
-                    dia = cond.get("diameter")
-                    if dia is None:
-                        dia = self._conductor_diameter
-                    row.setText(2, str(dia))
-
-                else:
-                    width = cond.get("width")
-                    height = cond.get("height")
-                    if width or height is None:
-                        width = self._conductor_width
-                        height = self._conductor_height
-                    row.setText(2, (str(width) + " x " + str(height)))
-
-        tree.blockSignals(False)
         self.gui_properties.winding.conductor_type = cond_text
+        self._show_conductor_dimensions()
+
+    def _conductor_type(self):
+        """Return the stored conductor type for the selected display label."""
+        label = self.cond_type.currentText()
+        return next((kind for kind, text in CONDUCTOR_LABELS.items() if text == label), label)
+
+    def _selected_winding(self):
+        item = self.winding_tree_widget.currentItem()
+        while item and item.parent():
+            item = item.parent()
+        return item
+
+    def _show_conductor_dimensions(self):
+        """Display conductor dimensions for the selected winding side."""
+        winding = self._selected_winding()
+        conductor_type = self._conductor_type()
+        rectangular = conductor_type in RECTANGULAR_TYPES
+        if rectangular:
+            dimension_label = "Size (W x H) (mm)"
+        elif conductor_type == "Litz":
+            dimension_label = "Bundle Dia (mm)"
+        else:
+            dimension_label = "Diameter (mm)"
+        self.conductor_dimension_label.setText(dimension_label)
+        self.conductor_height.setVisible(rectangular)
+        litz = conductor_type in LITZ_TYPES
+        for field in (self.strand_diameter_label, self.strand_diameter, self.strand_number_label, self.strand_number):
+            field.setVisible(litz)
+            field.setEnabled(winding is not None)
+        self.conductor_dimension.setEnabled(winding is not None)
+        self.conductor_height.setEnabled(winding is not None)
+        self.side_load.setEnabled(winding is not None)
+        self.cond_material.setEnabled(winding is not None)
+        if winding is None:
+            self.side_load_label.setText("Side load (ohm)")
+            self.cond_material_label.setText("Conductor Material")
+            self.side_load.clear()
+            self.conductor_dimension.clear()
+            self.conductor_height.clear()
+            self.strand_diameter.clear()
+            self.strand_number.clear()
+            return
+        data = winding.data(0, Qt.UserRole)
+        conductor = data["conductor"]
+        if conductor_type in LITZ_TYPES:
+            self.cond_material_label.setText(f"Side {data['side']} Conductor Material")
+        else:
+            self.cond_material_label.setText("Conductor Material")
+        material = (
+            data.get("conductor_material", self.gui_properties.winding.conductor_material)
+            if conductor_type in LITZ_TYPES
+            else self.gui_properties.winding.conductor_material
+        )
+        self.cond_material.blockSignals(True)
+        if self.cond_material.findText(material) < 0:
+            self.cond_material.addItem(material)
+        self.cond_material.setCurrentText(material)
+        self.cond_material.blockSignals(False)
+        self.side_load_label.setText(f"Side {data['side']} Load (ohm)")
+        self.side_load.setText(str(data["side_load"]))
+        self.conductor_dimension.setText(str(conductor["width" if rectangular else "diameter"]))
+        self.conductor_height.setText(str(conductor["height"]))
+        self.strand_diameter.setText(str(data["strand_diameter"]))
+        self.strand_number.setText(str(data["strand_number"]))
+
+    def _conductor_material_changed(self, material):
+        """Store the selected conductor material for the active Litz side."""
+        if self._conductor_type() not in LITZ_TYPES:
+            self.gui_properties.winding.conductor_material = material
+            return
+        winding = self._selected_winding()
+        if winding is None:
+            return
+        data = winding.data(0, Qt.UserRole)
+        data["conductor_material"] = material
+        winding.setData(0, Qt.UserRole, data)
+        self.gui_properties.winding.layers_definition = self._update_layers_definition()
+
+    def _side_load_changed(self):
+        """Store the load for the selected winding side."""
+        winding = self._selected_winding()
+        if winding is None:
+            return
+        try:
+            load = float(self.side_load.text())
+        except ValueError:
+            load = float("nan")
+        if not math.isfinite(load):
+            self.ui.update_logger("Side load must be a finite number.")
+            self._show_conductor_dimensions()
+            return
+        data = winding.data(0, Qt.UserRole)
+        data["side_load"] = load
+        winding.setData(0, Qt.UserRole, data)
+        self.gui_properties.winding.side_loads = self._update_loads_definition()
+
+    def _strand_settings_changed(self):
+        """Store the Litz strand specification for the selected side."""
+        winding = self._selected_winding()
+        if winding is None or self._conductor_type() not in LITZ_TYPES:
+            return
+        try:
+            diameter = float(self.strand_diameter.text())
+            count = int(self.strand_number.text())
+        except ValueError:
+            diameter, count = 0, 0
+        if not math.isfinite(diameter) or diameter <= 0 or count < 2:
+            self.ui.update_logger("Strand diameter must be positive and strand count must be an integer of at least 2.")
+            self._show_conductor_dimensions()
+            return
+        data = winding.data(0, Qt.UserRole)
+        data["strand_diameter"] = diameter
+        data["strand_number"] = count
+        winding.setData(0, Qt.UserRole, data)
+        self.gui_properties.winding.layers_definition = self._update_layers_definition()
+
+    def _conductor_dimensions_changed(self):
+        """Apply the selected side's dimensions to all its layers."""
+        winding = self._selected_winding()
+        if winding is None:
+            return
+        rectangular = self._conductor_type() in RECTANGULAR_TYPES
+        fields = (self.conductor_dimension, self.conductor_height) if rectangular else (self.conductor_dimension,)
+        try:
+            values = [float(field.text()) for field in fields]
+        except ValueError:
+            values = []
+        if not values or any(not math.isfinite(value) or value <= 0 for value in values):
+            self.ui.update_logger("Conductor dimensions must be positive numbers.")
+            self._show_conductor_dimensions()
+            return
+        data = winding.data(0, Qt.UserRole)
+        conductor = data["conductor"]
+        conductor["width" if rectangular else "diameter"] = values[0]
+        if rectangular:
+            conductor["height"] = values[1]
+        winding.setData(0, Qt.UserRole, data)
+        self.gui_properties.winding.layers_definition = self._update_layers_definition()
 
     def _update_core_segments_display(self):
         core_type = self.gui_properties.core.type or ""
@@ -1014,30 +1156,6 @@ class GeometryMenu(object):
                 # Remove leading 0 from user input
                 item.setText(1, str(turns))
                 self.winding_tree_widget.blockSignals(False)
-
-
-            elif column == 2:
-                mode = self.cond_type.currentText()
-                cond = data.setdefault("conductor", {})
-
-                raw_input = (item.text(2) or "").strip()
-                parts = raw_input.replace("x", " ").split()
-
-                if mode == "Circular":
-                    dia = float(parts[0])
-                    cond["diameter"] = dia
-                    self.winding_tree_widget.blockSignals(True)
-                    item.setText(2, str(dia))
-                    self.winding_tree_widget.blockSignals(False)
-                else:
-                    width = float(parts[0])
-                    height = float(parts[1])
-                    cond["width"] = width
-                    cond["height"] = height
-                    self.winding_tree_widget.blockSignals(True)
-                    item.setText(2, f"{width} x {height}")
-                    self.winding_tree_widget.blockSignals(False)
-
             elif column == 3:
                 insulation = float(item.text(3))
                 data["insulation"] = insulation
@@ -1049,22 +1167,12 @@ class GeometryMenu(object):
                 return
 
         elif row_type == "Winding":
-            if column == 4:
-                side_load = float(item.text(4))
-                data["side_load"] = side_load
-                self.winding_tree_widget.blockSignals(True)
-                item.setText(4, str(side_load))
-                self.winding_tree_widget.blockSignals(False)
-            else:
-                return
+            return
 
         item.setData(0, Qt.UserRole, data)
 
         if row_type == "Layer":
             self.gui_properties.winding.layers_definition = self._update_layers_definition()
-
-        elif row_type == "Winding":
-            self.gui_properties.winding.side_loads = self._update_loads_definition()
 
     def _add_layer(self):
         """Add a new layer to the selected winding and update the corresponding connection tree.
@@ -1094,21 +1202,7 @@ class GeometryMenu(object):
             "id": new_layer_id,
             "turns": self._turn_number,
             "insulation": self._insulation_thickness,
-            "conductor": {
-                "width": self._conductor_width,
-                "height": self._conductor_height,
-                "diameter": self._conductor_diameter,
-            },
         }
-
-        # Choose correct conductor values based on conductor type
-        cond_type = self.cond_type.currentText()
-        conductor = layer_data["conductor"]
-
-        if cond_type == "Circular":
-            conductor_display = str(conductor["diameter"])
-        else:
-            conductor_display = str(conductor["width"]) + " x " + str(conductor["height"])
 
         self.winding_tree_widget.blockSignals(True)
 
@@ -1117,7 +1211,7 @@ class GeometryMenu(object):
             [
                 "Layer " + str(new_layer_id),
                 str(layer_data["turns"]),
-                conductor_display,
+                "",
                 str(layer_data["insulation"]),
                 "",
             ]
@@ -1308,11 +1402,14 @@ class GeometryMenu(object):
 
         # Update winding tree after side is deleted
         if winding_tree.topLevelItemCount():
+            self._connection_side = ""
             winding_tree.setCurrentItem(winding_tree.topLevelItem(0))
-            self.winding_label.setText(winding_tree.topLevelItem(0).text(0))
+            self._connection_side = str(winding_tree.topLevelItem(0).data(0, Qt.UserRole)["side"])
+            self.connection_label.setText(f"Connect Side{self._connection_side} in:")
             self._display_connection_scheme()
         else:
-            self.winding_label.setText("")
+            self._connection_side = ""
+            self.connection_label.setText("Connect in:")
             self.connections_tree_widget.clear()
 
         # And update the various properties needed
@@ -1739,7 +1836,7 @@ class GeometryMenu(object):
         restores a single saved connection if it is present in ``UserRole`` (``conn_saved``).
         Otherwise, it rebuilds from the global ``_connections_definition``.
         """
-        side_key = self.winding_label.text().replace("Side", "").strip()
+        side_key = self._connection_side
         self.connections_tree_widget.clear()
 
         # Find the current top-level side item
@@ -1812,10 +1909,15 @@ class GeometryMenu(object):
 
         # Initialize layers definition as empty
         layers_def = {}
+        conductor_type = self._conductor_type()
+        round_conductor = conductor_type in ("Circular", "Litz")
+        planar = self.build_combo.currentText() != "Wound" if not round_conductor else False
 
         # Iterate all windings and their child layers
         for side_index in range(self.winding_tree_widget.topLevelItemCount()):
             winding = self.winding_tree_widget.topLevelItem(side_index)
+            side_data = winding.data(0, Qt.UserRole)
+            conductor = side_data["conductor"]
 
             for layer in range(winding.childCount()):
                 child = winding.child(layer)
@@ -1828,33 +1930,33 @@ class GeometryMenu(object):
 
                 turns = data.get("turns")
                 insulation = data.get("insulation")
-                cond = data.get("conductor")
-
-                if self.cond_type.currentText() == "Circular":
+                if round_conductor or planar:
+                    segments_text = self.conductor_segments.text()
+                    segments = int(segments_text) if segments_text not in ("", "--") else self._segments_number
+                if round_conductor:
                     layers_def[layer_key] = {
-                        "conductor_diameter": cond.get("diameter"),
-                        "segments_number": int(self.conductor_segments.text()) if self.conductor_segments.text() not in ("","--") else self._segments_number,
+                        "conductor_diameter": conductor.get("diameter", self._conductor_diameter),
+                        "segments_number": segments,
                         "insulation_thickness": insulation,
                         "turns_number": turns,
                     }
-
                 else:
-                    if self.build_combo.currentText() == "Wound":
-                        layers_def[layer_key] = {
-                            "conductor_width": cond.get("width"),
-                            "conductor_height": cond.get("height"),
-                            "insulation_thickness": insulation,
-                            "turns_number": turns,
-                        }
+                    layers_def[layer_key] = {
+                        "conductor_width": conductor.get("width"),
+                        "conductor_height": conductor.get("height"),
+                        "turns_number": turns,
+                    }
+                    if planar:
+                        layers_def[layer_key]["turn_spacing"] = insulation
+                        layers_def[layer_key]["segments_number"] = segments
                     else:
-                        layers_def[layer_key] = {
-                            "conductor_width": cond.get("width"),
-                            "conductor_height": cond.get("height"),
-                            "turn_spacing": insulation,
-                            "turns_number": turns,
-                            "segments_number": int(self.conductor_segments.text()) if self.conductor_segments.text() not in ("","--") else self._segments_number,
-                        }
-        # self.gui_properties.winding.turn_spacing = insulation
+                        layers_def[layer_key]["insulation_thickness"] = insulation
+                if conductor_type in LITZ_TYPES:
+                    layers_def[layer_key]["strand_diameter"] = side_data["strand_diameter"]
+                    layers_def[layer_key]["strand_number"] = side_data["strand_number"]
+                    layers_def[layer_key]["conductor_material"] = side_data.get(
+                        "conductor_material", self.gui_properties.winding.conductor_material
+                    )
         return layers_def
 
     def _stash_connections(self):
@@ -1865,9 +1967,8 @@ class GeometryMenu(object):
             return
 
         # Stash previous sides text
-        prev_side_text = self.winding_label.text()
-        if prev_side_text:
-            prev_key = prev_side_text.replace("Side", "")
+        prev_key = self._connection_side
+        if prev_key:
 
             # Get previous top-level side item
             prev_item = None
@@ -1905,14 +2006,15 @@ class GeometryMenu(object):
         # Switch to new side
         item = self.winding_tree_widget.currentItem()
         if item is None:
+            self._connection_side = ""
+            self.connection_label.setText("Connect in:")
+            self.connections_tree_widget.clear()
             return
 
         while item.parent():
             item = item.parent()
-        top_level_name = item.text(0)
-
-        if self.winding_label.text() != top_level_name:
-            self.winding_label.setText(top_level_name)
+        self._connection_side = str(item.data(0, Qt.UserRole)["side"])
+        self.connection_label.setText(f"Connect Side{self._connection_side} in:")
 
         self._display_connection_scheme()
 
@@ -1943,12 +2045,7 @@ class GeometryMenu(object):
             self.current_example_index = self.example_files.index(file_name)
         except ValueError:
             self.current_example_index = 0
-
-        msg, is_valid = self.data_manager._import_data_from_json(file_name)
-        self.ui.update_logger(msg)
-        if is_valid:
-            self._write_ui_data()
-            self.example_name.setText(file_name.name)
+        self._load_etk_json(file_name)
 
     def _reset_example_dir(self):
         """Reset navigation to default examples directory and revert displayed design to 'New Design'."""
@@ -2007,9 +2104,12 @@ class GeometryMenu(object):
             self.excitation_value.setText(str(self.gui_properties.electrical.current))
 
         # Populate UI for Winding Group
+        conductor_type = self.gui_properties.winding.conductor_type
         self.build_combo.setCurrentText(self.gui_properties.winding.layer_type)
-        self.cond_type.setCurrentText(self.gui_properties.winding.conductor_type)
+        self.cond_type.setCurrentText(CONDUCTOR_LABELS.get(conductor_type, conductor_type))
+        self.cond_material.blockSignals(True)
         self.cond_material.setCurrentText(self.gui_properties.winding.conductor_material)
+        self.cond_material.blockSignals(False)
         self.layer_spacing.setText(str(self.gui_properties.winding.layer_spacing))
 
         # Winding Table
@@ -2019,7 +2119,6 @@ class GeometryMenu(object):
 
         # Connections Table populated and displayed
         self._populate_connections_from_definition(self.gui_properties.winding.connections_definition)
-        self._display_connection_scheme()
 
         # Add first winding to tree for a new design
         if not self.gui_properties.winding.layers_definition:
@@ -2027,6 +2126,7 @@ class GeometryMenu(object):
 
         # Select first layer in first side to refresh connections
         self.winding_tree_widget.setCurrentItem(self.winding_tree_widget.topLevelItem(0).child(0))
+        self._stash_connections()
 
         # Settings
         self.draw_skin_layers.setChecked(self.gui_properties.settings.draw_skin_layers)
@@ -2036,7 +2136,7 @@ class GeometryMenu(object):
         self.number_passes.setText(str(self.gui_properties.settings.number_passes))
         self.percentage_error.setText(str(self.gui_properties.settings.percentage_error))
 
-        if self.cond_type.currentText() == "Circular":
+        if self._conductor_type() in ("Circular", "Litz"):
             self.conductor_segments.setEnabled(True)
             self.conductor_segments.setText(str(self.gui_properties.settings.number_segments))
         else:
@@ -2155,6 +2255,23 @@ class GeometryMenu(object):
             layer_ids = layer_side_def[side]
             load = side_load_map.get(side, self._default_side_load)
 
+            first_layer = layers_def.get("layer_" + str(layer_ids[0]), {}) if layer_ids else {}
+            strand_diameter = first_layer.get("strand_diameter", 0.1)
+            strand_number = first_layer.get("strand_number", 7)
+            conductor = {
+                "width": first_layer.get("conductor_width", self._conductor_width),
+                "height": first_layer.get("conductor_height", self._conductor_height),
+                "diameter": first_layer.get("conductor_diameter", self._conductor_diameter),
+            }
+            dimension_keys = ("conductor_diameter",) if "conductor_diameter" in first_layer else (
+                "conductor_width", "conductor_height"
+            )
+            if any(
+                any(layers_def.get("layer_" + str(layer_id), {}).get(key) != first_layer.get(key)
+                    for key in dimension_keys)
+                for layer_id in layer_ids[1:]
+            ):
+                self.ui.update_logger(f"Side {side}: using conductor dimensions from its first layer.")
             winding_item = QTreeWidgetItem(["Side" + str(side), "", "", "", str(load)])
             winding_item.setFlags(winding_item.flags() | Qt.ItemIsEditable)
             winding_item.setData(
@@ -2164,6 +2281,12 @@ class GeometryMenu(object):
                     "type": "Winding",
                     "side": int(side),
                     "side_load": float(load),
+                    "strand_diameter": strand_diameter,
+                    "strand_number": strand_number,
+                    "conductor_material": first_layer.get(
+                        "conductor_material", self.gui_properties.winding.conductor_material
+                    ),
+                    "conductor": conductor,
                 },
             )
 
@@ -2173,16 +2296,6 @@ class GeometryMenu(object):
                 layer_def = layers_def.get(layer_key, {})
 
                 turns = layer_def.get("turns_number", self._turn_number)
-
-                # Determine conductor display and data
-                if "conductor_diameter" in layer_def:
-                    conductor_display = str(layer_def["conductor_diameter"])
-                    conductor = {"diameter": layer_def["conductor_diameter"]}
-                else:
-                    w = layer_def.get("conductor_width", self._conductor_width)
-                    h = layer_def.get("conductor_height", self._conductor_height)
-                    conductor_display = str(w) + " x " + str(h)
-                    conductor = {"width": w, "height": h}
 
                 # Insulation key depends on layer type (Wound vs Planar), not conductor type
                 if self.gui_properties.winding.layer_type.lower() == "planar":
@@ -2194,7 +2307,7 @@ class GeometryMenu(object):
                     [
                         "Layer " + str(layer_id),
                         str(turns),
-                        conductor_display,
+                        "",
                         str(insulation),
                         "",
                     ]
@@ -2208,7 +2321,6 @@ class GeometryMenu(object):
                         "id": layer_id,
                         "turns": turns,
                         "insulation": insulation,
-                        "conductor": conductor,
                     },
                 )
 
@@ -2292,8 +2404,9 @@ class GeometryMenu(object):
         self._number_of_layers = len(self.gui_properties.winding.layers_definition)
         self.gui_properties.winding.layer_spacing = self.layer_spacing.text()
         self.gui_properties.settings.draw_skin_layers = self.draw_skin_layers.isChecked()
-        self.gui_properties.winding.conductor_type= self.cond_type.currentText()
-        self.gui_properties.winding.conductor_material = self.cond_material.currentText()
+        self.gui_properties.winding.conductor_type= self._conductor_type()
+        if self.gui_properties.winding.conductor_type not in LITZ_TYPES:
+            self.gui_properties.winding.conductor_material = self.cond_material.currentText()
 
         self.gui_properties.settings.include_bobbin = self.bobbin_checkbox.isChecked()
         self.gui_properties.bobbin_board_and_margin.thickness = float(self.bobbin_board_thickness.text())
@@ -2336,10 +2449,12 @@ class GeometryMenu(object):
 
         # handle the event where the user cancels the option to save
         if file_name != Path("."):
-            self._save_model(file=file_name)
-            self._active_dir = file_name.parent
-            self.example_files = sorted(self._active_dir.glob("*.json")) + [None]
-            self.example_name.setText(file_name.name)
+            if file_name.suffix.lower() != ".json":
+                file_name = file_name.with_suffix(".json")
+            if self._save_model(file=file_name):
+                self._active_dir = file_name.parent
+                self.example_files = sorted(self._active_dir.glob("*.json")) + [None]
+                self.example_name.setText(file_name.name)
         else:
             self.ui.update_logger("Save As operation cancelled by user")
 
@@ -2353,5 +2468,17 @@ class GeometryMenu(object):
         self._read_ui_data()
         self.data_manager._update_frontend_properties()
         etk_model = self.data_manager.create_backend_data()
+        if self._conductor_type() in LITZ_TYPES and not self._validate_litz_model(etk_model):
+            return False
         with file.open(mode="w") as f:
             json.dump(etk_model, f, indent=2)
+        return True
+
+    def _validate_litz_model(self, model):
+        """Report invalid Litz input before saving or creating a model."""
+        try:
+            Validation().validate_json(model)
+        except ValueError as error:
+            self.ui.update_logger(f"Invalid Litz configuration: {error}")
+            return False
+        return True

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright (C) 2023 - 2026 ANSYS, Inc. and/or its affiliates.
+# Copyright (C) 2023 - 2026 Synopsys, Inc. and ANSYS, Inc. All rights reserved.
 # SPDX-License-Identifier: Apache-2.0
 #
 #
@@ -21,6 +21,89 @@ import math
 from pathlib import Path
 
 from jsonschema import validate
+from jsonschema.exceptions import ValidationError
+
+from ansys.aedt.toolkits.electronic_transformer.common.conductors import LITZ_TYPES
+from ansys.aedt.toolkits.electronic_transformer.common.conductors import RECTANGULAR_TYPES
+
+
+def connection_layers(connection):
+    """Yield layer numbers from a nested circuit connection."""
+    for key, value in connection.items():
+        if value == "Layer":
+            yield str(key)
+        elif isinstance(value, dict):
+            yield from connection_layers(value)
+
+
+def _has_litz_layers(data):
+    """Return whether possibly malformed input data contains a Litz conductor."""
+    winding = data.get("winding") if isinstance(data, dict) else None
+    layers = winding.get("layers") if isinstance(winding, dict) else None
+    if not isinstance(layers, dict):
+        return False
+    return any(
+        isinstance(layer, dict)
+        and isinstance(layer.get("conductor"), dict)
+        and layer["conductor"].get("type") in LITZ_TYPES
+        for layer in layers.values()
+    )
+
+
+def _validate_litz_design(data, litz_layers):
+    """Check that a Litz design uses one Litz type, rectangular if planar, and has consistent sides."""
+    litz_types = {conductor["type"] for conductor in litz_layers.values()}
+    if (
+        len(litz_layers) != len(data["winding"]["layers"])
+        or len(litz_types) != 1
+        or (data["winding"]["layer_type"] == "Planar" and litz_types != {"Litz Rectangular"})
+    ):
+        raise ValueError(
+            "Litz conductors require Litz selected for every layer, and rectangular Litz for a planar design."
+        )
+    for name, conductor in litz_layers.items():
+        _validate_strand_fit(name, conductor)
+    _validate_litz_sides(data["circuit"]["connections"], litz_layers)
+
+
+def _validate_strand_fit(name, conductor):
+    """Check that the strands fit inside the bundle cross-section."""
+    strand_area = conductor["strand_number"] * math.pi * conductor["strand_diameter"] ** 2 / 4
+    if conductor["type"] == "Litz Rectangular":
+        bundle_area = conductor["width"] * conductor["height"]
+        if conductor["strand_diameter"] > min(conductor["width"], conductor["height"]):
+            raise ValueError(f"{name}: strand diameter exceeds the bundle dimensions.")
+    else:
+        bundle_area = math.pi * conductor["diameter"] ** 2 / 4
+    if strand_area > bundle_area:
+        raise ValueError(f"{name}: strand area exceeds the bundle cross-sectional area.")
+
+
+def _validate_litz_sides(connections, litz_layers):
+    """Check that each layer is on exactly one side and each side has one Litz specification."""
+    assigned_layers = set()
+    for side, connection in connections.items():
+        side_layers = list(connection_layers(connection))
+        missing = [number for number in side_layers if f"layer_{number}" not in litz_layers]
+        if missing:
+            raise ValueError(f"Side {side}: unknown layer(s) {', '.join(missing)}.")
+        for number in side_layers:
+            if number in assigned_layers:
+                raise ValueError(f"Layer {number} is connected more than once.")
+            assigned_layers.add(number)
+        specifications = {
+            (
+                litz_layers[f"layer_{number}"]["material"],
+                litz_layers[f"layer_{number}"]["strand_diameter"],
+                litz_layers[f"layer_{number}"]["strand_number"],
+            )
+            for number in side_layers
+        }
+        if len(specifications) > 1:
+            raise ValueError(f"Side {side}: all layers must use the same Litz material, strand diameter and count.")
+    unassigned_layers = set(litz_layers) - {f"layer_{number}" for number in assigned_layers}
+    if unassigned_layers:
+        raise ValueError(f"Litz layers not connected to a side: {', '.join(sorted(unassigned_layers))}.")
 
 
 class Validation:
@@ -296,7 +379,7 @@ class Validation:
         # ---- start checking for wound ---- #
         if winding_properties.layer_type == "Wound":
             # ---- Check possible width for wound---- #
-            if conductor_type == "Rectangular":
+            if conductor_type in RECTANGULAR_TYPES:
                 # take sum of layer dimensions where one layer is: Width + 2 * Insulation
                 maximum_layer = (
                     sum(
@@ -327,7 +410,7 @@ class Validation:
             maximum_possible_width = 2 * (bobbin_board_thickness + side_margin + maximum_layer)
 
             # ---- Check possible height for wound---- #
-            if conductor_type == "Rectangular":
+            if conductor_type in RECTANGULAR_TYPES:
                 # max value from each layer: (Height + 2 * Insulation) * number of turns
                 maximum_layer = max(
                     [
@@ -343,7 +426,7 @@ class Validation:
                     ]
                 )
 
-            elif conductor_type == "Circular":
+            elif conductor_type in ("Circular", "Litz"):
                 maximum_layer = max(
                     [
                         ((layer.conductor.diameter + 2 * layer.insulation.thickness) * layer.turns.quantity)
@@ -473,13 +556,23 @@ class Validation:
 
         Parameters
         ----------
-        data : :class:`pathlib.Path`
-            Path to the input data in JSON format.
+        data : dict
+            Parsed input data.
         """
         with self.schema.open("r", encoding="utf-8") as file:
             schema = json.load(file)
 
         try:
             validate(instance=data, schema=schema)
-        except Exception as e:
-            raise Exception("Invalid input data:", e)
+        except ValidationError as e:
+            if _has_litz_layers(data):
+                raise ValueError(f"Invalid input data: {e.message}") from e
+            raise Exception("Invalid input data:", e) from e
+
+        litz_layers = {
+            name: layer["conductor"]
+            for name, layer in data["winding"]["layers"].items()
+            if layer["conductor"]["type"] in LITZ_TYPES
+        }
+        if litz_layers:
+            _validate_litz_design(data, litz_layers)

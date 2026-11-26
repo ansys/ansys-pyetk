@@ -38,6 +38,8 @@ from ansys.aedt.toolkits.electronic_transformer.backend.workflows.bobbin import 
 from ansys.aedt.toolkits.electronic_transformer.backend.workflows.core import Core
 from ansys.aedt.toolkits.electronic_transformer.backend.workflows.etk import ETK
 from ansys.aedt.toolkits.electronic_transformer.backend.workflows.winding import Winding
+from ansys.aedt.toolkits.electronic_transformer.common.conductors import LITZ_TYPES
+from ansys.aedt.toolkits.electronic_transformer.common.conductors import RECTANGULAR_TYPES
 from ansys.aedt.toolkits.electronic_transformer.common.validation import Validation
 
 
@@ -162,11 +164,14 @@ class ToolkitBackend(AEDTCommon):
             this_layer.conductor.material = value_layer["conductor"]["material"]
             this_layer.conductor.type = value_layer["conductor"]["type"]
 
-            if this_layer.conductor.type == "Rectangular":
+            if this_layer.conductor.type in RECTANGULAR_TYPES:
                 this_layer.conductor.height = value_layer["conductor"]["height"]
                 this_layer.conductor.width = value_layer["conductor"]["width"]
-            elif this_layer.conductor.type == "Circular":
+            elif this_layer.conductor.type in ("Circular", "Litz"):
                 this_layer.conductor.diameter = value_layer["conductor"]["diameter"]
+            if this_layer.conductor.type in LITZ_TYPES:
+                this_layer.conductor.strand_diameter = value_layer["conductor"]["strand_diameter"]
+                this_layer.conductor.strand_number = value_layer["conductor"]["strand_number"]
 
             this_layer.turns.quantity = value_layer["turns"]["quantity"]
             this_layer.turns.spacing = value_layer["turns"]["spacing"]

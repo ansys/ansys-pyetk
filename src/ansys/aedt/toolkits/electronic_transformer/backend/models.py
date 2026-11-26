@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright (C) 2023 - 2026 ANSYS, Inc. and/or its affiliates.
+# Copyright (C) 2023 - 2026 Synopsys, Inc. and ANSYS, Inc. All rights reserved.
 # SPDX-License-Identifier: Apache-2.0
 #
 #
@@ -15,7 +15,6 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
 
 from enum import Enum
 from typing import Any
@@ -98,6 +97,8 @@ class Conductor(BaseModel, validate_assignment=True):
     material: str = ""
     width: float = 0.0
     diameter: float = 0.0
+    strand_diameter: float = 0.0
+    strand_number: int = 0
     height: float = 0.0
     type: str = ""
     number_segments: int = 0
