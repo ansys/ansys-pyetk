@@ -17,7 +17,9 @@
 # limitations under the License.
 
 import json
+import os
 from pathlib import Path
+import sys
 
 from ansys.aedt.toolkits.common.ui.logger_handler import logger
 
@@ -25,6 +27,58 @@ from ansys.aedt.toolkits.electronic_transformer.ui.common.utils import extract_s
 
 # data and example directory location
 data_dir = Path(__file__).resolve().parents[1] / "data"
+
+
+def user_data_dir():
+    """Return the folder where users of the standalone application can edit the databases.
+
+    Each JSON file in this folder only holds what the user adds or changes. It is merged on
+    top of the database shipped with the toolkit, so toolkit updates still reach the user.
+    Returns ``None`` when running from source or a pip installation.
+    """
+    if "PYAEDT_TOOLKIT_CONFIG_DIR" in os.environ:
+        return Path(os.environ["PYAEDT_TOOLKIT_CONFIG_DIR"]).absolute() / "data"
+    if getattr(sys, "frozen", False):
+        base = os.environ.get("APPDATA") or str(Path.home() / ".config")
+        return Path(base) / "Ansys" / "Electronic Transformer toolKit" / "data"
+    return None
+
+
+def _merge(base, override):
+    """Merge ``override`` into ``base``: objects key by key, any other value replaces."""
+    for key, value in override.items():
+        if isinstance(value, dict) and isinstance(base.get(key), dict):
+            _merge(base[key], value)
+        else:
+            base[key] = value
+    return base
+
+
+def load_with_user_overrides(path):
+    """Load a shipped JSON database and merge the user's version of the file on top of it.
+
+    Errors in the shipped file are raised as before. A problem with the user's file is
+    logged and the shipped data is used, so a bad edit can't stop the toolkit from starting.
+    """
+    data = json.loads(Path(path).read_text(encoding="utf-8"))
+    folder = user_data_dir()
+    if folder is None:
+        return data
+
+    user_file = folder / Path(path).name
+    try:
+        if not user_file.exists() and "PYAEDT_TOOLKIT_CONFIG_DIR" not in os.environ:
+            folder.mkdir(parents=True, exist_ok=True)
+            user_file.write_text("{}\n", encoding="utf-8")
+        if not user_file.is_file():
+            return data
+        overrides = json.loads(user_file.read_text(encoding="utf-8-sig"))
+        if not isinstance(overrides, dict):
+            raise ValueError("the file must contain a JSON object")
+        return _merge(data, overrides)
+    except (OSError, ValueError, RecursionError) as error:
+        logger.error(f"Ignoring {user_file}: {error}")
+        return json.loads(Path(path).read_text(encoding="utf-8"))
 
 
 class CoreDataBase:
@@ -36,7 +90,7 @@ class CoreDataBase:
         self.core_file_path = data_dir / "core_dimensions.json"
 
         try:
-            self.cores_database = json.loads(self.core_file_path.read_text())
+            self.cores_database = load_with_user_overrides(self.core_file_path)
 
         except FileNotFoundError:
             msg = "Error: core_dimensions.json missing at " + str(self.core_file_path)
@@ -108,7 +162,7 @@ class MaterialDataBase:
         self.mat_file_path = data_dir / "material_properties.json"
 
         try:
-            self.materials_database = json.loads(self.mat_file_path.read_text())
+            self.materials_database = load_with_user_overrides(self.mat_file_path)
             return self.materials_database
 
         except FileNotFoundError:

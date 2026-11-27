@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright (C) 2023 - 2026 ANSYS, Inc. and/or its affiliates.
+# Copyright (C) 2023 - 2026 Synopsys, Inc. and ANSYS, Inc. All rights reserved.
 # SPDX-License-Identifier: Apache-2.0
 #
 #
@@ -76,7 +76,7 @@ def sample_json_data():
         dict: Sample JSON configuration data.
     """
     return {
-        "json_version": "0.1.0",
+        "json_version": "0.2.0",
         "core": {
             "supplier": "TDK",
             "type": "EI",

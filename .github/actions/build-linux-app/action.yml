@@ -22,10 +22,18 @@ runs:
       with:
         python-version: ${{ inputs.python-version }}
 
+    # Bootstrap from the PSF-published wheel and hash: an index-based upgrade
+    # would still rely on the old pip's compromised CA bundle.
+    - name: "Bootstrap pip with a safe certificate bundle"
+      shell: bash
+      run: |
+        python -m pip --disable-pip-version-check install --no-cache-dir --force-reinstall "pip @ https://files.pythonhosted.org/packages/3f/06/3e4420302363fbb71be3c7f35ce042f54bfca330e3e66b3a2e3c4cca579f/pip-26.2.2-py3-none-any.whl#sha256=fd7f4dfa8190e014013b9f08f3e973f4e4c26ffd179a204895533a7254813a70"
+
     - name: Install Linux Dependencies
       shell: bash
       run: |
         sudo apt update
+        sudo apt-get install -y --no-install-recommends ca-certificates
         sudo apt install aptitude -y
         sudo aptitude install libfontconfig1-dev \
           libfreetype6-dev \
@@ -56,11 +64,17 @@ runs:
         sudo apt install ruby -y
         sudo gem install fpm
 
+    - name: Set up uv
+      uses: astral-sh/setup-uv@bec219d24cd3e171d82865faccec33120bb574f4 # v10.1.0
+      with:
+        activate-environment: true
+        enable-cache: false
+        prune-cache: true
+
     - name: Install Python Dependencies
       shell: bash
       run: |
-        pip install --upgrade pip
-        pip install .[freeze]
+        uv sync --frozen --extra freeze
 
     - name: Extract version
       id: extract-version

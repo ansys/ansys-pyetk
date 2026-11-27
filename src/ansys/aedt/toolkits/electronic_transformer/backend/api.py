@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright (C) 2023 - 2026 ANSYS, Inc. and/or its affiliates.
+# Copyright (C) 2023 - 2026 Synopsys, Inc. and ANSYS, Inc. All rights reserved.
 # SPDX-License-Identifier: Apache-2.0
 #
 #
@@ -15,7 +15,6 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
 
 from pathlib import Path
 import sys
@@ -100,6 +99,7 @@ class ToolkitBackend(AEDTCommon):
         self.properties.core.material = core_props["material"]
         self.properties.core.dimensions = core_props["dimensions"]
         self.properties.core.airgap.define_airgap = core_props["airgap"]["define_airgap"]
+        self.properties.core.number_segments = core_props.get("number_segments", 0)
 
         if self.properties.core.airgap.define_airgap:
             self.properties.core.airgap.airgap_on_leg = core_props["airgap"]["airgap_on_leg"]
@@ -171,6 +171,7 @@ class ToolkitBackend(AEDTCommon):
             this_layer.turns.quantity = value_layer["turns"]["quantity"]
             this_layer.turns.spacing = value_layer["turns"]["spacing"]
             this_layer.turns.distance = value_layer["turns"]["distance"]
+            this_layer.segments_number = value_layer.get("segments_number", 0)
 
             self.properties.winding.layers[key_layer] = this_layer
 
@@ -188,7 +189,7 @@ class ToolkitBackend(AEDTCommon):
 
         self.properties.settings.full_model = setup_props["full_model"]
         self.properties.settings.region_offset = setup_props["region_offset"]
-        self.properties.settings.segmentation_angle = setup_props["segmentation_angle"]
+        self.properties.settings.number_segments = setup_props.get("number_segments", 0)
         self.properties.settings.analysis_setup.adaptive_frequency = setup_props["analysis_setup"]["adaptive_frequency"]
         self.properties.settings.analysis_setup.percentage_error = setup_props["analysis_setup"]["percentage_error"]
         self.properties.settings.analysis_setup.number_passes = setup_props["analysis_setup"]["number_passes"]
@@ -334,8 +335,10 @@ class ToolkitBackend(AEDTCommon):
             properties.settings,
             properties.bobbin,
         )
-
+        material_name = next(iter(properties.winding.layers.values())).conductor.material
+        owinding.set_class_obj_material(self.properties.materials[material_name])
         owinding.create_geometry()
+
         self.release_aedt()
 
         if not owinding:

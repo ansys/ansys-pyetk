@@ -23,9 +23,17 @@ and launched. For more information, see :ref:`installation`.
 
         Learn how to use the **Transformer Builder** tab to specify transformer settings.
 
+    .. grid-item-card:: Custom databases :fa:`scroll`
+        :padding: 2 2 2 2
+        :link: custom_databases
+        :link-type: doc
+
+        Learn how to add your own materials and cores.
+
 .. toctree::
    :hidden:
    :maxdepth: 2
 
    common_framework
    transformer_builder
+   custom_databases

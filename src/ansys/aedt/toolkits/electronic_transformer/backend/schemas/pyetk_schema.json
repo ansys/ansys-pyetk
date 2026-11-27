@@ -168,6 +168,9 @@
         "material": {
           "type": "string"
         },
+        "number_segments": {
+          "type": "integer"
+        },
         "dimensions": {
           "$ref": "#/definitions/Dimensions"
         },
@@ -328,8 +331,8 @@
         "region_offset": {
           "type": "number"
         },
-        "segmentation_angle": {
-          "type": "number"
+        "number_segments": {
+          "type": "integer"
         },
         "analysis_setup": {
           "$ref": "#/definitions/AnalysisSetup"
@@ -338,8 +341,7 @@
       "required": [
         "analysis_setup",
         "full_model",
-        "region_offset",
-        "segmentation_angle"
+        "region_offset"
       ],
       "title": "Settings"
     },
@@ -455,7 +457,10 @@
         },
         "turns": {
           "$ref": "#/definitions/Turns"
-        }
+        },
+          "segments_number": {
+            "type": "integer"
+          }
       },
       "required": [
         "conductor",
@@ -484,6 +489,9 @@
         },
         "type": {
           "type": "string"
+        },
+        "number_segments": {
+          "type": "integer"
         }
       },
       "required": [
